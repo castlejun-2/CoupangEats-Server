@@ -19,7 +19,7 @@ const {emit} = require("nodemon");
 /**
  * API No. 1
  * API Name : 유저 생성 (회원가입) API
- * [POST] /app/users
+ * [POST] /app/users/sign-up
  */
 exports.postUsers = async function (req, res) {
 
