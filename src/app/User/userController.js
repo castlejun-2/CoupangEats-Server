@@ -12,9 +12,9 @@ const {emit} = require("nodemon");
  * API Name : 테스트 API
  * [GET] /app/test
  */
-// exports.getTest = async function (req, res) {
-//     return res.send(response(baseResponse.SUCCESS))
-// }
+ exports.getTest = async function (req, res) {
+     return res.send(response(baseResponse.SUCCESS))
+ }
 
 /**
  * API No. 1
@@ -24,11 +24,11 @@ const {emit} = require("nodemon");
 exports.postUsers = async function (req, res) {
 
     /**
-     * Body: email, password, nickname
+     * Body: email, password, username, phonenumber
      */
-    const {email, password, nickname} = req.body;
+    const {email, password, username, phonenumber} = req.body;
 
-    // 빈 값 체크
+    // 이메일 빈 값 체크
     if (!email)
         return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
 
@@ -40,13 +40,19 @@ exports.postUsers = async function (req, res) {
     if (!regexEmail.test(email))
         return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
 
-    // 기타 등등 - 추가하기
+    // 이름 빈 값 체크
+    if (!username)
+        return res.send(response(baseResponse.SIGNUP_USERNAME_EMPTY));
 
+    // 핸드폰 번호 빈 값 체크
+    if (!phonenumber)
+        return res.send(response(baseResponse.SIGNUP_PHONENUMBER_EMPTY));
 
     const signUpResponse = await userService.createUser(
         email,
         password,
-        nickname
+        username,
+        phonenumber
     );
 
     return res.send(signUpResponse);
@@ -96,7 +102,7 @@ exports.getUserById = async function (req, res) {
 
 // TODO: After 로그인 인증 방법 (JWT)
 /**
- * API No. 4
+ * API No. 2
  * API Name : 로그인 API
  * [POST] /app/login
  * body : email, passsword
@@ -105,7 +111,20 @@ exports.login = async function (req, res) {
 
     const {email, password} = req.body;
 
-    // TODO: email, password 형식적 Validation
+    // 이메일 빈 값 체크
+    if (!email)
+        return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
+
+    // 길이 체크
+    if (email.length > 30)
+        return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
+
+    // 형식 체크 (by 정규표현식)
+    if (!regexEmail.test(email))
+        return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
+
+    if (!password)
+        return res.send(response(baseResponse.SINGIN_PASSWORD_EMPTY));    
 
     const signInResponse = await userService.postSignIn(email, password);
 

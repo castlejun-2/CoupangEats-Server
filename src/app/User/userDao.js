@@ -33,8 +33,8 @@ async function selectUserId(connection, userId) {
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
-        INSERT INTO UserInfo(email, password, nickname)
-        VALUES (?, ?, ?);
+        INSERT INTO UserInfo(email, password, userName, phoneNumber)
+        VALUES (?, ?, ?, ?);
     `;
   const insertUserInfoRow = await connection.query(
     insertUserInfoQuery,
@@ -61,7 +61,7 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
 // 유저 계정 상태 체크 (jwt 생성 위해 id 값도 가져온다.)
 async function selectUserAccount(connection, email) {
   const selectUserAccountQuery = `
-        SELECT status, id
+        SELECT status, userIdx
         FROM UserInfo 
         WHERE email = ?;`;
   const selectUserAccountRow = await connection.query(
