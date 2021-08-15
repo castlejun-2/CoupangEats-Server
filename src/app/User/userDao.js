@@ -1,7 +1,7 @@
 // 모든 유저 조회
 async function selectUser(connection) {
   const selectUserListQuery = `
-                SELECT email, nickname 
+                SELECT email, userName 
                 FROM UserInfo;
                 `;
   const [userRows] = await connection.query(selectUserListQuery);
@@ -22,7 +22,7 @@ async function selectUserEmail(connection, email) {
 // userId 회원 조회
 async function selectUserId(connection, userId) {
   const selectUserIdQuery = `
-                 SELECT id, email, nickname 
+                 SELECT id, email, userName 
                  FROM UserInfo 
                  WHERE id = ?;
                  `;
@@ -47,7 +47,7 @@ async function insertUserInfo(connection, insertUserInfoParams) {
 // 패스워드 체크
 async function selectUserPassword(connection, selectUserPasswordParams) {
   const selectUserPasswordQuery = `
-        SELECT email, nickname, password
+        SELECT email, userName, password
         FROM UserInfo 
         WHERE email = ? AND password = ?;`;
   const selectUserPasswordRow = await connection.query(
@@ -71,12 +71,12 @@ async function selectUserAccount(connection, email) {
   return selectUserAccountRow[0];
 }
 
-async function updateUserInfo(connection, id, nickname) {
+async function updateUserInfo(connection, id, userName) {
   const updateUserQuery = `
   UPDATE UserInfo 
-  SET nickname = ?
-  WHERE id = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [nickname, id]);
+  SET userName = ?
+  WHERE userIdx = ?;`;
+  const updateUserRow = await connection.query(updateUserQuery, [userName, id]);
   return updateUserRow[0];
 }
 

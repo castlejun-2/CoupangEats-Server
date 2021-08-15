@@ -42,8 +42,6 @@ exports.createUser = async function (email, password, username, phonenumber) {
     }
 };
 
-
-// TODO: After 로그인 인증 방법 (JWT)
 exports.postSignIn = async function (email, password) {
     try {
         // 이메일 여부 확인
@@ -95,18 +93,3 @@ exports.postSignIn = async function (email, password) {
         return errResponse(baseResponse.DB_ERROR);
     }
 };
-
-exports.editUser = async function (id, nickname) {
-    try {
-        console.log(id)
-        const connection = await pool.getConnection(async (conn) => conn);
-        const editUserResult = await userDao.updateUserInfo(connection, id, nickname)
-        connection.release();
-
-        return response(baseResponse.SUCCESS);
-
-    } catch (err) {
-        logger.error(`App - editUser Service error\n: ${err.message}`);
-        return errResponse(baseResponse.DB_ERROR);
-    }
-}

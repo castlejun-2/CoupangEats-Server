@@ -8,12 +8,6 @@ module.exports = function(app){
     // 1. 유저 생성 (회원가입) API
     app.post('/app/users/sign-up', user.postUsers);
 
-    // 2. 유저 조회 API (+ 검색)
-    app.get('/app/users',user.getUsers); 
-
-    // 3. 특정 유저 조회 API
-    app.get('/app/users/:userId', user.getUserById);
-
     // 2. 로그인 하기 API (JWT 생성)
     app.post('/app/login', user.login);
 
