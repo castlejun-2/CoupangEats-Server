@@ -16,6 +16,9 @@ module.exports = function(app){
 
     // 5. 상세 주소 수정 API
     app.patch('/app/users/:userId/detail-address',jwtMiddleware, user.detailAddress)
+
+    // 6. 기본 배송지 설정 API
+    app.patch('/app/users/:userId/default-address',jwtMiddleware, user.defaultAddress)
 };
 
 

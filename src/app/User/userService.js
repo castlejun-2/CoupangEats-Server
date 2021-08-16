@@ -123,3 +123,19 @@ exports.updateDetailAddress = async function (userId, detailAddress, infoAddress
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
+exports.setDefaultAddress = async function (userId, addressId) {
+    try {
+        const updateUserAddressParams = [userId, addressId];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        const settingDefaultResult = await userDao.SetdefaultAddress(connection,updateUserAddressParams);
+
+        connection.release();
+        return response(basesResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};

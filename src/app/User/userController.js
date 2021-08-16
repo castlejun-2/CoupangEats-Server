@@ -184,6 +184,30 @@ exports.login = async function (req, res) {
         return res.send(updateAddressInfo);
     }
 };
+
+/**
+ * API No. 6
+ * API Name : 기분 주소시 설정 API
+ * [PATCH] /app/users/:userId/detail-address
+ * path variable : userId
+ * body : detailAddress, infoAddress, category
+ */
+ exports.detailAddress = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId
+    const userId = req.params.userId;
+    const addressId = req.query.addressId;
+
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!addressId)
+            res.send(errResponse(baseResponse.ADDRESS_DEFAULT_EMPTY));
+
+        const setDefaultAddressInfo = await userService.setDefaultAddress(userId, addressId)
+        return res.send(response(baseResponse.SUCCESS,setDefaultAddressInfo));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation
@@ -209,16 +233,6 @@ exports.patchUsers = async function (req, res) {
         return res.send(editUserInfo);
     }
 };
-
-
-
-
-
-
-
-
-
-
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
