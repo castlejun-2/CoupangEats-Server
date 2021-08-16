@@ -8,7 +8,7 @@ const storeDao = require("./storeDao");
 exports.retrieveStoreList = async function (keyword) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const storeListResult = await userDao.selectStore(connection, keyword);
+    const storeListResult = await storeDao.selectStore(connection, keyword);
     connection.release();
 
     return storeListResult;
