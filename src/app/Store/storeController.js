@@ -12,7 +12,10 @@ exports.getStores = async function (req, res) {
      * Query String: keyword
      */
     const keyword = req.query.keyword;
+    
+    if(!keyword)
+        return res.send(errResponse(baseResponse.STORE_KEYWORD_EMPTY));
 
-    const storeList = await userProvider.retrieveStoreList(keyword);
+    const storeList = await storeProvider.retrieveStoreList(keyword);
     return res.send(response(baseResponse.SUCCESS, storeList));    
 }

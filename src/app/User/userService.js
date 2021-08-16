@@ -93,3 +93,35 @@ exports.postSignIn = async function (email, password) {
         return errResponse(baseResponse.DB_ERROR);
     }
 };
+
+exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, category) {
+    try {
+        const insertUserAddressParams = [userId, address, detailAddress, infoAddress, category];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const userAddressResult = await userDao.insertUserAddress(connection, insertUserAddressParams);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - createUserAddress Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+exports.updateDetailAddress = async function (userId, detailAddress, infoAddress, category) {
+    try {
+        const updateUserAddressParams = [detailAddress, infoAddress, userId, category];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const userDetailAddressResult = await userDao.updateUserAddress(connection, updateUserAddressParams);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - updateUserHomeAddress Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};

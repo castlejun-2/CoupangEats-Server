@@ -40,6 +40,10 @@ exports.postUsers = async function (req, res) {
     if (!regexEmail.test(email))
         return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
 
+    // 비밀번호 빈 값 체크
+    if (!password)
+        return res.send(response(baseResponse.SIGNUP_PASSWORD_EMPTY));        
+
     // 이름 빈 값 체크
     if (!username)
         return res.send(response(baseResponse.SIGNUP_USERNAME_EMPTY));
@@ -124,14 +128,62 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
 
     if (!password)
-        return res.send(response(baseResponse.SINGIN_PASSWORD_EMPTY));    
+        return res.send(response(baseResponse.SIGNIN_PASSWORD_EMPTY));    
 
     const signInResponse = await userService.postSignIn(email, password);
 
     return res.send(signInResponse);
 };
 
+/**
+ * API No. 4
+ * API Name : 주소지 추가 API
+ * [POST] /app/users/:userId/add-address
+ * path variable : userId
+ * body : address, detailAddress, infoAddress, category
+ */
+ exports.postAddress = async function (req, res) {
 
+    const userIdFromJWT = req.verifiedToken.userId
+    const userId = req.params.userId;
+    const {address, detailAddress, infoAddress, category} = req.body;
+
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if (!address)
+            return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));            
+        if(!category)
+            res.send(errResponse(baseResponse.ADDRESS_CATEGORY_EMPTY));
+
+        const postAddressInfo = await userService.postAddAddress(userId, address, detailAddress, infoAddress, category)
+        return res.send(postAddressInfo);
+    }
+};
+
+/**
+ * API No. 5
+ * API Name : 상세 주소 변경 API
+ * [PATCH] /app/users/:userId/detail-address
+ * path variable : userId
+ * body : detailAddress, infoAddress, category
+ */
+ exports.detailAddress = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId
+    const userId = req.params.userId;
+    const {detailAddress, infoAddress, category} = req.body;
+
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!category)
+            res.send(errResponse(baseResponse.ADDRESS_CATEGORY_EMPTY));
+
+        const updateAddressInfo = await userService.updateDetailAddress(userId, detailAddress, infoAddress, category)
+        return res.send(updateAddressInfo);
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation

@@ -3,7 +3,7 @@ async function selectStore(connection, keyword) {
     const selectStoreQuery = `
     SELECT image.url as '가게 사진',
            storeName as '가게 이름',
-           isCheetah as '치타배달',
+           case when isCheetah = 1 then '치타배달' else 'NULL' end as '치타배달',
            averageDelivery as '평균 배달시간',
            rv.star as '평균 평점',
            rv.cnt as '리뷰 갯수',

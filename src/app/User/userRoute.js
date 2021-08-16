@@ -11,7 +11,11 @@ module.exports = function(app){
     // 2. 로그인 하기 API (JWT 생성)
     app.post('/app/login', user.login);
 
+    // 4. 주소지 추가 API (일반 주소)
+    app.post('/app/users/:userId/add-address',jwtMiddleware, user.postAddress);
 
+    // 5. 상세 주소 수정 API
+    app.patch('/app/users/:userId/detail-address',jwtMiddleware, user.detailAddress)
 };
 
 

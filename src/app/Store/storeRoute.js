@@ -5,4 +5,5 @@ module.exports = function(app){
     // 3. 가게 검색 API
     app.get('/app/stores',store.getStores); 
 
+
 };
