@@ -192,7 +192,7 @@ exports.login = async function (req, res) {
  * path variable : userId
  * body : detailAddress, infoAddress, category
  */
- exports.detailAddress = async function (req, res) {
+ exports.defaultAddress = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId
     const userId = req.params.userId;
