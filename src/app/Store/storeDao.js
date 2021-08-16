@@ -10,7 +10,7 @@ async function selectStore(connection, keyword) {
            storeAddress as '가게 주소',
            case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
            lm.mnN as '메뉴리스트',
-           case when status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
     FROM StoreInfo si left join
          (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
          From ReviewInfo ri join MenuInfo mui on ri.menuId = mui.menuIdx group by sti) rv on rv.sti = si.storeIdx join
