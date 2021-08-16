@@ -3,7 +3,7 @@ module.exports = function(app){
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
     // 0. 테스트 API
-    app.get('/app/test', user.getTest)
+    app.get('/app/test', user.getTest);
 
     // 1. 유저 생성 (회원가입) API
     app.post('/app/users/sign-up', user.postUsers);
@@ -15,10 +15,10 @@ module.exports = function(app){
     app.post('/app/users/:userId/add-address',jwtMiddleware, user.postAddress);
 
     // 5. 상세 주소 수정 API
-    app.patch('/app/users/:userId/detail-address',jwtMiddleware, user.detailAddress)
+    app.patch('/app/users/:userId/detail-address',jwtMiddleware, user.detailAddress);
 
     // 6. 기본 배송지 설정 API
-    app.patch('/app/users/:userId/default-address',jwtMiddleware, user.defaultAddress)
+    app.patch('/app/users/:userId/default-address',jwtMiddleware, user.defaultAddress);
 };
 
 
