@@ -205,7 +205,7 @@ exports.login = async function (req, res) {
             res.send(errResponse(baseResponse.ADDRESS_DEFAULT_EMPTY));
 
         const setDefaultAddressInfo = await userService.setDefaultAddress(userId, addressId)
-        return res.send(response(baseResponse.SUCCESS,setDefaultAddressInfo));
+        return res.send(response(baseResponse.ADDRESS_DEFAULT_SETTING_SUCCESS));
     }
 };
 /**

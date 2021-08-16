@@ -109,12 +109,23 @@ async function updateUserAddress(connection, updateUserAddressParams) {
   return updateUserDetailAddressRow;
 }
 
-// 기본 배송지 설정
-async function SetdefaultAddress(connection, updateUserAddressParams){
+// 기본 배송지 설정전 세팅
+async function SetdefaultAddress(connection, userId){
   const defaultAddressSettingQuery=`
   update AddressInfo
   set isDefault = 0
-  where userId = ? and addressIdx != ?;
+  where userId = ?;
+  `;
+  const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, userId);
+  return SetdefaultAddressRows;
+}
+
+// 기본 배송지 설정
+async function SettingdefaultAddress(connection, updateUserAddressParams){
+  const defaultAddressSettingQuery=`
+  update AddressInfo
+  set isDefault = 1
+  where userId = ? and addressIdx = ?;
   `;
   const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, updateUserAddressParams);
   return SetdefaultAddressRows;
@@ -129,5 +140,6 @@ module.exports = {
   updateUserInfo,
   insertUserAddress,
   updateUserAddress,
-  SetdefaultAddress
+  SetdefaultAddress,
+  SettingdefaultAddress
 };
