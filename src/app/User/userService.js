@@ -72,8 +72,6 @@ exports.postSignIn = async function (email, password) {
             return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
         }
 
-        console.log(userInfoRows[0].id) // DB의 userId
-
         //토큰 생성 Service
         let token = await jwt.sign(
             {
@@ -121,7 +119,7 @@ exports.updateDetailAddress = async function (userId, detailAddress, infoAddress
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
-        logger.error(`App - updateUserHomeAddress Service error\n: ${err.message}`);
+        logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };

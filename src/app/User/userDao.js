@@ -98,7 +98,7 @@ async function insertUserAddress(connection, insertUserAddressParams) {
 async function updateUserAddress(connection, updateUserAddressParams) {
   const updateUserDetailAddressQuery = `
         UPDATE AddressInfo
-        SET detailAddress = ?, infoAddress = ?
+        SET detailAddressLine = ?, infoAddress = ?
         WHERE userId = ? and category = ?;
     `;
   const updateUserDetailAddressRow = await connection.query(
