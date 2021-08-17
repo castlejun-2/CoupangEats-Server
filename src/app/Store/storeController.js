@@ -54,6 +54,9 @@ exports.getStoresByCategory = async function (req, res) {
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
 
+    console.log(userId);
+    console.log(userIdFromJWT);
+    
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
