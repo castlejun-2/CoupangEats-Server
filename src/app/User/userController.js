@@ -145,7 +145,7 @@ exports.login = async function (req, res) {
  exports.logout = async function (req, res) {
 
     // Request JWT Token
-    const userIdFromJWT = req.verifiedToken.userIdx;
+    const userIdFromJWT = req.verifiedToken.userId;
 
     // Request body
     const {userId} = req.body;
@@ -177,7 +177,7 @@ exports.login = async function (req, res) {
  */
  exports.postAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userIdx;
+    const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const {address, detailAddress, infoAddress, category} = req.body;
 
@@ -203,7 +203,7 @@ exports.login = async function (req, res) {
  */
  exports.detailAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userIdx
+    const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const {detailAddress, infoAddress, category} = req.body;
 
@@ -227,7 +227,7 @@ exports.login = async function (req, res) {
  */
  exports.defaultAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userIdx
+    const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const addressId = req.query.addressId;
 
@@ -252,7 +252,7 @@ exports.patchUsers = async function (req, res) {
 
     // jwt - userId, path variable :userId
 
-    const userIdFromJWT = req.verifiedToken.userIdx
+    const userIdFromJWT = req.verifiedToken.userId;
 
     const userId = req.params.userId;
     const nickname = req.body.nickname;
@@ -271,7 +271,7 @@ exports.patchUsers = async function (req, res) {
  * [GET] /app/auto-login
  */
 exports.check = async function (req, res) {
-    const userIdResult = req.verifiedToken.userIdx;
+    const userIdResult = req.verifiedToken.userId;
     console.log(userIdResult);
     return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
 };

@@ -77,7 +77,7 @@ async function selectUserAccount(connection, email) {
         UPDATE UserInfo
         SET isLogin = 1
         WHERE email = ?;`;      
-  const selectUserAccountRow = await connection.query(selectUserAccountQuery,email);
+  const selectUserAccountRow = await connection.query(selectUserAccountQuery, email);
   const setUserLoginRow = await connection.query(setUserLoginQuery, email);
   return selectUserAccountRow[0];
 }

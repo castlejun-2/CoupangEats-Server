@@ -85,7 +85,7 @@ exports.postSignIn = async function (email, password) {
                 subject: "userInfo",
             } // 유효 기간 365일
         ); 
-        
+
         return response(baseResponse.SUCCESS, {'userId': userInfoRows[0].userIdx, 'jwt': token});
 
     } catch (err) {

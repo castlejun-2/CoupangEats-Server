@@ -17,8 +17,8 @@ exports.getStoresByKeyword = async function (req, res) {
     /**
      * Query String: keyword
      */
-    const userIdFromJWT = req.verifiedToken.userIdx;
-    const {userId} = req.params
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
     const keyword = req.query.keyword;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
@@ -48,7 +48,7 @@ exports.getStoresByCategory = async function (req, res) {
     /**
      * Query String: category
      */
-    const userIdFromJWT = req.verifiedToken.userIdx;
+    const userIdFromJWT = req.verifiedToken.userId;
     const {userId} = req.params
     const category = req.query.category;
     const latitude = req.query.latitude;
