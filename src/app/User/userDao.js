@@ -47,7 +47,7 @@ async function insertUserInfo(connection, insertUserInfoParams) {
 // 유저 IDX 체크
 async function selectUserIdx(connection, userId) {
   const userIdxQuery = `
-    select exists(select userIdx from UserInfo where userIdx = ? and status = 'INACTIVE') as exist;
+    select exists(select userIdx from UserInfo where userIdx = ? and status = 'ACTIVE') as exist;
      `;
   const [userIdxRow] = await connection.query(userIdxQuery, userId);
   return userIdxRow;
