@@ -95,10 +95,15 @@ exports.postSignIn = async function (email, password) {
 };
 
 exports.logout = async function (userId) {
-    const connection = await pool.getConnection(async (conn) => conn);
-    const logoutResult = await userDao.userLogout(connection, userId);
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const logoutResult = await userDao.userLogout(connection, userId);
 
-    connection.release();
+        connection.release();
+    } catch (err) {
+        logger.error(`App - Logout Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);   
+    }
 
     return logoutResult;
 }

@@ -150,8 +150,6 @@ exports.login = async function (req, res) {
     // Request body
     const userId = req.params.userId;
 
-    console.log(userIdFromJWT);
-    console.log(userId);
     // Validation Check (Request Error)
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -183,6 +181,9 @@ exports.login = async function (req, res) {
     const userId = req.params.userId;
     const {address, detailAddress, infoAddress, category} = req.body;
 
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
@@ -209,6 +210,9 @@ exports.login = async function (req, res) {
     const userId = req.params.userId;
     const {detailAddress, infoAddress, category} = req.body;
 
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
@@ -233,6 +237,9 @@ exports.login = async function (req, res) {
     const userId = req.params.userId;
     const addressId = req.query.addressId;
 
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {

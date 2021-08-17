@@ -8,10 +8,10 @@ module.exports = function(app){
     // 1. 유저 생성 (회원가입) API
     app.post('/app/users/sign-up', user.postUsers);
 
-    // 2. 로그인 API (JWT 생성)
+    // 31. 로그인 API (JWT 생성)
     app.post('/app/login', user.login);
 
-    // 8. 로그아웃 API
+    // 3. 로그아웃 API
     app.post('/app/:userId/logout', jwtMiddleware, user.logout);
 
     // 4. 주소지 추가 API (일반 주소)

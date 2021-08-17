@@ -63,9 +63,9 @@ async function selectStoreByCategory(connection, getDistanceParams) {
 }
 
 
-  module.exports = {
-    selectStoreByKeyword,
-    selectStoreByCategory
-  };
+module.exports = {
+  selectStoreByKeyword,
+  selectStoreByCategory
+};
 
   
