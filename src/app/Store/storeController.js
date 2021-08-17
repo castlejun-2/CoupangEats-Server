@@ -41,7 +41,7 @@ exports.getStoresByKeyword = async function (req, res) {
 /**
  * API No. 7
  * API Name : 카테고리로 매장 조회 API
- * [PATCH] /app/users/:userId/category
+ * [GET] /app/users/:userId/category
  * path variable : userId
  */
 exports.getStoresByCategory = async function (req, res) {

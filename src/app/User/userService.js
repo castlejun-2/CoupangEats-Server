@@ -44,11 +44,9 @@ exports.createUser = async function (email, password, username, phonenumber) {
 
 exports.postSignIn = async function (email, password) {
     try {
-        await connection.beginTransaction();
         // 이메일 여부 확인
         const emailRows = await userProvider.emailCheck(email);
         if (emailRows.length < 1){
-            await connection.rollback();
             return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
         }
 
@@ -64,7 +62,6 @@ exports.postSignIn = async function (email, password) {
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
 
         if (passwordRows[0].password !== hashedPassword) {
-            await connection.rollback();
             return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
         }
 
@@ -72,10 +69,8 @@ exports.postSignIn = async function (email, password) {
         const userInfoRows = await userProvider.accountCheck(email);
 
         if (userInfoRows[0].status === "INACTIVE") {
-            await connection.rollback();
             return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
         } else if (userInfoRows[0].status === "DELETED") {
-            await connection.rollback();
             return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
         }
 
@@ -95,10 +90,7 @@ exports.postSignIn = async function (email, password) {
 
     } catch (err) {
         logger.error(`App - postSignIn Service error\n: ${err.message} \n${JSON.stringify(err)}`);
-        await connection.rollback();
         return errResponse(baseResponse.DB_ERROR);
-    } finally {
-        connection.release();
     }
 };
 
@@ -113,61 +105,46 @@ exports.logout = async function (userId) {
 
 exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, category) {
     try {
-        await connection.beginTransaction();
         const insertUserAddressParams = [userId, address, detailAddress, infoAddress, category];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userAddressResult = await userDao.insertUserAddress(connection, insertUserAddressParams);
-        await connection.commit();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
         logger.error(`App - createUserAddress Service error\n: ${err.message}`);
-        await connection.rollback();
         return errResponse(baseResponse.DB_ERROR);
-    } finally {
-        connection.release();
     }
 };
 
 exports.updateDetailAddress = async function (userId, detailAddress, infoAddress, category) {
     try {
-        await connection.beginTransaction();
         const updateUserAddressParams = [detailAddress, infoAddress, userId, category];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userDetailAddressResult = await userDao.updateUserAddress(connection, updateUserAddressParams);
-        await connection.commit();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
         logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
-        await connection.rollback();
         return errResponse(baseResponse.DB_ERROR);
-    } finally {
-        connection.release();
     }
 };
 
 exports.setDefaultAddress = async function (userId, addressId) {
     try {
-        await connection.beginTransaction();
         const updateUserAddressParams = [userId, addressId];
 
         const connection = await pool.getConnection(async (conn) => conn);
         const settingDefaultResult = await userDao.SetdefaultAddress(connection,userId);
         const setDefaultResult = await userDao.SettingdefaultAddress(connection,updateUserAddressParams);
-        await connection.commit();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
         logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
-        await connection.rollback();
         return errResponse(baseResponse.DB_ERROR);
-    } finally {
-        connection.release();
     }
 };
 
