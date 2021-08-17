@@ -156,7 +156,7 @@ exports.login = async function (req, res) {
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    if (userIdFromJWT !== userId)
+    if (userIdFromJWT != userId)
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH)); 
 
     const checkUserIdx = await userProvider.userCheck(userId);
