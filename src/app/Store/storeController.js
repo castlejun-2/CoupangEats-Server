@@ -20,14 +20,20 @@ exports.getStoresByKeyword = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const keyword = req.query.keyword;
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
     
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
         if(!keyword)
             return res.send(errResponse(baseResponse.STORE_KEYWORD_EMPTY));
 
-        const storeList = await storeProvider.retrieveStoreByKeywordList(keyword);
+        const storeList = await storeProvider.retrieveStoreByKeywordList(latitude, longitude, keyword);
         return res.send(response(baseResponse.SUCCESS, storeList)); 
     }  
 }
@@ -45,14 +51,20 @@ exports.getStoresByCategory = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const category = req.query.category;
-    
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
         if(!category)
             return res.send(errResponse(baseResponse.STORE_CATEGORY_EMPTY));
 
-        const storeList = await storeProvider.retrieveStoreByCategoryList(category);
+        const storeList = await storeProvider.retrieveStoreByCategoryList(latitude, longitude, category);
         return res.send(response(baseResponse.SUCCESS, storeList));   
     } 
 }
