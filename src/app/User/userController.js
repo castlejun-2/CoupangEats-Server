@@ -148,7 +148,7 @@ exports.login = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
 
     // Request body
-    const {userId} = req.body;
+    const userId = req.params.userId;
 
     // Validation Check (Request Error)
     if (!userIdFromJWT || !userId) 
