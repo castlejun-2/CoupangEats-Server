@@ -144,7 +144,7 @@ exports.login = async function (req, res) {
  */
  exports.postAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userId
+    const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const {address, detailAddress, infoAddress, category} = req.body;
 

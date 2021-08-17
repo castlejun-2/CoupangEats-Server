@@ -39,6 +39,7 @@ module.exports = {
     SIGNUP_ADDRESS_DETAIL_EMPTY : { "isSuccess": false, "code": 2023, "message": "상세주소를 등록해주세요" },
     ADDRESS_CATEGORY_EMPTY : { "isSuccess": false, "code": 2024, "message": "주소의 구분을 입력해주세요" },
     ADDRESS_DEFAULT_EMPTY : { "isSuccess": false, "code": 2025, "message": "기본 주소지로 설정할 주소를 선택해주세요" },
+    STORE_CATEGORY_EMPTY: { "isSuccess": false, "code": 2026, "message": "카테고리를 선택해주세요" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

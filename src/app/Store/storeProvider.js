@@ -5,12 +5,22 @@ const storeDao = require("./storeDao");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.retrieveStoreList = async function (keyword) {
+exports.retrieveStoreByKeywordList = async function (keyword) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const storeListResult = await storeDao.selectStore(connection, keyword);
+    const storeListByKeywordResult = await storeDao.selectStoreByKeyword(connection, keyword);
     connection.release();
 
-    return storeListResult;
+    return storeListByKeywordResult;
+
+};
+
+exports.retrieveStoreByCategoryList = async function (category) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const storeListByCategoryResult = await storeDao.selectStoreByCategory(connection, category);
+    connection.release();
+
+    return storeListByCategoryResult;
 
 };
