@@ -84,8 +84,8 @@ exports.postSignIn = async function (email, password) {
                 expiresIn: "365d",
                 subject: "userInfo",
             } // 유효 기간 365일
-        );
-        await connection.commit();    
+        ); 
+        
         return response(baseResponse.SUCCESS, {'userId': userInfoRows[0].userIdx, 'jwt': token});
 
     } catch (err) {
@@ -110,6 +110,7 @@ exports.postAddAddress = async function (userId, address, detailAddress, infoAdd
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userAddressResult = await userDao.insertUserAddress(connection, insertUserAddressParams);
+        connection.release();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
@@ -125,6 +126,7 @@ exports.updateDetailAddress = async function (userId, detailAddress, infoAddress
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userDetailAddressResult = await userDao.updateUserAddress(connection, updateUserAddressParams);
+        connection.release();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
@@ -140,6 +142,7 @@ exports.setDefaultAddress = async function (userId, addressId) {
         const connection = await pool.getConnection(async (conn) => conn);
         const settingDefaultResult = await userDao.SetdefaultAddress(connection,userId);
         const setDefaultResult = await userDao.SettingdefaultAddress(connection,updateUserAddressParams);
+        connection.release();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
