@@ -150,6 +150,8 @@ exports.login = async function (req, res) {
     // Request body
     const userId = req.params.userId;
 
+    console.log(userIdFromJWT);
+    console.log(userId);
     // Validation Check (Request Error)
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
