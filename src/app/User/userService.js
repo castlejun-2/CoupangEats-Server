@@ -102,6 +102,15 @@ exports.postSignIn = async function (email, password) {
     }
 };
 
+exports.logout = async function (userId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const logoutResult = await userDao.userLogout(connection, userId);
+
+    connection.release();
+
+    return logoutResult;
+}
+
 exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, category) {
     try {
         await connection.beginTransaction();

@@ -67,11 +67,12 @@ exports.postUsers = async function (req, res) {
  * API Name : 유저 조회 API (+ 이메일로 검색 조회)
  * [GET] /app/users
  */
-exports.getUsers = async function (req, res) {
+/* exports.getUsers = async function (req, res) {
 
     /**
      * Query String: email
      */
+    /**
     const email = req.query.email;
 
     if (!email) {
@@ -83,28 +84,28 @@ exports.getUsers = async function (req, res) {
         const userListByEmail = await userProvider.retrieveUserList(email);
         return res.send(response(baseResponse.SUCCESS, userListByEmail));
     }
-};
+}; */
 
 /**
  * API No. 3
  * API Name : 특정 유저 조회 API
  * [GET] /app/users/{userId}
- */
-exports.getUserById = async function (req, res) {
+ * */
+ /* exports.getUserById = async function (req, res) {
 
     /**
      * Path Variable: userId
      */
+    /**
     const userId = req.params.userId;
 
     if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     const userByUserId = await userProvider.retrieveUser(userId);
     return res.send(response(baseResponse.SUCCESS, userByUserId));
-};
+}; */
 
 
-// TODO: After 로그인 인증 방법 (JWT)
 /**
  * API No. 2
  * API Name : 로그인 API
@@ -135,6 +136,38 @@ exports.login = async function (req, res) {
     return res.send(signInResponse);
 };
 
+
+/**
+ * API No. 8
+ * API Name : 로그아웃 API
+ * [POST] /users/:userId/logout
+ */
+ exports.logout = async function (req, res) {
+
+    // Request JWT Token
+    const userIdFromJWT = req.verifiedToken.userIdx;
+
+    // Request body
+    const {userId} = req.body;
+
+    // Validation Check (Request Error)
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT !== userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH)); 
+
+    const checkUserIdx = await userProvider.userCheck(userId);
+
+    if (checkUserIdx[0].exist === 0)
+        return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+    // Result
+    await userService.logout(userId);
+
+    return res.send(response(baseResponse.SUCCESS));
+
+};
+
 /**
  * API No. 4
  * API Name : 주소지 추가 API
@@ -144,7 +177,7 @@ exports.login = async function (req, res) {
  */
  exports.postAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userId;
+    const userIdFromJWT = req.verifiedToken.userIdx;
     const userId = req.params.userId;
     const {address, detailAddress, infoAddress, category} = req.body;
 
@@ -170,7 +203,7 @@ exports.login = async function (req, res) {
  */
  exports.detailAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userId
+    const userIdFromJWT = req.verifiedToken.userIdx
     const userId = req.params.userId;
     const {detailAddress, infoAddress, category} = req.body;
 
@@ -194,7 +227,7 @@ exports.login = async function (req, res) {
  */
  exports.defaultAddress = async function (req, res) {
 
-    const userIdFromJWT = req.verifiedToken.userId
+    const userIdFromJWT = req.verifiedToken.userIdx
     const userId = req.params.userId;
     const addressId = req.query.addressId;
 
@@ -219,7 +252,7 @@ exports.patchUsers = async function (req, res) {
 
     // jwt - userId, path variable :userId
 
-    const userIdFromJWT = req.verifiedToken.userId
+    const userIdFromJWT = req.verifiedToken.userIdx
 
     const userId = req.params.userId;
     const nickname = req.body.nickname;
@@ -238,7 +271,7 @@ exports.patchUsers = async function (req, res) {
  * [GET] /app/auto-login
  */
 exports.check = async function (req, res) {
-    const userIdResult = req.verifiedToken.userId;
+    const userIdResult = req.verifiedToken.userIdx;
     console.log(userIdResult);
     return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
 };

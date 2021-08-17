@@ -44,6 +44,15 @@ async function insertUserInfo(connection, insertUserInfoParams) {
   return insertUserInfoRow;
 }
 
+// 유저 IDX 체크
+async function selectUserIdx(connection, userId) {
+  const userIdxQuery = `
+    select exists(select userIdx from UserInfo where userIdx = ? and status = 'INACTIVE') as exist;
+     `;
+  const [userIdxRow] = await connection.query(userIdxQuery, userId);
+  return userIdxRow;
+}
+
 // 패스워드 체크
 async function selectUserPassword(connection, selectUserPasswordParams) {
   const selectUserPasswordQuery = `
@@ -64,11 +73,24 @@ async function selectUserAccount(connection, email) {
         SELECT status, userIdx
         FROM UserInfo 
         WHERE email = ?;`;
-  const selectUserAccountRow = await connection.query(
-      selectUserAccountQuery,
-      email
-  );
+  const setUserLoginQuery = `
+        UPDATE UserInfo
+        SET isLogin = 1
+        WHERE email = ?;`;      
+  const selectUserAccountRow = await connection.query(selectUserAccountQuery,email);
+  const setUserLoginRow = await connection.query(setUserLoginiQuery, email);
   return selectUserAccountRow[0];
+}
+
+// 로그아웃
+async function userLogout(connection, userId) {
+  const logoutQuery = `
+      UPDATE UserInfo
+      SET isLogin = 0
+      WHERE userIdx = ?;
+  `;
+  const logoutRow = await connection.query(logoutQuery, userId);
+  return logoutRow[0];
 }
 
 async function updateUserInfo(connection, id, userName) {
@@ -135,8 +157,10 @@ module.exports = {
   selectUserEmail,
   selectUserId,
   insertUserInfo,
+  selectUserIdx,
   selectUserPassword,
   selectUserAccount,
+  userLogout,
   updateUserInfo,
   insertUserAddress,
   updateUserAddress,
