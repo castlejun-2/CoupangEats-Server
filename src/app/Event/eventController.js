@@ -28,3 +28,19 @@ exports.getEvent = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, eventList)); 
     }  
 }
+
+exports.getCouponList = async function (req, res) {
+  
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+  
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const couponList = await eventProvider.retrieveCouponList();
+        return res.send(response(baseResponse.SUCCESS, couponList)); 
+    }  
+}
