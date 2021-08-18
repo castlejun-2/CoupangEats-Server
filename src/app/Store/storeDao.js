@@ -149,12 +149,25 @@ async function selectMainScreenByOther(connection) {
   const [mainRows] = await connection.query(selectMainByOtherListQuery);
   return mainRows;
 }
+
+// 메인화면 그 외의 매장 리스트 조회 API
+async function selectStoreCategory(connection) {
+  const selectStoreCategoryListQuery = `
+        SELECT sc.categoryName as '카테고리 이름',
+	             sc.categoryImageUrl as '카테고리 대표 사진'
+        FROM StoreCategoryInfo sc
+        WHERE status = 'ACTIVE';
+  `;
+  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
+  return categoryRows;
+}
 module.exports = {
   selectStoreByKeyword,
   selectStoreByCategory,
   selectMainScreenByNew,
   selectMainScreenByPopular,
   selectMainScreenByOther,
+  selectStoreCategory,
 };
 
   

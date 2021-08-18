@@ -87,7 +87,6 @@ exports.getStoresByCategory = async function (req, res) {
      */
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const type = req.query.type;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -95,18 +94,23 @@ exports.getStoresByCategory = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        if(!type)
-            return res.send(errResponse(baseResponse.SIGNIN_TYPE_EMPTY));
-
-        if(type === 'new' || type === 'popular'){  //신규입점 및 인기매장 리스트 조회
-            const mainList = await storeProvider.retrieveMainScreenList(type);
-            return res.send(response(baseResponse.SUCCESS, mainList)); 
-        }
-        else if(type === 'pick'){ //그 외의 매장 리스트 조회
+        let ttype;
+        const result = [];
+            
+        const storeCategoryList = await storeProvider.retrieveStoreCategoryList();
+            result.push({'매장 분류': storeCategoryList});
+        ttype = 'new';  
+            const mainList1 = await storeProvider.retrieveMainScreenList(ttype);
+            result.push({'신규매장': mainList1});
+        
+        ttype = 'popular';
+            const mainList2 = await storeProvider.retrieveMainScreenList(ttype);
+            result.push({'인기매장': mainList2});
+        
+        ttype === 'pick'; //그 외의 매장 리스트 조회
             const mainOtherList = await storeProvider.retrieveMainScreenList();
-            return res.send(response(baseResponse.SUCCESS, mainOtherList)); 
-        }
-        else //그 외의 타입 입력시 에러 처리
-            return res.send(errResponse(baseResponse.SIGNIN_TYPE_EMPTY));          
+            result.push({'골라먹는 매장': mainOtherList});
+
+        return res.send(response(baseResponse.SUCCESS, result));         
     } 
 }

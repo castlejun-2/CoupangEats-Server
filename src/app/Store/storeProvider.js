@@ -73,3 +73,13 @@ exports.retrieveMainScreenList = async function (type) {
         return mainScreenOtherListResult;
     }
 };
+
+exports.retrieveStoreCategoryList = async function (type) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const storeCategoryListResult = await storeDao.selectStoreCategory(connection);
+    connection.release();    
+    return storeCategoryListResult;
+    
+};
+
