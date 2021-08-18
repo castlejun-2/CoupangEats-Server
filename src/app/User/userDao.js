@@ -153,6 +153,17 @@ async function SettingdefaultAddress(connection, updateUserAddressParams){
   return SetdefaultAddressRows;
 }
 
+// 즐겨찾기 매장 갯수 조회
+async function selectUserBookMarkCount(connection, userId){
+  const defaultAddressSettingQuery=`
+  SELECT  concat(count(*),'개') as '즐겨찾는 매장 수'
+  FROM UserInfo ui join UserBookmarkInfo ubi on ui.userIdx = ubi.userId
+  WHERE ui.userIdx = ?;
+  `;
+  const [BookMarkCountRows] = await connection.query(defaultAddressSettingQuery, userId);
+  return BookMarkCountRows;
+}
+
 // 즐겨찾기 조회
 async function selectUserBookMark(connection, Params){
   const getBookMarkQuery=`
@@ -196,5 +207,6 @@ module.exports = {
   updateUserAddress,
   SetdefaultAddress,
   SettingdefaultAddress,
-  selectUserBookMark
+  selectUserBookMark,
+  selectUserBookMarkCount,
 };

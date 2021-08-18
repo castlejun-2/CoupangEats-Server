@@ -263,7 +263,7 @@ exports.login = async function (req, res) {
     const userId = req.params.userId;
     const latitude = req.query.latitude;
     const longitude = req.query.longitude;
-
+    let result = [];
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
@@ -274,8 +274,13 @@ exports.login = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
         if(!longitude)
             return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
+            
+        const countBookMarkResult = await userProvider.getBookMarkCount(userId);
+        result.push({'BookMark 매장 갯수': countBookMarkResult});
+
         const getBookMarkResult = await userProvider.getBookMark(latitude, longitude, userId)
-        return res.send(response(baseResponse.SUCCESS, getBookMarkResult));
+        result.push({'BookMark 매장': getBookMarkResult});
+        return res.send(response(baseResponse.SUCCESS, result));
     }
 };
 /**
