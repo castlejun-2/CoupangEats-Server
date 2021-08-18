@@ -250,6 +250,34 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.ADDRESS_DEFAULT_SETTING_SUCCESS));
     }
 };
+
+/**
+ * API No. 34
+ * API Name : 즐겨찾기 조회 API
+ * [GET] /app/users/:userId/bookmark
+ * path variable : userId
+ */
+ exports.getBookMark = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
+        const getBookMarkResult = await userProvider.getBookMark(latitude, longitude, userId)
+        return res.send(response(baseResponse.SUCCESS, getBookMarkResult));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation

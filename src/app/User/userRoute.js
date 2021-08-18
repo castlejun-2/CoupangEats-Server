@@ -22,6 +22,9 @@ module.exports = function(app){
 
     // 6. 기본 배송지 설정 API
     app.patch('/app/users/:userId/default-address',jwtMiddleware, user.defaultAddress);
+
+    // 34. 즐겨찾기 조회 API
+    app.get('/app/users/:userId/bookmark',jwtMiddleware, user.getBookMark)
 };
 
 

@@ -64,3 +64,12 @@ exports.userCheck = async function (userId) {
 
   return userCheckResult;
 };
+
+exports.getBookMark = async function (latitude, longitude, userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const Params = [latitude, longitude, latitude, userId];
+  const getBookMarkList = await userDao.selectUserBookMark(connection, Params);
+  connection.release();
+
+  return getBookMarkList;
+};

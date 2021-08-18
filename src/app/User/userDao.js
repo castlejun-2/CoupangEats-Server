@@ -152,6 +152,36 @@ async function SettingdefaultAddress(connection, updateUserAddressParams){
   const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, updateUserAddressParams);
   return SetdefaultAddressRows;
 }
+
+// 즐겨찾기 조회
+async function selectUserBookMark(connection, Params){
+  const getBookMarkQuery=`
+  SELECT 	image.url as '가게 사진',
+		      storeName as '가게 이름',
+		      case when isCheetah = 1 then '치타배달' end as '치타배달',
+		      rv.star as '평균 평점',
+          rv.cnt as '리뷰 갯수',
+		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          averageDelivery as '평균 배달시간',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
+        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+FROM StoreInfo si left join
+	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
+		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+         (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
+          from StoreInfo si join
+         (select miu.menuImageUrl,mi.storeId
+          from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+          group by mu.storeId ) image on image.imagesi=si.storeIdx
+         join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
+         join UserInfo ui on ui.userIdx=ubi.userId
+WHERE ui.userIdx = ?;    
+  `;
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  return getBookMarkRows;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -165,5 +195,6 @@ module.exports = {
   insertUserAddress,
   updateUserAddress,
   SetdefaultAddress,
-  SettingdefaultAddress
+  SettingdefaultAddress,
+  selectUserBookMark
 };

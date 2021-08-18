@@ -25,41 +25,20 @@ exports.retrieveStoreByCategoryList = async function (latitude, longitude, categ
     return storeListByCategoryResult;
 };
 
-//카테고리에 해당하는 매장 검색 API
-exports.retrieveStoreByCategoryList = async function (latitude, longitude, category) {
-
-    const connection = await pool.getConnection(async (conn) => conn);
-    const getDistanceParams = [latitude, longitude, latitude, category];
-    const storeListByCategoryResult = await storeDao.selectStoreByCategory(connection, getDistanceParams);
-    connection.release();
-
-    return storeListByCategoryResult;
-};
-
-//카테고리에 해당하는 매장 검색 API
-exports.retrieveStoreByCategoryList = async function (latitude, longitude, category) {
-
-    const connection = await pool.getConnection(async (conn) => conn);
-    const getDistanceParams = [latitude, longitude, latitude, category];
-    const storeListByCategoryResult = await storeDao.selectStoreByCategory(connection, getDistanceParams);
-    connection.release();
-
-    return storeListByCategoryResult;
-};
-
 //메인화면 조회 API
-exports.retrieveMainScreenList = async function (type) {
+exports.retrieveMainScreenList = async function (latitude, longitude, type) {
+    const getDistanceParams = [latitude, longitude, latitude];
     if(type){
         if(type === 'new'){
             const connection = await pool.getConnection(async (conn) => conn);
-            const mainScreenByNewListResult = await storeDao.selectMainScreenByNew(connection);
+            const mainScreenByNewListResult = await storeDao.selectMainScreenByNew(connection,getDistanceParams);
 
             connection.release();    
             return mainScreenByNewListResult;
         }    
         else if(type === 'popular'){
             const connection = await pool.getConnection(async (conn) => conn);
-            const mainScreenByPopularListResult = await storeDao.selectMainScreenByPopular(connection);
+            const mainScreenByPopularListResult = await storeDao.selectMainScreenByPopular(connection,getDistanceParams);
         
             connection.release();    
             return mainScreenByPopularListResult;
@@ -68,7 +47,7 @@ exports.retrieveMainScreenList = async function (type) {
     else{
         const connection = await pool.getConnection(async (conn) => conn);
 
-        const mainScreenOtherListResult = await storeDao.selectMainScreenByOther(connection);
+        const mainScreenOtherListResult = await storeDao.selectMainScreenByOther(connection,getDistanceParams);
         connection.release();    
         return mainScreenOtherListResult;
     }

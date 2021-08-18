@@ -87,6 +87,8 @@ exports.getStoresByCategory = async function (req, res) {
      */
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -94,21 +96,25 @@ exports.getStoresByCategory = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        let ttype;
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
+        let type;
         const result = [];
             
         const storeCategoryList = await storeProvider.retrieveStoreCategoryList();
             result.push({'매장 분류': storeCategoryList});
-        ttype = 'new';  
-            const mainList1 = await storeProvider.retrieveMainScreenList(ttype);
+        type = 'new';  
+            const mainList1 = await storeProvider.retrieveMainScreenList(latitude, longitude, type);
             result.push({'신규매장': mainList1});
         
-        ttype = 'popular';
-            const mainList2 = await storeProvider.retrieveMainScreenList(ttype);
+        type = 'popular';
+            const mainList2 = await storeProvider.retrieveMainScreenList(latitude, longitude, type);
             result.push({'인기매장': mainList2});
         
-        ttype === 'pick'; //그 외의 매장 리스트 조회
-            const mainOtherList = await storeProvider.retrieveMainScreenList();
+        type === 'pick'; //그 외의 매장 리스트 조회
+            const mainOtherList = await storeProvider.retrieveMainScreenList(latitude, longitude, 0);
             result.push({'골라먹는 매장': mainOtherList});
 
         return res.send(response(baseResponse.SUCCESS, result));         
