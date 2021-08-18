@@ -49,7 +49,7 @@ exports.getStoresByKeyword = async function (req, res) {
  */
 exports.getStoresByCategory = async function (req, res) {
     /**
-     * Query String: category
+     * Query String: category,latitude,longitude
      */
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
@@ -72,5 +72,41 @@ exports.getStoresByCategory = async function (req, res) {
 
         const storeList = await storeProvider.retrieveStoreByCategoryList(latitude, longitude, category);
         return res.send(response(baseResponse.SUCCESS, storeList));   
+    } 
+}
+
+/**
+ * API No. 33
+ * API Name : 메인화면 신규 입점 및 인기 매장 조회 API
+ * [GET] /app/users/:userId/main
+ * path variable : userId
+ */
+ exports.getMainScreen = async function (req, res) {
+    /**
+     * Query String: type
+     */
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const type = req.query.type;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!type)
+            return res.send(errResponse(baseResponse.SIGNIN_TYPE_EMPTY));
+
+        if(type === 'new' || type === 'popular'){  //신규입점 및 인기매장 리스트 조회
+            const mainList = await storeProvider.retrieveMainScreenList(type);
+            return res.send(response(baseResponse.SUCCESS, mainList)); 
+        }
+        else if(type === 'pick'){ //그 외의 매장 리스트 조회
+            const mainOtherList = await storeProvider.retrieveMainScreenList();
+            return res.send(response(baseResponse.SUCCESS, mainOtherList)); 
+        }
+        else //그 외의 타입 입력시 에러 처리
+            return res.send(errResponse(baseResponse.SIGNIN_TYPE_EMPTY));          
     } 
 }

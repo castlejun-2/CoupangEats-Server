@@ -4,5 +4,6 @@ package-lock.json
 README.md
 config/database.js
 progress/*
+index.js
 log/*
 .DS_Store

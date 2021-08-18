@@ -26,7 +26,8 @@ async function selectCoupon(connection) {
   const [couponRows] = await connection.query(selectCouponListQuery);
   return couponRows;
 }
+
 module.exports = {
     selectEvent,
-    selectCoupon
+    selectCoupon,
 };

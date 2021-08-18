@@ -42,6 +42,8 @@ module.exports = {
     STORE_CATEGORY_EMPTY: { "isSuccess": false, "code": 2026, "message": "카테고리를 선택해주세요" },
     SIGNIN_LATITUDE_EMPTY: { "isSuccess": false, "code": 2027, "message": "위도를 넣어주세요" },
     SIGNIN_LONGITUDE_EMPTY: { "isSuccess": false, "code": 2028, "message": "경도를 넣어주세요" },
+    SIGNIN_TYPE_EMPTY: { "isSuccess": false, "code": 2029, "message": "타입을 입력주세요" },
+    SIGNIN_TYPE_WRONG: { "isSuccess": false, "code": 2030, "message": "잘못된 타입을 입력하였습니다" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

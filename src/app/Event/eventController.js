@@ -29,6 +29,12 @@ exports.getEvent = async function (req, res) {
     }  
 }
 
+/**
+ * API No. 16
+ * API Name : 이벤트 진행중인 쿠폰 조회 API
+ * [GET] /app/events/:userId/coupon
+ * path variable : userId
+ */
 exports.getCouponList = async function (req, res) {
   
     const userIdFromJWT = req.verifiedToken.userId;
