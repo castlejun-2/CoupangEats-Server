@@ -313,6 +313,20 @@ async function selectUserCoupon(connection, userId){
   const [getCouponRows] = await connection.query(getUserCouponQuery, userId);
   return getCouponRows;
 }
+
+// 사용자 쿠폰 등록
+async function postCoupon(connection, AddUserCouponParams) {
+  const postCouponQuery = `
+        INSERT INTO UserCouponInfo(userId, couponId)
+        VALUES (?, ?);
+    `;
+  const postBookCoupon = await connection.query(
+    postCouponQuery,
+    AddUserCouponParams
+  );
+
+  return postBookCoupon;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -335,4 +349,5 @@ module.exports = {
   postBookMark,
   deleteBookMark,
   selectUserCoupon,
+  postCoupon,
 };

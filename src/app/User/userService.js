@@ -186,4 +186,19 @@ exports.postUserBookMark = async function (userId, storeId) {
     }
 };
 
+// 쿠폰 등록
+exports.postCoupon = async function (userId, couponId) {
+    try {
+        const AddUserCouponParams = [userId, couponId];
+        const connection = await pool.getConnection(async (conn) => conn);
+        const postUserCouponResult = await userDao.postCoupon(connection, AddUserCouponParams);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - post User Coupon Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
 

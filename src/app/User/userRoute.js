@@ -31,6 +31,10 @@ module.exports = function(app){
 
     // 16. 사용자 등록 쿠폰 조회 API
     app.get('/app/users/:userId/coupon',jwtMiddleware, user.getCoupon)
+
+    // 17. 사용자 쿠폰 등록 API
+    app.post('/app/users/:userId/coupon',jwtMiddleware, user.postCoupon);
+
     
 };
 

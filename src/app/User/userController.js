@@ -339,6 +339,31 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, getCouponResult));
     }
 };
+
+/**
+ * API No. 17
+ * API Name : 16. 사용자 쿠폰 등록 API
+ * [post] /app/users/:userId/getCoupon
+ * path variable : userId
+ */
+ exports.postCoupon = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const {couponId} = req.body;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        if(!couponId)
+            return res.send(errResponse(baseResponse.SIGNIN_COUPONID_EMPT));
+        const postCouponResult = await userService.postCoupon(userId, couponId);
+        return res.send(response(baseResponse.SUCCESS));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation
