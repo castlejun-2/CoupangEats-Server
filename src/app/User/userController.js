@@ -162,9 +162,9 @@ exports.login = async function (req, res) {
     if (checkUserIdx[0].exist === 0)
         return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
     // Result
-    await userService.logout(userId);
+    const logoutResult = await userService.logout(userId);
 
-    return res.send(response(baseResponse.SUCCESS));
+    return res.send(logoutResult);
 
 };
 

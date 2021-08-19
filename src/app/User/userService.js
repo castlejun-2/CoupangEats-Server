@@ -100,12 +100,11 @@ exports.logout = async function (userId) {
         const logoutResult = await userDao.userLogout(connection, userId);
 
         connection.release();
+        return response(baseResponse.SUCCESS);
     } catch (err) {
         logger.error(`App - Logout Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   
     }
-
-    return logoutResult;
 }
 
 exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, latitude, longitude, category) {
