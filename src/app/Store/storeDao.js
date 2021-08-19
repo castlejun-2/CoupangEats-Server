@@ -230,7 +230,7 @@ async function selectMainCategory(connection, storeId) {
 async function selectCategoryDetailMenu(connection, categoryId) {
   const selectStoreCategoryListQuery = `
     SELECT mcd.detailMenuName as '카테고리 추가 옵션',
-	         mcd.plusPrice as '추가금액'
+           format(mcd.plusPrice,0) as '추가금액'
     FROM MenuCategoryDetailInfo mcd left join MenuCategoryInfo mc on mcd.menuCategoryId=mc.menuCategoryIdx
     WHERE mc.menucategoryIdx=?;
   `;
