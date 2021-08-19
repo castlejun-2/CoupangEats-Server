@@ -263,6 +263,28 @@ async function selectCategoryDetailMenu(connection, categoryId) {
   const [detailRows] = await connection.query(selectStoreCategoryListQuery, categoryId);
   return detailRows;
 }
+
+// 매장 세부정보 조회 API
+async function selectStoreDetailInfo(connection, storeId) {
+  const selectStoreDetailListQuery = `
+SELECT si.storeName as '매장 이름',
+	     si.storeNumber as '전화번호',
+       si.storeAddress as '매장 주소',
+       si.representative as '대표자명',
+       si.licenseNumber as '사업자등록번호',
+       si.brandName as '상호명',
+       si.latitude as '위도',
+       si.longitude as '경도',
+       concat(si.startTime,'~',si.finishTime) as '영업시간',
+       si.description as '매장소개',
+       si.notice as '공지사항',
+       si.menuOrigin as '원산지 정보'
+FROM StoreInfo si
+WHERE storeIdx = ?;
+  `;
+  const [detailRows] = await connection.query(selectStoreDetailListQuery, storeId);
+  return detailRows;
+}
 module.exports = {
   selectStoreByKeyword,
   selectStoreByCategory,
@@ -276,6 +298,7 @@ module.exports = {
   selectDetailMenu,
   selectMainCategory,
   selectCategoryDetailMenu,
+  selectStoreDetailInfo,
 };
 
   

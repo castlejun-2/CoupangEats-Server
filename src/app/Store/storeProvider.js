@@ -106,3 +106,11 @@ exports.getDetailMenu = async function (categoryId) {
     connection.release();    
     return mainStoreDetailMenuListResult;
 };
+
+exports.retrieveStoreDetail = async function (storeId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const storeDetailResult = await storeDao.selectStoreDetailInfo(connection, storeId);
+    connection.release();    
+    return storeDetailResult;
+};

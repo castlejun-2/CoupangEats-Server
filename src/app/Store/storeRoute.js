@@ -12,6 +12,9 @@ module.exports = function(app){
     app.get('/app/stores/:userId/main',jwtMiddleware,store.getMainScreen);
 
     // 18. 매장 메인화면 조회 API
-    app.get('/app/stores/:userId/storeMain',jwtMiddleware,store.getStoreMain)
+    app.get('/app/stores/:userId/mainstore',jwtMiddleware,store.getStoreMain);
+
+    // 19. 매장 세부정보 조회 API
+    app.get('/app/stores/:userId/detail-store',jwtMiddleware,store.getStoreDetail);
  
 };

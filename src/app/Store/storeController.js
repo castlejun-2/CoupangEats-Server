@@ -106,13 +106,11 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 18
  * API Name : 매장 메인화면 조회 API
- * [GET] /app/users/:userId/storeMain
+ * [GET] /app/users/:userId/mainstore
  * path variable : userId
  */
  exports.getStoreMain = async function (req, res) {
-    /**
-     * Query String: type
-     */
+
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const storeId = req.query.storeId;
@@ -139,5 +137,32 @@ exports.getStoresByCategory = async function (req, res) {
             result.push(menuList[i],DetailMenu);
         }
         return res.send(response(baseResponse.SUCCESS, result));      
+    } 
+}
+
+/**
+ * API No. 19
+ * API Name : 매장 세부정보 조회 API
+ * [GET] /app/users/:userId/detail-store
+ * path variable : userId
+ */
+ exports.getStoreDetail = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const storeId = req.query.storeId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+    
+        const storeDetailList = await storeProvider.retrieveStoreDetail(storeId);
+
+        return res.send(response(baseResponse.SUCCESS, storeDetailList));      
     } 
 }
