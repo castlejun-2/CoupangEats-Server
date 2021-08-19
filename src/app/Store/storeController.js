@@ -25,7 +25,7 @@ exports.getStoresByKeyword = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if(!keyword)
             return res.send(errResponse(baseResponse.STORE_KEYWORD_EMPTY));
@@ -53,7 +53,7 @@ exports.getStoresByCategory = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if(!category)
             return res.send(errResponse(baseResponse.STORE_CATEGORY_EMPTY));
@@ -80,7 +80,7 @@ exports.getStoresByCategory = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         let type;
         const result = [];

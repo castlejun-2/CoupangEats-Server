@@ -185,7 +185,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if (!address)
             return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));
@@ -218,7 +218,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if(!category)
             res.send(errResponse(baseResponse.ADDRESS_CATEGORY_EMPTY));
@@ -245,7 +245,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if(!addressId)
             res.send(errResponse(baseResponse.ADDRESS_DEFAULT_EMPTY));
@@ -272,7 +272,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if (!storeId)
             return res.send(errResponse(baseResponse.SIGNIN_BOOKMARK_STORE_EMPTY));
@@ -291,7 +291,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 34
+ * API No. 14
  * API Name : 즐겨찾기 조회 API
  * [GET] /app/users/:userId/bookmark
  * path variable : userId
@@ -307,7 +307,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
         
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const countBookMarkResult = await userProvider.getBookMarkCount(userId);
         result.push({'BookMark 매장 갯수': countBookMarkResult});
@@ -315,6 +315,28 @@ exports.login = async function (req, res) {
         const getBookMarkResult = await userProvider.getBookMark(userId, filter)
         result.push({'BookMark 매장': getBookMarkResult});
         return res.send(response(baseResponse.SUCCESS, result));
+    }
+};
+
+/**
+ * API No. 16
+ * API Name : 16. 사용자 등록 쿠폰 조회 API
+ * [GET] /app/users/:userId/getCoupon
+ * path variable : userId
+ */
+ exports.getCoupon = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getCouponResult = await userProvider.getCoupon(userId);
+        return res.send(response(baseResponse.SUCCESS, getCouponResult));
     }
 };
 /**

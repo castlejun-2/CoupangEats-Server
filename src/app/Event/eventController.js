@@ -22,7 +22,7 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const couponList = await eventProvider.retrieveCouponList();
         return res.send(response(baseResponse.SUCCESS, couponList)); 
@@ -44,7 +44,7 @@ exports.getEvent = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
     if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const eventList = await eventProvider.retrieveEventList();
         return res.send(response(baseResponse.SUCCESS, eventList)); 

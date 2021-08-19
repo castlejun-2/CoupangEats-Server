@@ -57,6 +57,7 @@ exports.accountCheck = async function (email) {
   return userAccountResult;
 };
 
+// 유저 여부 조회
 exports.userCheck = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const userCheckResult = await userDao.selectUserIdx(connection, userId);
@@ -65,6 +66,7 @@ exports.userCheck = async function (userId) {
   return userCheckResult;
 };
 
+// 즐겨찾기 여부 조회
 exports.bookMarkCheck = async function (userId, storeId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const checkBookMarkResult = await userDao.selectUserBookMarkCheck(connection, userId, storeId);
@@ -73,6 +75,7 @@ exports.bookMarkCheck = async function (userId, storeId) {
   return checkBookMarkResult;
 };
 
+// 추가한 즐겨찾기 매장 갯수 조회
 exports.getBookMarkCount = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getBookMarkCount = await userDao.selectUserBookMarkCount(connection, userId);
@@ -81,6 +84,7 @@ exports.getBookMarkCount = async function (userId) {
   return getBookMarkCount;
 };
 
+// 추가한 즐겨찾기 매장 조회
 exports.getBookMark = async function (userId, filter) {
   if(filter === 'recent-plus' || !filter ){
     const connection = await pool.getConnection(async (conn) => conn);
@@ -103,4 +107,13 @@ exports.getBookMark = async function (userId, filter) {
 
   return getBookMarkByManyList;    
   }  
+};
+
+// 등록한 쿠폰 조회
+exports.getCoupon = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getUserCoupon = await userDao.selectUserCoupon(connection, userId);
+  connection.release();
+
+  return getUserCoupon;
 };

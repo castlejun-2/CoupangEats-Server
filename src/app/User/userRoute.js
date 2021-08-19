@@ -28,6 +28,10 @@ module.exports = function(app){
 
     // 14. 즐겨찾기 조회 API (+정렬기능)
     app.get('/app/users/:userId/bookmark',jwtMiddleware, user.getBookMark)
+
+    // 16. 사용자 등록 쿠폰 조회 API
+    app.get('/app/users/:userId/coupon',jwtMiddleware, user.getCoupon)
+    
 };
 
 

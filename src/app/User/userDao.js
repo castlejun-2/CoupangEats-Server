@@ -299,6 +299,20 @@ ORDER BY ooi.cs DESC;
   const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
 }
+
+// 사용자가 등록한 쿠폰 조회 
+async function selectUserCoupon(connection, userId){
+  const getUserCouponQuery=`
+          SELECT ci.couponName as '쿠폰 이름',
+	               ci.salePrice as '할인 가격',
+                 ci.limitOrderPrice as '최소 주문 가격',
+                 date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as '유효기간'
+          FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
+          WHERE uci.userId = ? and uci.status = 'ACTIVE';
+  `;
+  const [getCouponRows] = await connection.query(getUserCouponQuery, userId);
+  return getCouponRows;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -320,4 +334,5 @@ module.exports = {
   selectUserBookMarkCheck,
   postBookMark,
   deleteBookMark,
+  selectUserCoupon,
 };
