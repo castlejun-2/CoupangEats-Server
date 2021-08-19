@@ -93,10 +93,10 @@ exports.getBookMark = async function (latitude, longitude, userId, filter) {
   else if(filter === 'recent-order'){
     const connection = await pool.getConnection(async (conn) => conn);
     const Params = [latitude, longitude, latitude, userId];
-    const getBookMarkByOrdertList = await userDao.selectUserBookMarkByOrder(connection, Params);
+    const getBookMarkByOrderList = await userDao.selectUserBookMarkByOrder(connection, Params);
     connection.release();
 
-    return getBookMarkByOrderList;    
+    return getBookMarkByOrderList;
   }
   else if(filter === 'many-order'){
     const connection = await pool.getConnection(async (conn) => conn);
