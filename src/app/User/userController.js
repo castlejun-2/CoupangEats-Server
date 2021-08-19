@@ -367,7 +367,7 @@ exports.login = async function (req, res) {
         }
         else {
             const postCouponResult = await userService.postCoupon(userId, couponId);
-            return res.send(response(baseResponse.SUCCESS));
+            return res.send(postCouponResult);
         }
     }
 };
