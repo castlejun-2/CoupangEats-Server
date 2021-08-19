@@ -362,9 +362,8 @@ exports.login = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_COUPONID_EMPT));
 
         const checkCoupon = await userProvider.checkCoupon(userId, couponId);   
-        if (checkCoupon[0].exist === 1){ //이미 등록된 쿠폰인지 확인
-            return res.send(erresponse(baseResponse.SIGNIN_COUPON_EXIST));
-        }
+        if (checkCoupon[0].exist === 1) //이미 등록된 쿠폰인지 확인
+            return res.send(errResponse(baseResponse.SIGNIN_COUPON_EXIST));
         else {
             const postCouponResult = await userService.postCoupon(userId, couponId);
             return res.send(postCouponResult);
