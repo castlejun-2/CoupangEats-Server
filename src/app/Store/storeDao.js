@@ -218,7 +218,8 @@ async function selectMainMenuCategory(connection, storeId) {
     SELECT smci.storeCategoryIdx as 'Id',
            smci.categoryName as '메뉴 카테고리'
     FROM StoreMenuCategoryInfo smci join MenuInfo mi on mi.category=smci.storeCategoryIdx
-    WHERE mi.storeId = ?;
+    WHERE mi.storeId = ?
+    GROUP BY smci.storeCategoryIdx;
   `;
   const [categoryRows] = await connection.query(selectStoreCategoryListQuery, storeId);
   return categoryRows;
