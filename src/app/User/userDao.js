@@ -304,8 +304,8 @@ ORDER BY ooi.cs DESC;
 async function selectUserCoupon(connection, userId){
   const getUserCouponQuery=`
           SELECT ci.couponName as '쿠폰 이름',
-	               ci.salePrice as '할인 가격',
-                 ci.limitOrderPrice as '최소 주문 가격',
+                 format(ci.salePrice,0) as '할인 가격',
+                 format(ci.limitOrderPrice,0) as '최소 주문 가격',
                  date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as '유효기간'
           FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
           WHERE uci.userId = ? and uci.status = 'ACTIVE';
