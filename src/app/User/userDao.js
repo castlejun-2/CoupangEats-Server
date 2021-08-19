@@ -314,6 +314,15 @@ async function selectUserCoupon(connection, userId){
   return getCouponRows;
 }
 
+// 유저 쿠폰 체크
+async function selectUserCouponCheck(connection, userId, couponId) {
+  const userCouponQuery = `
+      select exists(select userId from UserCouponInfo where userId = ? and couponId = ? and status = 'ACTIVE') as exist;
+     `;
+  const [CouponRow] = await connection.query(userCouponQuery, [userId, couponId]);
+  return CouponRow;
+}
+
 // 사용자 쿠폰 등록
 async function postCoupon(connection, AddUserCouponParams) {
   const postCouponQuery = `
@@ -350,4 +359,5 @@ module.exports = {
   deleteBookMark,
   selectUserCoupon,
   postCoupon,
+  selectUserCouponCheck,
 };

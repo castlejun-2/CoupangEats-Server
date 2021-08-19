@@ -117,3 +117,12 @@ exports.getCoupon = async function (userId) {
 
   return getUserCoupon;
 };
+
+// 쿠폰 등록 여부 조회
+exports.checkCoupon = async function (userId, couponId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const checkCouponResult = await userDao.selectUserCouponCheck(connection, userId, couponId);
+  connection.release();
+
+  return checkCouponResult;
+};
