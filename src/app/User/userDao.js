@@ -132,7 +132,7 @@ async function updateUserAddress(connection, updateUserAddressParams) {
 }
 
 // 기본 배송지 설정전 세팅
-async function SetdefaultAddress(connection, userId){
+async function setdefaultAddress(connection, userId){
   const defaultAddressSettingQuery=`
   update AddressInfo
   set isDefault = 0
@@ -143,7 +143,7 @@ async function SetdefaultAddress(connection, userId){
 }
 
 // 기본 배송지 설정
-async function SettingdefaultAddress(connection, updateUserAddressParams){
+async function settingdefaultAddress(connection, updateUserAddressParams){
   const defaultAddressSettingQuery=`
   update AddressInfo
   set isDefault = 1
@@ -151,6 +151,29 @@ async function SettingdefaultAddress(connection, updateUserAddressParams){
   `;
   const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, updateUserAddressParams);
   return SetdefaultAddressRows;
+}
+
+// 유저 북마크 체크
+async function selectUserBookMarkCheck(connection, userId, storeId) {
+  const userBookMarkQuery = `
+  select exists(select userId from UserBookmarkInfo where userId = ? and storeId = ? and status = 'ACTIVE') as exist;
+     `;
+  const [userIdxRow] = await connection.query(userBookMarkQuery, [userId, storeId]);
+  return userIdxRow;
+}
+
+// 사용자 매장 즐겨찾기 추가
+async function postBookMark(connection, AddUserBookMarkParams) {
+  const postBookMarkQuery = `
+        INSERT INTO UserBookmarkInfo(userId, storeId)
+        VALUES (?, ?);
+    `;
+  const postBookMarkRow = await connection.query(
+    postBookMarkQuery,
+    AddUserBookMarkParams
+  );
+
+  return postBookMarkRow;
 }
 
 // 즐겨찾기 매장 갯수 조회
@@ -164,8 +187,8 @@ async function selectUserBookMarkCount(connection, userId){
   return BookMarkCountRows;
 }
 
-// 즐겨찾기 조회
-async function selectUserBookMark(connection, Params){
+// 최근 추가한 순 즐겨찾기 조회
+async function selectUserBookMarkByRecent(connection, Params){
   const getBookMarkQuery=`
   SELECT 	image.url as '가게 사진',
 		      storeName as '가게 이름',
@@ -188,7 +211,72 @@ FROM StoreInfo si left join
          join DeliveryTipInfo dti on si.storeIdx=dti.storeId
          join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
          join UserInfo ui on ui.userIdx=ubi.userId
-WHERE ui.userIdx = ?;    
+WHERE ui.userIdx = ?
+ORDER BY ubi.createdAt DESC;    
+  `;
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  return getBookMarkRows;
+}
+
+// 최근 주문한 순 즐겨찾기 조회
+async function selectUserBookMarkByOrder(connection, Params){
+  const getBookMarkQuery=`
+  SELECT 	image.url as '가게 사진',
+		      storeName as '가게 이름',
+		      case when isCheetah = 1 then '치타배달' end as '치타배달',
+		      rv.star as '평균 평점',
+          rv.cnt as '리뷰 갯수',
+		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          averageDelivery as '평균 배달시간',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
+        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+FROM StoreInfo si left join
+	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
+		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+         (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
+          from StoreInfo si join
+         (select miu.menuImageUrl,mi.storeId
+          from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+          group by mu.storeId ) image on image.imagesi=si.storeIdx
+         join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
+         join UserInfo ui on ui.userIdx=ubi.userId
+         join (select userId,storeID,oi.createdAt as ca from OrderInfo oi join UserInfo ui on ui.userIdx=oi.userId group by oi.storeId) ooi on ooi.storeId=si.storeIdx
+WHERE ubi.userId = ?
+ORDER BY ooi.ca DESC;
+  `;
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  return getBookMarkRows;
+}
+
+// 많이 주문한 순 즐겨찾기 조회
+async function selectUserBookMarkByMany(connection, Params){
+  const getBookMarkQuery=`
+  SELECT 	image.url as '가게 사진',
+		      storeName as '가게 이름',
+		      case when isCheetah = 1 then '치타배달' end as '치타배달',
+		      rv.star as '평균 평점',
+          rv.cnt as '리뷰 갯수',
+		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          averageDelivery as '평균 배달시간',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
+        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+FROM StoreInfo si left join
+	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
+		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+         (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
+          from StoreInfo si join
+         (select miu.menuImageUrl,mi.storeId
+          from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+          group by mu.storeId ) image on image.imagesi=si.storeIdx
+         join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
+         join UserInfo ui on ui.userIdx=ubi.userId
+         join (select userId,storeID,count(storeId) as cs from OrderInfo oi join UserInfo ui on ui.userIdx=oi.userId group by oi.storeId) ooi on ooi.storeId=si.storeIdx
+WHERE ubi.userId = ?
+ORDER BY ooi.cs DESC;
   `;
   const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
   return getBookMarkRows;
@@ -205,8 +293,12 @@ module.exports = {
   updateUserInfo,
   insertUserAddress,
   updateUserAddress,
-  SetdefaultAddress,
-  SettingdefaultAddress,
-  selectUserBookMark,
+  setdefaultAddress,
+  settingdefaultAddress,
+  selectUserBookMarkByRecent,
+  selectUserBookMarkByOrder,
+  selectUserBookMarkByMany,
   selectUserBookMarkCount,
+  selectUserBookMarkCheck,
+  postBookMark,
 };

@@ -65,6 +65,14 @@ exports.userCheck = async function (userId) {
   return userCheckResult;
 };
 
+exports.bookMarkCheck = async function (userId, storeId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const checkBookMarkResult = await userDao.selectUserBookMarkCheck(connection, userId, storeId);
+  connection.release();
+
+  return checkBookMarkResult;
+};
+
 exports.getBookMarkCount = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const getBookMarkCount = await userDao.selectUserBookMarkCount(connection, userId);
@@ -73,11 +81,29 @@ exports.getBookMarkCount = async function (userId) {
   return getBookMarkCount;
 };
 
-exports.getBookMark = async function (latitude, longitude, userId) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const Params = [latitude, longitude, latitude, userId];
-  const getBookMarkList = await userDao.selectUserBookMark(connection, Params);
-  connection.release();
+exports.getBookMark = async function (latitude, longitude, userId, filter) {
+  if(filter === 'recent-plus' || !filter ){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const Params = [latitude, longitude, latitude, userId];
+    const getBookMarkByRecentList = await userDao.selectUserBookMarkByRecent(connection, Params);
+    connection.release();
 
-  return getBookMarkList;
+    return getBookMarkByRecentList;
+  }
+  else if(filter === 'recent-order'){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const Params = [latitude, longitude, latitude, userId];
+    const getBookMarkByOrdertList = await userDao.selectUserBookMarkByOrder(connection, Params);
+    connection.release();
+
+    return getBookMarkByOrderList;    
+  }
+  else if(filter === 'many-order'){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const Params = [latitude, longitude, latitude, userId];
+    const getBookMarkByManyList = await userDao.selectUserBookMarkByMany(connection, Params);
+    connection.release();
+
+  return getBookMarkByManyList;    
+  }  
 };

@@ -145,8 +145,23 @@ exports.setDefaultAddress = async function (userId, addressId) {
         const updateUserAddressParams = [userId, addressId];
 
         const connection = await pool.getConnection(async (conn) => conn);
-        const settingDefaultResult = await userDao.SetdefaultAddress(connection,userId);
-        const setDefaultResult = await userDao.SettingdefaultAddress(connection,updateUserAddressParams);
+        const settingDefaultResult = await userDao.setdefaultAddress(connection,userId);
+        const setDefaultResult = await userDao.settingdefaultAddress(connection,updateUserAddressParams);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+exports.postUserBookMark = async function (userId, storeId) {
+    try {
+        const AddUserBookMarkParams = [userId, storeId];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        const postUserBookMarkResult = await userDao.postBookMark(connection,AddUserBookMarkParams);
         connection.release();
         return response(baseResponse.SUCCESS);
 
