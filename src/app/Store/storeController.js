@@ -102,3 +102,42 @@ exports.getStoresByCategory = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, result));         
     } 
 }
+
+/**
+ * API No. 18
+ * API Name : 매장 메인화면 조회 API
+ * [GET] /app/users/:userId/storeMain
+ * path variable : userId
+ */
+ exports.getStoreMain = async function (req, res) {
+    /**
+     * Query String: type
+     */
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const storeId = req.query.storeId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+        const result = [];
+            
+        const mainTopList = await storeProvider.retrieveMainList(storeId);
+        result.push({'매장 상단 정보': mainTopList});
+
+        const reviewList = await storeProvider.retrieveReviewList(storeId);
+        result.push({'리뷰 미리보기': reviewList});
+        
+        const menuList = await storeProvider.retrieveMenuList(storeId);
+        for(let i=0; i<menuList.length; i++){
+            const DetailMenu = await storeProvider.getDetailMenu(menuList[i].Id);
+            result.push(menuList[i],DetailMenu);
+        }
+        return res.send(response(baseResponse.SUCCESS, result));      
+    } 
+}

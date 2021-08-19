@@ -46,7 +46,8 @@ module.exports = {
     SIGNIN_TYPE_WRONG: { "isSuccess": false, "code": 2030, "message": "잘못된 타입을 입력하였습니다" },
     SIGNIN_BOOKMARK_STORE_EMPTY: { "isSuccess": false, "code": 2031, "message": "즐겨찾기에 추가할 매장ID를 입력해주세요" },
     USER_BOOKMARK_EXIST: { "isSuccess": false, "code": 2032, "message": "이미 즐겨찾기 등록된 매장입니다" },
-    SIGNIN_COUPONID_EMPT: { "isSuccess": false, "code": 2033, "message": "등록할 쿠폰 ID를 입력해주세요" }, 
+    SIGNIN_COUPONID_EMPTY: { "isSuccess": false, "code": 2033, "message": "등록할 쿠폰 ID를 입력해주세요" },
+    SIGNIN_STOREID_EMPTY: { "isSuccess": false, "code": 2034, "message": "조회할 매장을 입력해주세요" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

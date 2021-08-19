@@ -359,7 +359,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     else {
         if(!couponId)
-            return res.send(errResponse(baseResponse.SIGNIN_COUPONID_EMPT));
+            return res.send(errResponse(baseResponse.SIGNIN_COUPONID_EMPTY));
 
         const checkCoupon = await userProvider.checkCoupon(userId, couponId);   
         if (checkCoupon[0].exist === 1) //이미 등록된 쿠폰인지 확인
