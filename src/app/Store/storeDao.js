@@ -215,7 +215,7 @@ async function selectMainReview(connection, storeId) {
 // 매장 메뉴 분류 리스트 조회
 async function selectMainMenuCategory(connection, storeId) {
   const selectStoreCategoryListQuery = `
-    SELECT smci.menuCategoryIdx as 'Id',
+    SELECT smci.storeCategoryIdx as 'Id',
            smci.categoryName as '메뉴 카테고리'
     FROM StoreMenuCategoryInfo smci join MenuInfo mi on mi.category=smci.storeCategoryIdx
     WHERE mi.storeId = ?;
