@@ -173,7 +173,7 @@ async function selectStoreCategory(connection) {
 }
 
 // 매장 메인화면 조회 API
-async function selectMainScreen(connection,storeId) {
+async function selectMainScreen(connection, storeId) {
   const selectMainListQuery = `
   SELECT 	image.url as '가게 사진',
 		      storeName as '가게 이름',
@@ -182,7 +182,7 @@ async function selectMainScreen(connection,storeId) {
           rv.cnt as '리뷰 갯수',
           averageDelivery as '평균 배달시간',
           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
-          format(si.minimumOrder,0) as '최소 주문 가격',
+          format(si.minimumOrder,0) as '최소 주문 가격'
   FROM StoreInfo si left join
 	    (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
 	     From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
