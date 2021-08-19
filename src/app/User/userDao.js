@@ -105,8 +105,8 @@ async function updateUserInfo(connection, id, userName) {
 // 주소지 추가
 async function insertUserAddress(connection, insertUserAddressParams) {
   const insertUserAddressInfoQuery = `
-        INSERT INTO AddressInfo(userId, addressLine, detailAddressLine, infoAddress, category)
-        VALUES (?, ?, ?, ?, ?);
+        INSERT INTO AddressInfo(userId, addressLine, detailAddressLine, infoAddress, latitude, longitude, category)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
   const insertUserAddressInfoRow = await connection.query(
     insertUserAddressInfoQuery,
@@ -162,6 +162,21 @@ async function selectUserBookMarkCheck(connection, userId, storeId) {
   return userIdxRow;
 }
 
+// 사용자 매장 즐겨찾기 삭제
+async function deleteBookMark(connection, AddUserBookMarkParams) {
+  const deleteBookMarkQuery = `
+        UPDATE UserBookmarkInfo
+        SET status = 'DELETE'
+        WHERE userId = ? and storeId = ?;
+    `;
+  const deleteBookMarkRow = await connection.query(
+    deleteBookMarkQuery,
+    AddUserBookMarkParams
+  );
+
+  return deleteBookMarkRow;
+}
+
 // 사용자 매장 즐겨찾기 추가
 async function postBookMark(connection, AddUserBookMarkParams) {
   const postBookMarkQuery = `
@@ -181,21 +196,21 @@ async function selectUserBookMarkCount(connection, userId){
   const defaultAddressSettingQuery=`
   SELECT  concat(count(*),'개') as '즐겨찾는 매장 수'
   FROM UserInfo ui join UserBookmarkInfo ubi on ui.userIdx = ubi.userId
-  WHERE ui.userIdx = ?;
+  WHERE ui.userIdx = ? and ubi.status = 'ACTIVE';
   `;
   const [BookMarkCountRows] = await connection.query(defaultAddressSettingQuery, userId);
   return BookMarkCountRows;
 }
 
 // 최근 추가한 순 즐겨찾기 조회
-async function selectUserBookMarkByRecent(connection, Params){
+async function selectUserBookMarkByRecent(connection, userId){
   const getBookMarkQuery=`
   SELECT 	image.url as '가게 사진',
 		      storeName as '가게 이름',
 		      case when isCheetah = 1 then '치타배달' end as '치타배달',
 		      rv.star as '평균 평점',
           rv.cnt as '리뷰 갯수',
-		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
           averageDelivery as '평균 배달시간',
           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
         case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
@@ -211,22 +226,23 @@ FROM StoreInfo si left join
          join DeliveryTipInfo dti on si.storeIdx=dti.storeId
          join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
          join UserInfo ui on ui.userIdx=ubi.userId
-WHERE ui.userIdx = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+WHERE ui.userIdx = ? and ubi.status = 'ACTIVE'
 ORDER BY ubi.createdAt DESC;    
   `;
-  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
 }
 
 // 최근 주문한 순 즐겨찾기 조회
-async function selectUserBookMarkByOrder(connection, Params){
+async function selectUserBookMarkByOrder(connection, userId){
   const getBookMarkQuery=`
   SELECT 	image.url as '가게 사진',
 		      storeName as '가게 이름',
 		      case when isCheetah = 1 then '치타배달' end as '치타배달',
 		      rv.star as '평균 평점',
           rv.cnt as '리뷰 갯수',
-		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
           averageDelivery as '평균 배달시간',
           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
         case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
@@ -243,22 +259,23 @@ FROM StoreInfo si left join
          join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
          join UserInfo ui on ui.userIdx=ubi.userId
          join (select userId,storeID,oi.createdAt as ca from OrderInfo oi join UserInfo ui on ui.userIdx=oi.userId group by oi.storeId) ooi on ooi.storeId=si.storeIdx
-WHERE ubi.userId = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+WHERE ui.userIdx = ? and ubi.status = 'ACTIVE'
 ORDER BY ooi.ca DESC;
   `;
-  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
 }
 
 // 많이 주문한 순 즐겨찾기 조회
-async function selectUserBookMarkByMany(connection, Params){
+async function selectUserBookMarkByMany(connection, userId){
   const getBookMarkQuery=`
   SELECT 	image.url as '가게 사진',
 		      storeName as '가게 이름',
 		      case when isCheetah = 1 then '치타배달' end as '치타배달',
 		      rv.star as '평균 평점',
           rv.cnt as '리뷰 갯수',
-		      concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
           averageDelivery as '평균 배달시간',
           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
         case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
@@ -275,10 +292,11 @@ FROM StoreInfo si left join
          join UserBookmarkInfo ubi on ubi.storeId=si.storeIdx
          join UserInfo ui on ui.userIdx=ubi.userId
          join (select userId,storeID,count(storeId) as cs from OrderInfo oi join UserInfo ui on ui.userIdx=oi.userId group by oi.storeId) ooi on ooi.storeId=si.storeIdx
-WHERE ubi.userId = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+WHERE ui.userIdx = ? and ubi.status = 'ACTIVE'
 ORDER BY ooi.cs DESC;
   `;
-  const [getBookMarkRows] = await connection.query(getBookMarkQuery, Params);
+  const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
 }
 module.exports = {
@@ -301,4 +319,5 @@ module.exports = {
   selectUserBookMarkCount,
   selectUserBookMarkCheck,
   postBookMark,
+  deleteBookMark,
 };

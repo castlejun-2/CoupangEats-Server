@@ -1,5 +1,5 @@
 // 키워드로 가게 조회
-async function selectStoreByKeyword(connection, getDistanceParams) {
+async function selectStoreByKeyword(connection, userId, keyword) {
     const selectStoreByKeywordQuery = `
     SELECT image.url as '가게 사진',
            storeName as '가게 이름',
@@ -7,7 +7,7 @@ async function selectStoreByKeyword(connection, getDistanceParams) {
            averageDelivery as '평균 배달시간',
            rv.star as '평균 평점',
            rv.cnt as '리뷰 갯수',
-           concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+           concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
            case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
            lm.mnN as '메뉴리스트',
            cui.saleprice as '할인쿠폰',
@@ -26,14 +26,16 @@ async function selectStoreByKeyword(connection, getDistanceParams) {
 		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
           join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
          join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-    WHERE concat(storeName,lm.mnN) Like concat ("%",?,"%")
+         join UserInfo ui on ui.userIdx = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+    WHERE concat(storeName,lm.mnN) Like concat ("%",?,"%");
 `;
-    const [listRows] = await connection.query(selectStoreByKeywordQuery, getDistanceParams);
+    const [listRows] = await connection.query(selectStoreByKeywordQuery, [userId, keyword]);
     return listRows;
 }
 
 //카테고리별 가게 조회
-async function selectStoreByCategory(connection, getDistanceParams) {
+async function selectStoreByCategory(connection, userId, category) {
   const selectStoreByCategoryQuery = `
     SELECT image.url as '가게 사진',
            storeName as '가게 이름',
@@ -41,7 +43,7 @@ async function selectStoreByCategory(connection, getDistanceParams) {
            averageDelivery as '평균 배달시간',
            rv.star as '평균 평점',
            rv.cnt as '리뷰 갯수',
-           concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+           concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
            case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
            lm.mnN as '메뉴리스트',
            cui.saleprice as '할인쿠폰',
@@ -60,19 +62,21 @@ async function selectStoreByCategory(connection, getDistanceParams) {
 		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
           join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
          join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserInfo ui on ui.userIdx = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
     WHERE si.category Like concat ("%",?,"%")
   `;
-  const [listRows] = await connection.query(selectStoreByCategoryQuery, getDistanceParams);
+  const [listRows] = await connection.query(selectStoreByCategoryQuery, [userId, category]);
   return listRows;
 }
 // 메인화면 새로 입점한 가게 리스트 조회 API
-async function selectMainScreenByNew(connection) {
+async function selectMainScreenByNew(connection, userId) {
   const selectMainByNewListQuery = `
           SELECT image.url as '가게 사진',
                  storeName as '가게 이름',
                  rv.star as '평균 평점',
                  rv.cnt as '리뷰 갯수',
-                 concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+                 concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
                  case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
                  case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
           FROM StoreInfo si left join
@@ -85,20 +89,22 @@ async function selectMainScreenByNew(connection) {
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
           WHERE (DATE(NOW())-DATE(si.createdAt)) < 2
   `;
-  const [mainRows] = await connection.query(selectMainByNewListQuery,getDistanceParams);
+  const [mainRows] = await connection.query(selectMainByNewListQuery, userId);
   return mainRows;
 }
 
 // 메인화면 인기 매장 리스트 조회 API
-async function selectMainScreenByPopular(connection,getDistanceParams) {
+async function selectMainScreenByPopular(connection, userId) {
   const selectMainByPopularListQuery = `
             SELECT image.url as '가게 사진',
                  storeName as '가게 이름',
                  rv.star as '평균 평점',
                  rv.cnt as '리뷰 갯수',
-                 concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+                 concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
                  case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
                  case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
           FROM StoreInfo si left join
@@ -111,14 +117,16 @@ async function selectMainScreenByPopular(connection,getDistanceParams) {
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
 		  WHERE rv.cnt >= 5 ORDER BY rv.star DESC  
   `;
-  const [mainRows] = await connection.query(selectMainByPopularListQuery,getDistanceParams);
+  const [mainRows] = await connection.query(selectMainByPopularListQuery, userId);
   return mainRows;
 }
 
 // 메인화면 그 외의 매장 리스트 조회 API
-async function selectMainScreenByOther(connection, getDistanceParams) {
+async function selectMainScreenByOther(connection, userId) {
   const selectMainByOtherListQuery = `
     SELECT image.url as '가게 사진',
            storeName as '가게 이름',
@@ -126,7 +134,7 @@ async function selectMainScreenByOther(connection, getDistanceParams) {
            averageDelivery as '평균 배달시간',
            rv.star as '평균 평점',
            rv.cnt as '리뷰 갯수',
-           concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS '거리',
+           concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
            case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
            lm.mnN as '메뉴리스트',
            cui.saleprice as '할인쿠폰',
@@ -144,9 +152,11 @@ async function selectMainScreenByOther(connection, getDistanceParams) {
           group by mu.storeId ) image on image.imagesi=si.storeIdx join
 		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
           join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
-         join DeliveryTipInfo dti on si.storeIdx=dti.storeId;
+         join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserInfo ui on ui.userIdx = ?
+         join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx;
   `;
-  const [mainRows] = await connection.query(selectMainByOtherListQuery,getDistanceParams);
+  const [mainRows] = await connection.query(selectMainByOtherListQuery, userId);
   return mainRows;
 }
 

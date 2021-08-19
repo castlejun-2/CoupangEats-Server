@@ -179,7 +179,7 @@ exports.login = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const {address, detailAddress, infoAddress, category} = req.body;
+    const {address, detailAddress, infoAddress, latitude, longitude, category} = req.body;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -188,11 +188,15 @@ exports.login = async function (req, res) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         if (!address)
-            return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));            
+            return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));                
         if(!category)
             res.send(errResponse(baseResponse.ADDRESS_CATEGORY_EMPTY));
 
-        const postAddressInfo = await userService.postAddAddress(userId, address, detailAddress, infoAddress, category)
+        const postAddressInfo = await userService.postAddAddress(userId, address, detailAddress, infoAddress, latitude, longitude, category)
         return res.send(postAddressInfo);
     }
 };
@@ -253,12 +257,12 @@ exports.login = async function (req, res) {
 
 /**
  * API No. 13
- * API Name : 매장 즐겨찾기 추가 API
+ * API Name : 매장 즐겨찾기 추가 및 취소 API
  * [POST] /app/users/:userId/bookmark
  * path variable : userId
  * body : storeId
  */
- exports.postBookMark = async function (req, res) {
+ exports.updateBookMark = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
@@ -270,17 +274,19 @@ exports.login = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
+        if (!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_BOOKMARK_STORE_EMPTY));
         
         const checkUserBookMark = await userProvider.bookMarkCheck(userId, storeId);
         
-        //Validation Check
-        if (checkUserBookMark[0].exist === 1) //이미 즐겨찾기에 추가된 매장인지 확인
-            return res.send(errResponse(baseResponse.USER_BOOKMARK_EXIST));
-        if (!storeId)
-            return res.send(errResponse(baseResponse.SIGNIN_BOOKMARK_STORE_EMPTY));            
-
-        const postBookMarkInfo = await userService.postUserBookMark(userId, storeId)
-        return res.send(postBookMarkInfo);
+        if (checkUserBookMark[0].exist === 1){ //이미 즐겨찾기에 추가된 매장인지 확인
+            const deleteBookMarkInfo = await userService.deleteUserBookMark(userId, storeId)
+            return res.send(deleteBookMarkInfo);
+        }            
+        else {
+            const postBookMarkInfo = await userService.postUserBookMark(userId, storeId)
+            return res.send(postBookMarkInfo);
+        }
     }
 };
 
@@ -294,8 +300,6 @@ exports.login = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const latitude = req.query.latitude;
-    const longitude = req.query.longitude;
     const filter = req.query.filter;
 
     let result = [];
@@ -305,15 +309,10 @@ exports.login = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        if(!latitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
-        if(!longitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
-
         const countBookMarkResult = await userProvider.getBookMarkCount(userId);
         result.push({'BookMark 매장 갯수': countBookMarkResult});
 
-        const getBookMarkResult = await userProvider.getBookMark(latitude, longitude, userId, filter)
+        const getBookMarkResult = await userProvider.getBookMark(userId, filter)
         result.push({'BookMark 매장': getBookMarkResult});
         return res.send(response(baseResponse.SUCCESS, result));
     }

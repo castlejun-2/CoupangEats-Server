@@ -4,41 +4,38 @@ const { logger } = require("../../../config/winston");
 const storeDao = require("./storeDao");
 
 //키워드에 맞는로 매장 검색 API
-exports.retrieveStoreByKeywordList = async function (latitude, longitude, keyword) {
+exports.retrieveStoreByKeywordList = async function (userId, keyword) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const getDistanceParams = [latitude, longitude, latitude, keyword];
-    const storeListByKeywordResult = await storeDao.selectStoreByKeyword(connection, getDistanceParams);
+    const storeListByKeywordResult = await storeDao.selectStoreByKeyword(connection, userId, keyword);
     connection.release();
 
     return storeListByKeywordResult;
 };
 
 //카테고리에 해당하는 매장 검색 API
-exports.retrieveStoreByCategoryList = async function (latitude, longitude, category) {
+exports.retrieveStoreByCategoryList = async function (userId, category) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const getDistanceParams = [latitude, longitude, latitude, category];
-    const storeListByCategoryResult = await storeDao.selectStoreByCategory(connection, getDistanceParams);
+    const storeListByCategoryResult = await storeDao.selectStoreByCategory(connection, userId, category);
     connection.release();
 
     return storeListByCategoryResult;
 };
 
 //메인화면 조회 API
-exports.retrieveMainScreenList = async function (latitude, longitude, type) {
-    const getDistanceParams = [latitude, longitude, latitude];
+exports.retrieveMainScreenList = async function (userId, type) {
     if(type){
         if(type === 'new'){
             const connection = await pool.getConnection(async (conn) => conn);
-            const mainScreenByNewListResult = await storeDao.selectMainScreenByNew(connection,getDistanceParams);
+            const mainScreenByNewListResult = await storeDao.selectMainScreenByNew(connection,userId);
 
             connection.release();    
             return mainScreenByNewListResult;
         }    
         else if(type === 'popular'){
             const connection = await pool.getConnection(async (conn) => conn);
-            const mainScreenByPopularListResult = await storeDao.selectMainScreenByPopular(connection,getDistanceParams);
+            const mainScreenByPopularListResult = await storeDao.selectMainScreenByPopular(connection,userId);
         
             connection.release();    
             return mainScreenByPopularListResult;
@@ -47,13 +44,13 @@ exports.retrieveMainScreenList = async function (latitude, longitude, type) {
     else{
         const connection = await pool.getConnection(async (conn) => conn);
 
-        const mainScreenOtherListResult = await storeDao.selectMainScreenByOther(connection,getDistanceParams);
+        const mainScreenOtherListResult = await storeDao.selectMainScreenByOther(connection,userId);
         connection.release();    
         return mainScreenOtherListResult;
     }
 };
 
-exports.retrieveStoreCategoryList = async function (type) {
+exports.retrieveStoreCategoryList = async function () {
     const connection = await pool.getConnection(async (conn) => conn);
 
     const storeCategoryListResult = await storeDao.selectStoreCategory(connection);

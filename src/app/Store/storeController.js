@@ -20,8 +20,6 @@ exports.getStoresByKeyword = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const keyword = req.query.keyword;
-    const latitude = req.query.latitude;
-    const longitude = req.query.longitude;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -29,14 +27,10 @@ exports.getStoresByKeyword = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        if(!latitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
-        if(!longitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
         if(!keyword)
             return res.send(errResponse(baseResponse.STORE_KEYWORD_EMPTY));
 
-        const storeList = await storeProvider.retrieveStoreByKeywordList(latitude, longitude, keyword);
+        const storeList = await storeProvider.retrieveStoreByKeywordList(keyword);
         return res.send(response(baseResponse.SUCCESS, storeList)); 
     }  
 }
@@ -54,8 +48,6 @@ exports.getStoresByCategory = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const category = req.query.category;
-    const latitude = req.query.latitude;
-    const longitude = req.query.longitude;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -63,20 +55,16 @@ exports.getStoresByCategory = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        if(!latitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
-        if(!longitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
         if(!category)
             return res.send(errResponse(baseResponse.STORE_CATEGORY_EMPTY));
 
-        const storeList = await storeProvider.retrieveStoreByCategoryList(latitude, longitude, category);
+        const storeList = await storeProvider.retrieveStoreByCategoryList(userId, category);
         return res.send(response(baseResponse.SUCCESS, storeList));   
     } 
 }
 
 /**
- * API No. 33
+ * API No. 9
  * API Name : 메인화면 신규 입점 및 인기 매장 조회 API
  * [GET] /app/users/:userId/main
  * path variable : userId
@@ -87,8 +75,6 @@ exports.getStoresByCategory = async function (req, res) {
      */
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const latitude = req.query.latitude;
-    const longitude = req.query.longitude;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -96,25 +82,21 @@ exports.getStoresByCategory = async function (req, res) {
     if (userIdFromJWT != userId) {
         res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        if(!latitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
-        if(!longitude)
-            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));
         let type;
         const result = [];
             
         const storeCategoryList = await storeProvider.retrieveStoreCategoryList();
             result.push({'매장 분류': storeCategoryList});
         type = 'new';  
-            const mainList1 = await storeProvider.retrieveMainScreenList(latitude, longitude, type);
+            const mainList1 = await storeProvider.retrieveMainScreenList(userId, type);
             result.push({'신규매장': mainList1});
         
         type = 'popular';
-            const mainList2 = await storeProvider.retrieveMainScreenList(latitude, longitude, type);
+            const mainList2 = await storeProvider.retrieveMainScreenList(userId, type);
             result.push({'인기매장': mainList2});
         
         type === 'pick'; //그 외의 매장 리스트 조회
-            const mainOtherList = await storeProvider.retrieveMainScreenList(latitude, longitude, 0);
+            const mainOtherList = await storeProvider.retrieveMainScreenList(userId, 0);
             result.push({'골라먹는 매장': mainOtherList});
 
         return res.send(response(baseResponse.SUCCESS, result));         

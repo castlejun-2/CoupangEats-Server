@@ -8,10 +8,10 @@ module.exports = function(app){
     // 1. 유저 생성 (회원가입) API
     app.post('/app/users/sign-up', user.postUsers);
 
-    // 31. 로그인 API (JWT 생성)
+    // 2. 로그인 API (JWT 생성)
     app.post('/app/login', user.login);
 
-    // 3. 로그아웃 API
+    // 31. 로그아웃 API
     app.post('/app/:userId/logout', jwtMiddleware, user.logout);
 
     // 4. 주소지 추가 API (일반 주소)
@@ -23,10 +23,10 @@ module.exports = function(app){
     // 6. 기본 배송지 설정 API
     app.patch('/app/users/:userId/default-address',jwtMiddleware, user.defaultAddress);
 
-    // 13. 매장 즐겨찾기 추가 API
-    app.post('/app/users/:userId/bookmark',jwtMiddleware, user.postBookMark);
+    // 13. 매장 즐겨찾기 추가 및 삭제 API
+    app.post('/app/users/:userId/bookmark',jwtMiddleware, user.updateBookMark);
 
-    // 34. 즐겨찾기 조회 API (+정렬기능)
+    // 14. 즐겨찾기 조회 API (+정렬기능)
     app.get('/app/users/:userId/bookmark',jwtMiddleware, user.getBookMark)
 };
 

@@ -108,9 +108,9 @@ exports.logout = async function (userId) {
     return logoutResult;
 }
 
-exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, category) {
+exports.postAddAddress = async function (userId, address, detailAddress, infoAddress, latitude, longitude, category) {
     try {
-        const insertUserAddressParams = [userId, address, detailAddress, infoAddress, category];
+        const insertUserAddressParams = [userId, address, detailAddress, infoAddress, latitude, longitude, category];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -156,6 +156,21 @@ exports.setDefaultAddress = async function (userId, addressId) {
     }
 };
 
+exports.deleteUserBookMark = async function (userId, storeId) {
+    try {
+        const deleteUserBookMarkParams = [userId, storeId];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        const deleteUserBookMarkResult = await userDao.deleteBookMark(connection, deleteUserBookMarkParams);
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - delete User BookMark Address Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
 exports.postUserBookMark = async function (userId, storeId) {
     try {
         const AddUserBookMarkParams = [userId, storeId];
@@ -166,7 +181,7 @@ exports.postUserBookMark = async function (userId, storeId) {
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
-        logger.error(`App - updateUserDetailAddress Service error\n: ${err.message}`);
+        logger.error(`App - post User BookMark Address Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };

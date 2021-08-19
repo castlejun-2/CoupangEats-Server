@@ -81,27 +81,24 @@ exports.getBookMarkCount = async function (userId) {
   return getBookMarkCount;
 };
 
-exports.getBookMark = async function (latitude, longitude, userId, filter) {
+exports.getBookMark = async function (userId, filter) {
   if(filter === 'recent-plus' || !filter ){
     const connection = await pool.getConnection(async (conn) => conn);
-    const Params = [latitude, longitude, latitude, userId];
-    const getBookMarkByRecentList = await userDao.selectUserBookMarkByRecent(connection, Params);
+    const getBookMarkByRecentList = await userDao.selectUserBookMarkByRecent(connection, userId);
     connection.release();
 
     return getBookMarkByRecentList;
   }
   else if(filter === 'recent-order'){
     const connection = await pool.getConnection(async (conn) => conn);
-    const Params = [latitude, longitude, latitude, userId];
-    const getBookMarkByOrderList = await userDao.selectUserBookMarkByOrder(connection, Params);
+    const getBookMarkByOrderList = await userDao.selectUserBookMarkByOrder(connection, userId);
     connection.release();
 
     return getBookMarkByOrderList;
   }
   else if(filter === 'many-order'){
     const connection = await pool.getConnection(async (conn) => conn);
-    const Params = [latitude, longitude, latitude, userId];
-    const getBookMarkByManyList = await userDao.selectUserBookMarkByMany(connection, Params);
+    const getBookMarkByManyList = await userDao.selectUserBookMarkByMany(connection, userId);
     connection.release();
 
   return getBookMarkByManyList;    
