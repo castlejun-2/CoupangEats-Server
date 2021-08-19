@@ -75,6 +75,22 @@ exports.retrieveReviewList = async function (storeId) {
     return mainStoreReviewListResult;
 };
 
+exports.retrieveMenuCategoryList = async function (storeId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const mainStoreCategoryListResult = await storeDao.selectMainMenuCategory(connection, storeId);
+    connection.release();    
+    return mainStoreCategoryListResult;
+};
+
+exports.getMenu = async function (categoryId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const mainStoreDetailMenuListResult = await storeDao.selectDetailMenu(connection, categoryId);
+    connection.release();    
+    return mainStoreDetailMenuListResult;
+};
+
 exports.retrieveMenuList = async function (storeId) {
     const connection = await pool.getConnection(async (conn) => conn);
 

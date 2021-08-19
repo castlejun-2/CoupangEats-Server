@@ -133,9 +133,9 @@ exports.getStoresByCategory = async function (req, res) {
         const reviewList = await storeProvider.retrieveReviewList(storeId);
         result.push({'리뷰 미리보기': reviewList});
         
-        const menuList = await storeProvider.retrieveMenuList(storeId);
+        const menuList = await storeProvider.retrieveMenuCategoryList(storeId);
         for(let i=0; i<menuList.length; i++){
-            const DetailMenu = await storeProvider.getDetailMenu(menuList[i].Id);
+            const DetailMenu = await storeProvider.getMenu(menuList[i].Id);
             result.push(menuList[i],DetailMenu);
         }
         return res.send(response(baseResponse.SUCCESS, result));      

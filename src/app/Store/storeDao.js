@@ -183,7 +183,6 @@ async function selectMainScreen(connection,storeId) {
           averageDelivery as '평균 배달시간',
           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
           format(si.minimumOrder,0) as '최소 주문 가격',
-          case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
   FROM StoreInfo si left join
 	    (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
 	     From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
@@ -213,6 +212,32 @@ async function selectMainReview(connection, storeId) {
   return reviewRows;
 }
 
+// 매장 메뉴 분류 리스트 조회
+async function selectMainMenuCategory(connection, storeId) {
+  const selectStoreCategoryListQuery = `
+    SELECT smci.menuCategoryIdx as 'Id',
+           smci.categoryName as '메뉴 카테고리'
+    FROM StoreMenuCategoryInfo smci join MenuInfo mi on mi.category=smci.storeCategoryIdx
+    WHERE mi.storeId = ?;
+  `;
+  const [categoryRows] = await connection.query(selectStoreCategoryListQuery, storeId);
+  return categoryRows;
+}
+
+// 매장 메뉴 카테고리별 메뉴 조회
+async function selectDetailMenu(connection, categoryId) {
+  const selectStoreCategoryListQuery = `
+    SELECT mi.menuName as '메뉴이름',
+		       mi.price as '메뉴가격',
+           mi.description as '메뉴설명',
+           miu.menuImageUrl as '메뉴이미지'
+    FROM MenuInfo mi join (Select menuId, MenuImageUrl From MenuImageUrl group by menuId) miu on mi.menuIdx = miu.menuId
+    WHERE mi.category = ?;
+  `;
+  const [detailRows] = await connection.query(selectStoreCategoryListQuery, categoryId);
+  return detailRows;
+}
+
 // 매장 카테고리 리스트 조회
 async function selectMainCategory(connection, storeId) {
   const selectStoreCategoryListQuery = `
@@ -226,7 +251,7 @@ async function selectMainCategory(connection, storeId) {
   return categoryRows;
 }
 
-// 카테고리별 메뉴 조회
+// 카테고리별 옵션 조회
 async function selectCategoryDetailMenu(connection, categoryId) {
   const selectStoreCategoryListQuery = `
     SELECT mcd.detailMenuName as '카테고리 추가 옵션',
@@ -246,6 +271,8 @@ module.exports = {
   selectStoreCategory,
   selectMainScreen,
   selectMainReview,
+  selectMainMenuCategory,
+  selectDetailMenu,
   selectMainCategory,
   selectCategoryDetailMenu,
 };
