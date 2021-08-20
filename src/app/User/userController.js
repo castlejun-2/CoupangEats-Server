@@ -310,10 +310,10 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const countBookMarkResult = await userProvider.getBookMarkCount(userId);
-        result.push({'BookMark 매장 갯수': countBookMarkResult});
+        result.push({'BookMark Store Count': countBookMarkResult});
 
         const getBookMarkResult = await userProvider.getBookMark(userId, filter)
-        result.push({'BookMark 매장': getBookMarkResult});
+        result.push({'BookMark Store': getBookMarkResult});
         return res.send(response(baseResponse.SUCCESS, result));
     }
 };

@@ -194,7 +194,7 @@ async function postBookMark(connection, AddUserBookMarkParams) {
 // 즐겨찾기 매장 갯수 조회
 async function selectUserBookMarkCount(connection, userId){
   const defaultAddressSettingQuery=`
-  SELECT  concat(count(*),'개') as '즐겨찾는 매장 수'
+  SELECT  concat(count(*),'개') as 'bookmarkStoreCount'
   FROM UserInfo ui join UserBookmarkInfo ubi on ui.userIdx = ubi.userId
   WHERE ui.userIdx = ? and ubi.status = 'ACTIVE';
   `;
@@ -205,15 +205,15 @@ async function selectUserBookMarkCount(connection, userId){
 // 최근 추가한 순 즐겨찾기 조회
 async function selectUserBookMarkByRecent(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as '가게 사진',
-		      storeName as '가게 이름',
-		      case when isCheetah = 1 then '치타배달' end as '치타배달',
-		      rv.star as '평균 평점',
-          rv.cnt as '리뷰 갯수',
-          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
-          averageDelivery as '평균 배달시간',
-          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
-        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+  SELECT 	image.url as 'storeImageUrl',
+		      storeName as 'storeName',
+		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
+		      rv.star as 'averageStarRating',
+          rv.cnt as 'reviewCount',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+          averageDelivery as 'averageDeliveryTime',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+          case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
 	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
@@ -237,15 +237,15 @@ ORDER BY ubi.createdAt DESC;
 // 최근 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByOrder(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as '가게 사진',
-		      storeName as '가게 이름',
-		      case when isCheetah = 1 then '치타배달' end as '치타배달',
-		      rv.star as '평균 평점',
-          rv.cnt as '리뷰 갯수',
-          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
-          averageDelivery as '평균 배달시간',
-          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
-        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+  SELECT 	image.url as 'storeImageUrl',
+		      storeName as 'storeName',
+		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
+		      rv.star as 'averageStarRating',
+          rv.cnt as 'reviewCount',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+          averageDelivery as 'averageDeliveryTime',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+          case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
 	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
@@ -270,15 +270,15 @@ ORDER BY ooi.ca DESC;
 // 많이 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByMany(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as '가게 사진',
-		      storeName as '가게 이름',
-		      case when isCheetah = 1 then '치타배달' end as '치타배달',
-		      rv.star as '평균 평점',
-          rv.cnt as '리뷰 갯수',
-          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS '거리',
-          averageDelivery as '평균 배달시간',
-          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as '배달팁',
-        case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as '가게상태'
+  SELECT 	image.url as 'storeImageUrl',
+		      storeName as 'storeName',
+		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
+		      rv.star as 'averageStarRating',
+          rv.cnt as 'reviewCount',
+          concat(format((6371*acos(cos(radians(ad.latitude))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(ad.longitude))+sin(radians(ad.latitude))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+          averageDelivery as 'averageDeliveryTime',
+          case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+          case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
 	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
@@ -303,10 +303,10 @@ ORDER BY ooi.cs DESC;
 // 사용자가 등록한 쿠폰 조회 
 async function selectUserCoupon(connection, userId){
   const getUserCouponQuery=`
-          SELECT ci.couponName as '쿠폰 이름',
-                 format(ci.salePrice,0) as '할인 가격',
-                 format(ci.limitOrderPrice,0) as '최소 주문 가격',
-                 date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as '유효기간'
+          SELECT ci.couponName as 'couponName',
+                 format(ci.salePrice,0) as 'salePrice',
+                 format(ci.limitOrderPrice,0) as 'limitOrderPrice',
+                 date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as 'expirationDate'
           FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
           WHERE uci.userId = ? and uci.status = 'ACTIVE';
   `;

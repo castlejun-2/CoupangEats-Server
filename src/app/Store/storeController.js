@@ -126,14 +126,14 @@ exports.getStoresByCategory = async function (req, res) {
         const result = [];
             
         const mainTopList = await storeProvider.retrieveMainList(storeId);
-        result.push({'매장 상단 정보': mainTopList});
+        result.push({'Store Top Info': mainTopList});
 
         const reviewList = await storeProvider.retrieveReviewList(storeId);
-        result.push({'리뷰 미리보기': reviewList});
+        result.push({'Preview Review': reviewList});
         
         const menuList = await storeProvider.retrieveMenuCategoryList(storeId);
         for(let i=0; i<menuList.length; i++){
-            const DetailMenu = await storeProvider.getMenu(menuList[i].Id);
+            const DetailMenu = await storeProvider.getMenu(menuList[i].storeCategoryId);
             result.push(menuList[i],DetailMenu);
         }
         return res.send(response(baseResponse.SUCCESS, result));      

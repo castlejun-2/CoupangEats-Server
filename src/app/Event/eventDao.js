@@ -1,8 +1,8 @@
 // 진행중인 이벤트 조회
 async function selectEvent(connection) {
     const selectEventListQuery = `
-            SELECT ei.eventImageUrl as '이벤트 이미지',
-                   concat(@SEQ := @SEQ+1,'/',cnt_t.cnt) as '이벤트 갯수'
+            SELECT ei.eventImageUrl as 'eventImageUrl',
+                   concat(@SEQ := @SEQ+1,'/',cnt_t.cnt) as 'eventCount'
             FROM EventInfo ei,
                  (Select count(*) as cnt From EventInfo Where status='ACTIVE') cnt_t,
                  (SELECT @SEQ := 0) A
@@ -14,9 +14,9 @@ async function selectEvent(connection) {
 // 진행중인 이벤트 쿠폰 조회
 async function selectCoupon(connection) {
   const selectCouponListQuery = `
-          SELECT si.storeName as '할인 쿠폰 가게 이름',
-                 mui.MainImage as '가게 대표 사진',
-                 ci.salePrice as '할인가격'
+          SELECT si.storeName as 'storeName',
+                 mui.MainImage as 'storeImageUrl',
+                 ci.salePrice as 'salePrice'
           FROM StoreInfo si join CouponInfo ci on ci.storeId=si.storeIdx,
                (Select tmi.storeId as tsid, miu.menuImageUrl as MainImage
                 From MenuImageUrl miu join MenuInfo tmi on tmi.menuIdx=miu.menuId
