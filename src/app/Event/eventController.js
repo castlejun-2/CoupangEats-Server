@@ -37,17 +37,7 @@ const {emit} = require("nodemon");
  */
 exports.getEvent = async function (req, res) {
   
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-  
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    if (userIdFromJWT != userId) {
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        const eventList = await eventProvider.retrieveEventList();
-        return res.send(response(baseResponse.SUCCESS, eventList)); 
-    }  
+    const eventList = await eventProvider.retrieveEventList();
+    return res.send(response(baseResponse.SUCCESS, eventList));   
 }
 

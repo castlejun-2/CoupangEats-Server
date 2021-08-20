@@ -6,6 +6,6 @@ module.exports = function(app){
     app.get('/app/events/:userId/coupon',jwtMiddleware,event.getCouponList);
 
     // 15. 이벤트 조회 API
-    app.get('/app/events/:userId',jwtMiddleware,event.getEvent); 
+    app.get('/app/events/:userId',event.getEvent); 
 
 };
