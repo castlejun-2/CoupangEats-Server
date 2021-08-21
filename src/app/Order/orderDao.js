@@ -5,7 +5,7 @@ async function postOrderInfo(connection, userId, storeId) {
           VALUES (?, ?);
       `;
     const getOrderQuery = `
-          SELECT orderInfoIdx as 'orderIdx'
+          SELECT orderIdx
           FROM OrderInfo
           WHERE userId = ? and storeId = ? and status = 'CART';
       `;
