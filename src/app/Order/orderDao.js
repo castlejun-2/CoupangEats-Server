@@ -1,5 +1,5 @@
 // 주문 정보 등록 및 IDX 반환
-async function postOrderInfo(connection, usreId, storeId) {
+async function postOrderInfo(connection, userId, storeId) {
     const postOrderQuery = `
           INSERT INTO OrderInfo(userId, storeId)
           VALUES (?, ?);
