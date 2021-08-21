@@ -17,7 +17,7 @@ const {emit} = require("nodemon");
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const {storeId,orderArray} = req.body; 
+    const {storeId,menuCount,menuId,orderArray} = req.body; 
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -27,9 +27,15 @@ const {emit} = require("nodemon");
     } else {
         if(!storeId)
             return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
-
-        const getOrderId = await orderService.postUserOrder(userId, storeId);
+        if(!menuId)
+            return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
+            
+        const getOrderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
         for(let i=0; i<orderArray.length; i++){
+            if(!orderArray[i].menuCategoryId)
+                return res.send(errResponse(baseResponse.SIGNIN_MENUCATEGORYID_EMPTY));
+            if(!orderArray[i].menuDetailId)
+                return res.send(errResponse(baseResponse.SIGNIN_MENUDETAILID_EMPTY));
             const postOrderDetailList = await orderService.postOrderDetail(getOrderId[0].orderIdx, orderArray[i]);
         }
         return res.send(response(baseResponse.SUCCESS)); 

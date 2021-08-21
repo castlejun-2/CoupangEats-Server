@@ -14,18 +14,37 @@ async function postOrderInfo(connection, userId, storeId) {
     const [getOrderIdx] = await connection.query(getOrderQuery, [userId, storeId]);
 
     return getOrderIdx;
-  }
+}
+
+// 주문 세부사항 토탈 정보 담기
+async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
+    const postOrderQuery = `
+          INSERT INTO OrderTotalDetailInfo(orderId, menuId, menuCount)
+          VALUES (?, ?, ?);
+    `;
+    const getOrderQuery = `
+          SELECT orderTotalDetailIdx as 'orderIdx'
+          FROM OrderTotalDetailInfo
+          WHERE orderId = ? and menuId = ? status = 'ACTIVE'
+          ORDER BY createdAt DESC limit 1;
+    `;
+    const postOrder = await connection.query(postOrderQuery, [orderId, menuId, menuCount]);
+    const [getOrderIdx] = await connection.query(getOrderQuery, [orderId, menuId]);
+
+    return getOrderIdx;
+}
 
   // 주문정보 카트에 담기
 async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
     const postOrderInCartQuery = `
-          INSERT INTO OrderDetailInfo(orderId,menuId,menuCategoryId,menuDetailId)
-          VALUES (?, ?, ?, ?);
+          INSERT INTO OrderDetailInfo(orderTotalId,menuCategoryId,menuDetailId)
+          VALUES (?, ?, ?);
       `;
     const [postInCartRow] = await connection.query(postOrderInCartQuery, postOrderDetailParams);
     return postInCartRow;
   }
   module.exports = {
     postOrderInfo,
+    postOrderTotalInfo,
     postUserOrderInfoInCart,
   }
