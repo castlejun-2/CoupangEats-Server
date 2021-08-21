@@ -86,18 +86,18 @@ exports.getStoresByCategory = async function (req, res) {
         const result = [];
             
         const storeCategoryList = await storeProvider.retrieveStoreCategoryList();
-            result.push({'매장 분류': storeCategoryList});
+            result.push({'StoreClassification ': storeCategoryList});
         type = 'new';  
             const mainList1 = await storeProvider.retrieveMainScreenList(userId, type);
-            result.push({'신규매장': mainList1});
+            result.push({'NewStore': mainList1});
         
         type = 'popular';
             const mainList2 = await storeProvider.retrieveMainScreenList(userId, type);
-            result.push({'인기매장': mainList2});
+            result.push({'PopularStore': mainList2});
         
         type === 'pick'; //그 외의 매장 리스트 조회
             const mainOtherList = await storeProvider.retrieveMainScreenList(userId, 0);
-            result.push({'골라먹는 매장': mainOtherList});
+            result.push({'OtherStoreList': mainOtherList});
 
         return res.send(response(baseResponse.SUCCESS, result));         
     } 
