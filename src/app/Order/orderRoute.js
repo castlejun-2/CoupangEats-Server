@@ -3,6 +3,6 @@ module.exports = function(app){
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
     // 32. 카트에 담기 API
-    app.post('/app/orders/:userId/in-cart',order.getCart); 
+    app.post('/app/orders/:userId/in-cart', jwtMiddleware, order.getCart); 
 
 };

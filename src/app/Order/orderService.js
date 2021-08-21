@@ -13,8 +13,6 @@ const {connect} = require("http2");
 
 exports.postUserOrder = async function (userId, storeId) {
     try {
-        console.log(userId);
-        console.log(storeId);
         const connection = await pool.getConnection(async (conn) => conn);
         const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId);
         connection.release();
