@@ -114,3 +114,11 @@ exports.retrieveStoreDetail = async function (storeId) {
     connection.release();    
     return storeDetailResult;
 };
+
+exports.retrieveStoreActive = async function (storeId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const storeActiveResult = await storeDao.selectStoreActiveInfo(connection, storeId);
+    connection.release();    
+    return storeActiveResult;
+};

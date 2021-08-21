@@ -51,6 +51,7 @@ module.exports = {
     SIGNIN_MENUID_EMPTY: { "isSuccess": false, "code": 2035, "message": "카트에 담을 메뉴를 입력해주세요" },
     SIGNIN_MENUCATEGORYID_EMPTY: { "isSuccess": false, "code": 2036, "message": "카트에 담을 메뉴의 추가 옵션 카테고리를 입력해주세요" },
     SIGNIN_MENUDETAILID_EMPTY: { "isSuccess": false, "code": 2037, "message": "카트에 담을 메뉴의 추가옵션을 입력해주세요" },
+    STORE_NOT_ACTIVE: { "isSuccess": false, "code": 2038, "message": "매장 영업시간이 아닙니다" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

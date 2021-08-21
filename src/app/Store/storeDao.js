@@ -285,6 +285,15 @@ WHERE storeIdx = ?;
   const [detailRows] = await connection.query(selectStoreDetailListQuery, storeId);
   return detailRows;
 }
+
+// 가게 오픈 여부
+async function selectStoreActiveInfo(connection, storeId) {
+  const storeActiveQuery = `
+    select exists(select storeIdx from StoreInfo where storeIdx = ? and status = 'ACTIVE') as exist;
+  `;
+  const [storeActiveRow] = await connection.query(storeActiveQuery, storeId);
+  return storeActiveRow;
+}
 module.exports = {
   selectStoreByKeyword,
   selectStoreByCategory,
@@ -299,6 +308,7 @@ module.exports = {
   selectMainCategory,
   selectCategoryDetailMenu,
   selectStoreDetailInfo,
+  selectStoreActiveInfo,
 };
 
   
