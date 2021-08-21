@@ -28,10 +28,10 @@ const {emit} = require("nodemon");
         if(!storeId)
             return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
 
-        const getOrderId = await orderService.postUserOrder(userId, storeId);   
-        for(let i=0; i<orderArray.length; i++)  
+        const getOrderId = await orderService.postUserOrder(userId, storeId);
+        for(let i=0; i<orderArray.length; i++){
             const postOrderDetailList = await orderService.postOrderDetail(getOrderId[0].orderIdx, orderArray[i]);
-        
+        }
         return res.send(response(baseResponse.SUCCESS)); 
     }  
 }
