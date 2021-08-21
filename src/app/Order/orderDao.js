@@ -3,12 +3,13 @@ async function postOrderInfo(connection, userId, storeId) {
     const postOrderQuery = `
           INSERT INTO OrderInfo(userId, storeId)
           VALUES (?, ?);
-      `;
+    `;
     const getOrderQuery = `
           SELECT orderIdx
           FROM OrderInfo
-          WHERE userId = ? and storeId = ? and status = 'CART';
-      `;
+          WHERE userId = 1 and storeId = 1 and status = 'CART'
+          ORDER BY createdAt DESC limit 1;
+    `;
     const postOrder = await connection.query(postOrderQuery, [userId, storeId]);
     const [getOrderIdx] = await connection.query(getOrderQuery, [userId, storeId]);
 
