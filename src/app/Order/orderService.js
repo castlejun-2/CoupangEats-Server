@@ -13,13 +13,14 @@ const {connect} = require("http2");
 
 exports.postUserOrder = async function (userId, storeId) {
     try {
+        console.log(userId);
+        console.log(storeId);
         const connection = await pool.getConnection(async (conn) => conn);
-        const postOrderResult = await orderDao.postOrderInfo(connection, userId,storeId);
-
+        const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId);
         connection.release();
         return postOrderResult;
     } catch (err) {
-        logger.error(`App - Logout Service error\n: ${err.message}`);
+        logger.error(`App - Post OrderInfo Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   
     }
 }
