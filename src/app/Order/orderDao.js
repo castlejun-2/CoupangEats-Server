@@ -7,7 +7,7 @@ async function postOrderInfo(connection, userId, storeId) {
     const getOrderQuery = `
           SELECT orderIdx
           FROM OrderInfo
-          WHERE userId = 1 and storeId = 1 and status = 'CART'
+          WHERE userId = ? and storeId = ? and status = 'CART'
           ORDER BY createdAt DESC limit 1;
     `;
     const postOrder = await connection.query(postOrderQuery, [userId, storeId]);
@@ -16,7 +16,7 @@ async function postOrderInfo(connection, userId, storeId) {
     return getOrderIdx;
 }
 
-// 주문 세부사항 토탈 정보 담기
+// 주문 세부사항 토탈 정보 담기 
 async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
     const postOrderQuery = `
           INSERT INTO OrderTotalDetailInfo(orderId, menuId, menuCount)
@@ -25,11 +25,11 @@ async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
     const getOrderQuery = `
           SELECT orderTotalDetailIdx as 'orderIdx'
           FROM OrderTotalDetailInfo
-          WHERE orderId = ? and menuId = ? and status = 'ACTIVE'
+          WHERE orderId = ? and status = 'ACTIVE'
           ORDER BY createdAt DESC limit 1;
     `;
     const postOrder = await connection.query(postOrderQuery, [orderId, menuId, menuCount]);
-    const [getOrderIdx] = await connection.query(getOrderQuery, [orderId, menuId]);
+    const [getOrderIdx] = await connection.query(getOrderQuery, orderId);
 
     return getOrderIdx;
 }
