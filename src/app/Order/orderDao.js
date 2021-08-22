@@ -42,9 +42,34 @@ async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
       `;
     const [postInCartRow] = await connection.query(postOrderInCartQuery, postOrderDetailParams);
     return postInCartRow;
-  }
+}
+
+  // 카트 정보 조회
+async function selectCartInfo(connection, userId) {
+    const getCartInfoQuery = `
+select count(*) as 'CartCount',
+	   sum(st.SumPrice+di.deliveryTip) as 'SumPrice'
+FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId join
+    (SELECT otdi.orderTotalDetailIdx as 'In-Cart Id',
+	        sum(mi.price+ot.OptionPrice) as 'SumPrice',
+            oi.storeId as 'OrderStore'
+    FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
+	    join StoreInfo si on si.storeIdx=oi.storeId join UserInfo ui on ui.userIdx=oi.userId join
+        (select orderTotalDetailIdx as otdiId, sum(plusPrice) as 'OptionPrice'
+        from OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join OrderDetailInfo odi on odi.orderTotalId=otdi.orderTotalDetailIdx
+	    join MenuInfo mi on mi.menuIdx=otdi.menuId join MenuCategoryInfo mci on mci.menuId=mi.menuIdx join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
+    where oi.userId = ? and oi.status = 'Cart' and odi.menuDetailId=mcdi.menuDetailIdx
+    group by orderTotalDetailIdx) ot on ot.otdiId=otdi.orderTotalDetailIdx
+WHERE oi.status = 'CART' and oi.userId = ?
+GROUP BY otdi.orderTotalDetailIdx) st on st.OrderStore=si.storeIdx;
+      `;
+    const [getCartRow] = await connection.query(getCartInfoQuery, [userId, userId]);
+    return getCartRow;
+}
+
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
     postUserOrderInfoInCart,
+    selectCartInfo,
   }

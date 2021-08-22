@@ -7,14 +7,13 @@ const {response, errResponse} = require("../../../config/response");
 
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
-
 /**
  * API No. 32
  * API Name : 카트에 담기 API
- * [GET] /app/orders/:userId/in-cart
+ * [POST] /app/orders/:userId/in-cart
  * path variable : userId
  */
- exports.getCart = async function (req, res) {
+ exports.postCart = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
@@ -44,5 +43,27 @@ const {emit} = require("nodemon");
             const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderIdx, orderArray[i]);
         }
         return res.send(response(baseResponse.SUCCESS)); 
+    }  
+}
+
+/**
+ * API No. 33
+ * API Name : 카트에 담긴 정보 조회 API
+ * [GET] /app/orders/:userId/in-cart
+ * path variable : userId
+ */
+ exports.getCart = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {        
+        const cartInfo = await orderProvider.retrieveUserCartInfo(userId);
+        return res.send(response(baseResponse.SUCCESS,cartInfo)); 
     }  
 }

@@ -3,8 +3,8 @@ module.exports = function(app){
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
     // 32. 카트에 담기 API
-    app.post('/app/orders/:userId/in-cart', jwtMiddleware, order.getCart); 
+    app.post('/app/orders/:userId/in-cart', jwtMiddleware, order.postCart); 
 
-    // 33. 카트에 담긴 정보 조회API
+    // 33. 카트에 담긴 정보 조회 API
     app.get('/app/orders/:userId/in-cart', jwtMiddleware, order.getCart);
 };
