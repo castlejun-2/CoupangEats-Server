@@ -16,5 +16,11 @@ module.exports = function(app){
 
     // 19. 매장 세부정보 조회 API
     app.get('/app/stores/:userId/detail-store',jwtMiddleware,store.getStoreDetail);
- 
+    
+    // 34. 앱 메인화면 신규매장 조회 API
+    app.get('/app/stores/:userId/main-new',jwtMiddleware,store.getMainScreenByNewStore);
+
+    // 35. 앱 메인화면 인기매장 조회 API
+    app.get('/app/stores/:userId/main-popular',jwtMiddleware,store.getMainScreenByPopularStore);
+
 };

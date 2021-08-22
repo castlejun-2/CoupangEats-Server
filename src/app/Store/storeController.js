@@ -70,9 +70,7 @@ exports.getStoresByCategory = async function (req, res) {
  * path variable : userId
  */
  exports.getMainScreen = async function (req, res) {
-    /**
-     * Query String: type
-     */
+
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
 
@@ -100,6 +98,72 @@ exports.getStoresByCategory = async function (req, res) {
             result.push({'OtherStoreList': mainOtherList});
 
         return res.send(response(baseResponse.SUCCESS, result));         
+    } 
+}
+
+/**
+ * API No. 34
+ * API Name : 앱 메인화면 신규매장 조회 API
+ * [GET] /app/users/:userId/main-new
+ * path variable : userId
+ */
+ exports.getMainScreenByNewStore = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const mainListByNew = await storeProvider.retrieveMainScreenList(userId, 'new');
+        return res.send(response(baseResponse.SUCCESS, mainListByNew));         
+    } 
+}
+
+/**
+ * API No. 35
+ * API Name : 앱 메인화면 인기매장 조회 API
+ * [GET] /app/users/:userId/main-popular
+ * path variable : userId
+ */
+ exports.getMainScreenByPopularStore = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const mainListByPopular = await storeProvider.retrieveMainScreenList(userId, 'popular');
+        return res.send(response(baseResponse.SUCCESS, mainListByPopular));         
+    } 
+}
+
+/**
+ * API No. 36
+ * API Name : 앱 메인화면 골라먹는매장 조회 API
+ * [GET] /app/stores/:userId/main-pick
+ * path variable : userId
+ */
+ exports.getMainScreenByPickStore = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const mainListByPick = await storeProvider.retrieveMainScreenList(userId, 0);
+        return res.send(response(baseResponse.SUCCESS, mainListByPick));         
     } 
 }
 
