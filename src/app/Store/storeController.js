@@ -65,7 +65,7 @@ exports.getStoresByCategory = async function (req, res) {
 
 /**
  * API No. 9
- * API Name : 메인화면 신규 입점 및 인기 매장 조회 API
+ * API Name : 앱 메인화면 통합 조회 API
  * [GET] /app/users/:userId/main
  * path variable : userId
  */

@@ -8,7 +8,7 @@ module.exports = function(app){
     // 7. 카테고리로 매장 조회 API
     app.get('/app/stores/:userId/category',jwtMiddleware,store.getStoresByCategory);
 
-    // 9. 메인화면 신규 입점 및 인기 매장 조회 API
+    // 9. 앱 메인화면 통합 조회 API
     app.get('/app/stores/:userId/main',jwtMiddleware,store.getMainScreen);
 
     // 18. 매장 메인화면 조회 API
