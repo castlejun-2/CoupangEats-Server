@@ -64,6 +64,6 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {        
         const cartInfo = await orderProvider.retrieveUserCartInfo(userId);
-        return res.send(response(baseResponse.SUCCESS,cartInfo)); 
+        return res.send(response(baseResponse.SUCCESS, cartInfo)); 
     }  
 }
