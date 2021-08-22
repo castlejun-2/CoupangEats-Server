@@ -23,4 +23,8 @@ module.exports = function(app){
     // 35. 앱 메인화면 인기매장 조회 API
     app.get('/app/stores/:userId/main-popular',jwtMiddleware,store.getMainScreenByPopularStore);
 
+    // 35. 앱 메인화면 인기매장 조회 API
+    app.get('/app/stores/:userId/main-pick',jwtMiddleware,store.getMainScreenByPickStore);
+
+
 };
