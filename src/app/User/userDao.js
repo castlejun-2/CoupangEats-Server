@@ -321,7 +321,7 @@ async function selectUserCouponById(connection, userId, couponId, sumprice){
                  ci.salePrice as 'saleCost'
           FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
           WHERE uci.userId = ? and uci.couponId = ? and ci.limitOrderPrice <= ? and uci.status = 'ACTIVE'
-          ORDER BY ci.saleprice DESC;
+          ORDER BY ci.saleprice DESC limit 1;
   `;
   const [getCouponRows] = await connection.query(getUserCouponQuery, [userId, couponId, sumprice]);
   return getCouponRows;

@@ -181,9 +181,10 @@ const {emit} = require("nodemon");
         
         const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
         sumprice=sumprice+delieveryTipInfo[0].deliveryTip //배달 팁
-        
+        console.log(couponId)
         if(couponInfo[0].couponCount > 0){
             const userCouponInfo = await userProvider.getCoupon(userId, couponId, sumprice);
+            console.log(userCouponInfo)
             sumprice=sumprice-userCouponInfo[0].saleCost
         }
         result.push({'Total Cost': sumprice});
