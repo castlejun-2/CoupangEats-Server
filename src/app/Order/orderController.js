@@ -155,6 +155,7 @@ const {emit} = require("nodemon");
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
+    const couponId = req.query.couponId;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -163,10 +164,30 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const result = [];
+        let sumprice;
             
-        const userAddress = await userProvider.getUserDefaultAddress(userId);
+        const userAddress = await userProvider.getUserDefaultAddress(userId); //기본 배송지 삽입
         result.push({'User Address': userAddress});
 
-        return res.send(response(baseResponse.SUCCESS, cartInfo)); 
+        const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
+        result.push({'Menu List': orderMenuInfo});
+
+        const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
+        result.push({'Coupon List': couponInfo});
+
+        //최종 금액 계산
+        for(let i=0;i<orderMenuInfo.length;i++)
+            sumprice=sumprice+orderMenuInfo[i].menuPrice //메뉴의 총 가격
+        
+        const delieveryTipInfo = await storeProvider.getDeliveryTip(sumprice);
+        sumprice=sumprice+delieveryTip[0].deliveryTip //배달 팁
+
+        if(couponInfo[0].couponCount > 0){
+            const couponInfo = await userProvider.getCoupon(userId, couponId, sumprice);
+            sumprice=sumprice-couponInfo[0].salePrice;
+        }
+        result.push({'Total Cost': sumprice});
+
+        return res.send(response(baseResponse.SUCCESS, result)); 
     }  
 }

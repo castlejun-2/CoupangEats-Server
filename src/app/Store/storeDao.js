@@ -294,6 +294,17 @@ async function selectStoreActiveInfo(connection, storeId) {
   const [storeActiveRow] = await connection.query(storeActiveQuery, storeId);
   return storeActiveRow;
 }
+
+// 가게의 배달 팁 조회
+async function selectStoreDeliveryTipInfo(connection, sumprice) {
+  const storeActiveQuery = `
+    SELECT case limitorder when di.limitorder < ? then '0' else deliveryTip end as 'deliveryTip'
+    FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId
+    WHERE di.status='ACTIVE'
+  `;
+  const [storeActiveRow] = await connection.query(storeActiveQuery, sumprice);
+  return storeActiveRow;
+}
 module.exports = {
   selectStoreByKeyword,
   selectStoreByCategory,
@@ -309,6 +320,7 @@ module.exports = {
   selectCategoryDetailMenu,
   selectStoreDetailInfo,
   selectStoreActiveInfo,
+  selectStoreDeliveryTipInfo,
 };
 
   

@@ -122,3 +122,11 @@ exports.retrieveStoreActive = async function (storeId) {
     connection.release();    
     return storeActiveResult;
 };
+
+exports.getDeliveryTip = async function (sumprice) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const storeDeliveryTipResult = await storeDao.selectStoreDeliveryTipInfo(connection, sumprice);
+    connection.release();    
+    return storeDeliveryTipResult;
+};

@@ -98,28 +98,39 @@ async function deleteUserInCart(connection, userId) {
     return deleteCartRow;
 }
 
-  // 카트 정보 상세 조회
-  async function selectCartDetailInfo(connection, userId) {
+// 카트 정보 상세 조회(메뉴)
+async function selectCartDetailByMenuInfo(connection, userId) {
     const getCartDetailInfoQuery = `
-        select count(*) as 'CartCount',
-	           sum(st.SumPrice) as 'SumPrice'
-        FROM OrderInfo oi join StoreInfo si on oi.storeId=si.storeIdx join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
-            join DeliveryTipInfo di on si.storeIdx=di.storeId join
-            (SELECT otdi.orderTotalDetailIdx as 'CartId',
-	                sum((mi.price+ot.OptionPrice)*otdi.menuCount) as 'SumPrice',
-                    oi.storeId as 'OrderStore',
-                    otdi.menuCount as 'menuCnt'
-            FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
-	            join StoreInfo si on si.storeIdx=oi.storeId join UserInfo ui on ui.userIdx=oi.userId join
-                (select orderTotalDetailIdx as otdiId, sum(plusPrice) as 'OptionPrice'
-                from OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join OrderDetailInfo odi on odi.orderTotalId=otdi.orderTotalDetailIdx
-	                join MenuInfo mi on mi.menuIdx=otdi.menuId join MenuCategoryInfo mci on mci.menuId=mi.menuIdx join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
-                where oi.userId = ? and oi.status = 'Cart' and odi.menuDetailId=mcdi.menuDetailIdx
-                group by orderTotalDetailIdx) ot on ot.otdiId=otdi.orderTotalDetailIdx
-            WHERE oi.status = 'CART' and oi.userId = ?
-            GROUP BY otdi.orderTotalDetailIdx) st on st.CartId=otdi.orderTotalDetailIdx;
+            SELECT mi.menuName as 'menuName',
+	              (mi.price+pp.plusPrice)*otdi.menuCount as 'menuPrice',
+                   otdi.menuCount as 'menuCount'
+            FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+				              join OrderDetailInfo odi on otdi.orderTotalDetailIdx=odi.orderTotalId
+				              join MenuInfo mi on otdi.menuId=mi.menuIdx join
+                              (SELECT otdi.orderTotalDetailIdx as 'otdiIdx',
+						              sum(mcdi.plusPrice) as 'plusPrice'
+                               FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+						                         join OrderDetailInfo odi on otdi.orderTotalDetailIdx=odi.orderTotalId
+						                         join MenuInfo mi on otdi.menuId=mi.menuIdx
+                                                 left join MenuCategoryDetailInfo mcdi on odi.menuDetailId=mcdi.menuDetailIdx
+					           WHERE oi.status='CART' and oi.userId = ? GROUP BY otdi.orderTotalDetailIdx) pp on pp.otdiIdx=otdi.orderTotalDetailIdx
+            WHERE oi.status='CART' and oi.userId = ? GROUP BY otdi.orderTotalDetailIdx;
     `;
     const [getCartRow] = await connection.query(getCartDetailInfoQuery, [userId, userId]);
+    return getCartRow;
+}
+
+// 카트 정보 상세 조회(사용 가능 쿠폰)
+async function selectCartDetailByCouponInfo(connection, userId) {
+    const getCartCouponInfoQuery = `
+    SELECT count(*) as 'couponCount'
+    FROM OrderInfo oi join StoreInfo si on oi.storeId=si.storeIdx
+                      join CouponInfo ci on si.storeIdx=ci.storeId
+                      join UserCouponInfo uci on uci.couponId=ci.couponIdx
+                      join UserInfo ui on ui.userIdx=uci.userId
+    WHERE oi.status='CART' and ui.userIdx=? and uci.status='ACTIVE'
+    `;
+    const [getCartRow] = await connection.query(getCartCouponInfoQuery, userId);
     return getCartRow;
 }
   module.exports = {
@@ -130,5 +141,6 @@ async function deleteUserInCart(connection, userId) {
     selectCartInfo,
     selectSameStoreInCartInfo,
     deleteUserInCart,
-    selectCartDetailInfo,
+    selectCartDetailByMenuInfo,
+    selectCartDetailByCouponInfo,
   }

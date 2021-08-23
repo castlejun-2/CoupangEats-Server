@@ -110,12 +110,21 @@ exports.getBookMark = async function (userId, filter) {
 };
 
 // 등록한 쿠폰 조회
-exports.getCoupon = async function (userId) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const getUserCoupon = await userDao.selectUserCoupon(connection, userId);
-  connection.release();
+exports.getCoupon = async function (userId, couponId, sumprice) {
+  if(!couponId){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const getUserCoupon = await userDao.selectUserCoupon(connection, userId);
+    connection.release();
 
-  return getUserCoupon;
+    return getUserCoupon;
+  }
+  else{
+    const connection = await pool.getConnection(async (conn) => conn);
+    const getUserCouponById = await userDao.selectUserCouponById(connection, userId, couponId, sumprice);
+    connection.release();
+
+    return getUserCouponById;
+  }
 };
 
 // 쿠폰 등록 여부 조회

@@ -314,6 +314,21 @@ async function selectUserCoupon(connection, userId){
   return getCouponRows;
 }
 
+// 쿠폰아이디를 통한 사용자 쿠폰정보 조회 
+async function selectUserCouponById(connection, userId, couponId, sumprice){
+  const getUserCouponQuery=`
+          SELECT ci.couponName as 'couponName',
+                 format(ci.salePrice,0) as 'salePrice',
+                 format(ci.limitOrderPrice,0) as 'limitOrderPrice',
+                 date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as 'expirationDate'
+          FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
+          WHERE uci.userId = ? and uci.couponId = ? and ci.limitOrderPrice <= ? and uci.status = 'ACTIVE'
+          ORDER BY ci.saleprice DESC;
+  `;
+  const [getCouponRows] = await connection.query(getUserCouponQuery, [userId, couponId, sumprice]);
+  return getCouponRows;
+}
+
 // 유저 쿠폰 체크
 async function selectUserCouponCheck(connection, userId, couponId) {
   const userCouponQuery = `
@@ -372,4 +387,5 @@ module.exports = {
   postCoupon,
   selectUserCouponCheck,
   selectUserDefaultAddress,
+  selectUserCouponById,
 };

@@ -39,11 +39,20 @@ exports.retrieveSameOrderInCart = async function (userId, storeId) {
     
 };
 
-//카트상세정보 가져오기
-exports.retrieveUserCartDetailInfo = async function (userId) {
+//카트 상세정보(메뉴) 가져오기
+exports.getUserOrderMenu = async function (userId) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const cartinfolistResult = await orderDao.selectCartDetailInfo(connection,userId);
+    const cartInfolistResult = await orderDao.selectCartDetailByMenuInfo(connection,userId);
     connection.release();    
-    return cartinfolistResult;
+    return cartInfolistResult;
+    
+};
+
+//카트 상세정보(사용가능 쿠폰정보) 가져오기
+exports.getUserCoupon = async function (userId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const cartInfoCouponResult = await orderDao.selectCartDetailByCouponInfo(connection,userId);
+    connection.release();    
+    return cartInfoCouponResult;
     
 };
