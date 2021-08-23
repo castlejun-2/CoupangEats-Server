@@ -300,7 +300,7 @@ async function selectStoreDeliveryTipInfo(connection, storeId, sumprice) {
   const storeActiveQuery = `
     SELECT case di.limitorder when di.limitorder < ? then '0' else deliveryTip end as 'deliveryTip'
     FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId
-    WHERE di.status='ACTIVE' and si.storeIdx = ?'
+    WHERE di.status='ACTIVE' and si.storeIdx = ?
   `;
   const [storeActiveRow] = await connection.query(storeActiveQuery, [sumprice, storeId]);
   return storeActiveRow;
