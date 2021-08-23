@@ -173,7 +173,7 @@ const {emit} = require("nodemon");
         result.push({'Menu List': orderMenuInfo});
 
         const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
-        result.push({'Coupon List': couponInfo});
+        result.push({'Coupon List': couponInfo[0].couponCount});
 
         //최종 금액 계산
         for(let i=0;i<orderMenuInfo.length;i++)
