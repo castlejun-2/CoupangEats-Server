@@ -15,13 +15,24 @@ async function postOrderInfo(connection, userId, storeId) {
 
     return getOrderIdx;
 }
-  // 카트에 존재하는 메뉴의 매장과 현재 주문하려는 매장이 일치한지 여부 조회
-  async function selectSameStoreInCartInfo(connection, userId, storeId) {
+// 카트에 존재하는 메뉴의 매장과 현재 주문하려는 매장이 일치한지 여부 조회
+async function selectSameStoreInCartInfo(connection, userId, storeId) {
     const getSameStoreQuery = `
         select exists(select orderIdx from OrderInfo where userId = ? and storeId != ? and status = 'CART') as exist;
       `;
     const [sameStoreRow] = await connection.query(getSameStoreQuery, [userId, storeId]);
     return sameStoreRow;
+}
+
+// 카트에 존재하는 동일 매장의 OrderIdx 가져오기
+async function selectSameOrderInCartInfo(connection, userId, storeId) {
+    const getSameOrderQuery = `
+        SELECT orderIdx
+        FROM OrderInfo oi
+        WHERE userId = ? and storeId = ? and status='CART';
+      `;
+    const [sameOrderRow] = await connection.query(getSameOrderQuery, [userId, storeId]);
+    return sameOrderRow;
 }
 
 // 주문 세부사항 토탈 정보 담기 
@@ -80,6 +91,7 @@ async function selectCartInfo(connection, userId) {
     postOrderInfo,
     postOrderTotalInfo,
     postUserOrderInfoInCart,
+    selectSameOrderInCartInfo,
     selectCartInfo,
     selectSameStoreInCartInfo,
   }

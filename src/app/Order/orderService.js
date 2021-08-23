@@ -11,13 +11,21 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const {connect} = require("http2");
 
-exports.postUserOrder = async function (userId, storeId, menuId, menuCount) {
+exports.postUserOrder = async function (userId, storeId, menuId, menuCount, orderId) {
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
-        const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId);
-        const postOrderTotalResult = await orderDao.postOrderTotalInfo(connection, postOrderResult[0].orderIdx, menuId, menuCount);
-        connection.release();
-        return postOrderTotalResult;
+        if(!orderId){
+            const connection = await pool.getConnection(async (conn) => conn);
+            const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId);
+            const postOrderTotalResult = await orderDao.postOrderTotalInfo(connection, postOrderResult[0].orderIdx, menuId, menuCount);
+            connection.release();
+            return postOrderTotalResult;
+        }
+        else{
+            const connection = await pool.getConnection(async (conn) => conn);
+            const postOrderWithIdTotalResult = await orderDao.postOrderTotalInfo(connection, orderId, menuId, menuCount);
+            connection.release();
+            return postOrderWithIdTotalResult;
+        }
     } catch (err) {
         logger.error(`App - Post OrderInfo Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   

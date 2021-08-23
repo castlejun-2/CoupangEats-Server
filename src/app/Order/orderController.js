@@ -39,7 +39,12 @@ const {emit} = require("nodemon");
         if (sameStoreInCartInfo[0].exist === 1) //카트에 다른 가게의 메뉴가 담겨있는지 확인
                 return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
 
-        const orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
+        const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId)        
+        if(sameOrderInCartInfo[0].orderIdx)
+            const orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
+        else
+            const orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
+            
         for(let i=0; i<orderArray.length; i++){
             if(!orderArray[i].menuCategoryId)
                 return res.send(errResponse(baseResponse.SIGNIN_MENUCATEGORYID_EMPTY));

@@ -21,11 +21,20 @@ exports.retrieveUserCartInfo = async function (userId) {
     
 };
 
-//카트정보 가져오기
+//동일 매장정보 가져오기
 exports.retrieveSameStoreInCart = async function (userId, storeId) {
     const connection = await pool.getConnection(async (conn) => conn);
     const sameStoreInCartResult = await orderDao.selectSameStoreInCartInfo(connection, userId, storeId);
     connection.release();    
     return sameStoreInCartResult;
+    
+};
+
+//카트 주문IDX 가져오기
+exports.retrieveSameOrderInCart = async function (userId, storeId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const sameOrderInCartResult = await orderDao.selectSameOrderInCartInfo(connection, userId, storeId);
+    connection.release();    
+    return sameOrderInCartResult;
     
 };
