@@ -164,7 +164,7 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const result = [];
-        let sumprice;
+        var sumprice;
             
         const userAddress = await userProvider.getUserDefaultAddress(userId); //기본 배송지 삽입
         result.push({'User Address': userAddress});
