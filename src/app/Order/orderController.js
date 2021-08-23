@@ -175,14 +175,12 @@ const {emit} = require("nodemon");
         const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
         result.push({'Coupon List': couponInfo});
 
-        console.log(orderMenuInfo[0].menuPrice)
         //최종 금액 계산
         for(let i=0;i<orderMenuInfo.length;i++)
             sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
-        console.log(sumprice)
+        
         const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
-        console.log(delieveryTipInfo[0].deliveryTip)
-        sumprice+=delieveryTipInfo[0].deliveryTip //배달 팁
+        sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
 
         result.push({'Total Cost': sumprice});
 
