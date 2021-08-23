@@ -164,7 +164,7 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const result = [];
-        var sumprice;
+        var sumprice = new Set();
             
         const userAddress = await userProvider.getUserDefaultAddress(userId); //기본 배송지 삽입
         result.push({'User Address': userAddress});
@@ -178,7 +178,7 @@ const {emit} = require("nodemon");
         console.log(orderMenuInfo[0].menuPrice)
         //최종 금액 계산
         for(let i=0;i<orderMenuInfo.length;i++)
-            sumprice+=orderMenuInfo[i].menuPrice //메뉴의 총 가격
+            sumprice.add(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
         console.log(sumprice)
         const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
         console.log(delieveryTipInfo[0].deliveryTip)
