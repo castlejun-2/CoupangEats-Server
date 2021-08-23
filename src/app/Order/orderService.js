@@ -46,3 +46,17 @@ exports.postOrderDetail = async function (orderId, orderDetail) {
         return errResponse(baseResponse.DB_ERROR);   
     }
 };
+
+//카트 비우기
+exports.deleteInCart = async function (userId) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const deleteCartResult = await orderDao.deleteUserInCart(connection, userId);
+        connection.release();
+
+        return response(baseResponse.SUCCESS);
+    } catch (err) {
+        logger.error(`App - Delete In Cart error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);   
+    }
+};

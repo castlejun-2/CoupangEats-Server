@@ -87,6 +87,16 @@ async function selectCartInfo(connection, userId) {
     return getCartRow;
 }
 
+// 카트 비우기
+async function deleteUserInCart(connection, userId) {
+    const deleteCartQuery = `
+        UPDATE OrderInfo
+        SET status = 'DELETE'
+        WHERE userId = ? and status='CART';
+      `;
+    const [deleteCartRow] = await connection.query(deleteCartQuery, userId);
+    return deleteCartRow;
+}
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
@@ -94,4 +104,5 @@ async function selectCartInfo(connection, userId) {
     selectSameOrderInCartInfo,
     selectCartInfo,
     selectSameStoreInCartInfo,
+    deleteUserInCart,
   }

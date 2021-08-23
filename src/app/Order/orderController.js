@@ -41,7 +41,7 @@ const {emit} = require("nodemon");
                 return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
 
         const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId)        
-        if(sameOrderInCartInfo[0].orderIdx)
+        if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
             orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
         else
             orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
@@ -77,4 +77,26 @@ const {emit} = require("nodemon");
         const cartInfo = await orderProvider.retrieveUserCartInfo(userId);
         return res.send(response(baseResponse.SUCCESS, cartInfo)); 
     }  
+}
+
+/**
+ * API No. 37
+ * API Name : 카트 비우기 API
+ * [PATCH] /app/orders/:userId/in-cart
+ * path variable : userId
+ */
+ exports.deleteCart = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {        
+        const cartDelete = await orderService.deleteInCart(userId);
+        return res.send(response(baseResponse.SUCCESS)); 
+    } 
 }
