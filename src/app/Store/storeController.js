@@ -102,6 +102,96 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
+ * API No. 18
+ * API Name : 매장 메인화면 조회 API
+ * [GET] /app/users/:userId/mainstore
+ * path variable : userId
+ */
+ exports.getStoreMain = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const storeId = req.query.storeId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+        const result = [];
+            
+        const mainTopList = await storeProvider.retrieveMainList(storeId);
+        result.push({'Store Top Info': mainTopList});
+
+        const reviewList = await storeProvider.retrieveReviewList(storeId);
+        result.push({'Preview Review': reviewList});
+        
+        const menuList = await storeProvider.retrieveMenuCategoryList(storeId);
+        for(let i=0; i<menuList.length; i++){
+            const DetailMenu = await storeProvider.getMenu(menuList[i].storeCategoryId);
+            result.push(menuList[i],DetailMenu);
+        }
+        return res.send(response(baseResponse.SUCCESS, result));      
+    } 
+}
+
+/**
+ * API No. 19
+ * API Name : 매장 세부정보 조회 API
+ * [GET] /app/users/:userId/detail-store
+ * path variable : userId
+ */
+ exports.getStoreDetail = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const storeId = req.query.storeId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+    
+        const storeDetailList = await storeProvider.retrieveStoreDetail(storeId);
+
+        return res.send(response(baseResponse.SUCCESS, storeDetailList));      
+    } 
+}
+
+/**
+* API No. 30
+* API Name : 매장 배달팁 상세 조회 API
+* [GET] /app/users/:userId/delievery-tip
+* path variable : userId
+*/
+exports.getDelieveryTip = async function (req, res) {
+
+   const userIdFromJWT = req.verifiedToken.userId;
+   const userId = req.params.userId;
+   const storeId = req.qeury.storeId;
+
+   if (!userIdFromJWT || !userId) 
+       return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+   if (userIdFromJWT != userId) {
+       return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+   } else {
+       if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+
+       const storeDeliveryTipResult = await storeProvider.retrievestoreDeliveryTip(storeId);
+       return res.send(response(baseResponse.SUCCESS, storeDeliveryTipResult));         
+   } 
+}
+
+/**
  * API No. 34
  * API Name : 앱 메인화면 신규매장 조회 API
  * [GET] /app/users/:userId/main-new
@@ -164,69 +254,5 @@ exports.getStoresByCategory = async function (req, res) {
     } else {
         const mainListByPick = await storeProvider.retrieveMainScreenList(userId, 0);
         return res.send(response(baseResponse.SUCCESS, mainListByPick));         
-    } 
-}
-
-/**
- * API No. 18
- * API Name : 매장 메인화면 조회 API
- * [GET] /app/users/:userId/mainstore
- * path variable : userId
- */
- exports.getStoreMain = async function (req, res) {
-
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-    const storeId = req.query.storeId;
-
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    if (userIdFromJWT != userId) {
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if(!storeId)
-            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
-        const result = [];
-            
-        const mainTopList = await storeProvider.retrieveMainList(storeId);
-        result.push({'Store Top Info': mainTopList});
-
-        const reviewList = await storeProvider.retrieveReviewList(storeId);
-        result.push({'Preview Review': reviewList});
-        
-        const menuList = await storeProvider.retrieveMenuCategoryList(storeId);
-        for(let i=0; i<menuList.length; i++){
-            const DetailMenu = await storeProvider.getMenu(menuList[i].storeCategoryId);
-            result.push(menuList[i],DetailMenu);
-        }
-        return res.send(response(baseResponse.SUCCESS, result));      
-    } 
-}
-
-/**
- * API No. 19
- * API Name : 매장 세부정보 조회 API
- * [GET] /app/users/:userId/detail-store
- * path variable : userId
- */
- exports.getStoreDetail = async function (req, res) {
-
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-    const storeId = req.query.storeId;
-
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    if (userIdFromJWT != userId) {
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if(!storeId)
-            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
-    
-        const storeDetailList = await storeProvider.retrieveStoreDetail(storeId);
-
-        return res.send(response(baseResponse.SUCCESS, storeDetailList));      
     } 
 }

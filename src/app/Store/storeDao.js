@@ -177,7 +177,7 @@ async function selectMainScreen(connection, storeId) {
   const selectMainListQuery = `
   SELECT 	image.url as 'storeImageUrl',
 		      storeName as 'storeName',
-		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
+		      case when isCheetah = 1 then '치타배달' else 'NULL' end as 'cheetahDelivery',
 		      rv.star as 'averageStarRating',
           rv.cnt as 'reviewCount',
           averageDelivery as 'averageDeliveryTime',
@@ -286,6 +286,18 @@ WHERE storeIdx = ?;
   return detailRows;
 }
 
+// 매장 배달팁 상세 조회 API
+async function selectDeliveryTipInfo(connection, storeId) {
+  const selectStoreDeliveryTipQuery = `
+SELECT concat(format(dti.limitOrder,0),'원~') as 'Order Price',
+	     concat(format(dti.deliveryTip,0),'원') as 'Delivery Tip'
+FROM DeliveryTipInfo dti join StoreInfo si on dti.storeId=si.storeIdx
+WHERE si.storeIdx = ? and dti.status = 'ACTIVE';
+  `;
+  const [deliveryTipRows] = await connection.query(selectStoreDeliveryTipQuery, storeId);
+  return deliveryTipRows;
+}
+
 // 가게 오픈 여부
 async function selectStoreActiveInfo(connection, storeId) {
   const storeActiveQuery = `
@@ -319,6 +331,7 @@ module.exports = {
   selectMainCategory,
   selectCategoryDetailMenu,
   selectStoreDetailInfo,
+  selectDeliveryTipInfo,
   selectStoreActiveInfo,
   selectStoreDeliveryTipInfo,
 };

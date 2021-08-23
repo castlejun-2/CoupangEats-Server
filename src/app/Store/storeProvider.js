@@ -115,6 +115,14 @@ exports.retrieveStoreDetail = async function (storeId) {
     return storeDetailResult;
 };
 
+exports.retrievestoreDeliveryTip = async function (storeId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const deliveryTipResult = await storeDao.selectDeliveryTipInfo(connection, storeId);
+    connection.release();    
+    return deliveryTipResult;
+};
+
 exports.retrieveStoreActive = async function (storeId) {
     const connection = await pool.getConnection(async (conn) => conn);
 
