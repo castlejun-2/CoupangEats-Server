@@ -126,3 +126,12 @@ exports.checkCoupon = async function (userId, couponId) {
 
   return checkCouponResult;
 };
+
+// 사용자 기본 배송지 조회 
+exports.getUserDefaultAddress = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userDefaultAddressResult = await userDao.selectUserDefaultAddress(connection, userId);
+  connection.release();
+
+  return userDefaultAddressResult;
+};

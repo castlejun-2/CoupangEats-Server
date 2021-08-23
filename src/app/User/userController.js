@@ -370,6 +370,28 @@ exports.login = async function (req, res) {
         }
     }
 };
+
+/**
+ * API No. 40
+ * API Name : 사용자 기본 배송지 조회 API
+ * [GET] /app/users/:userId/default-address
+ * path variable : userId
+ */
+ exports.getdefaultAddress = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getDefaultAddressResult = await userProvider.getUserDefaultAddress(userId);
+        return res.send(response(baseResponse.SUCCESS, getDefaultAddressResult));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation

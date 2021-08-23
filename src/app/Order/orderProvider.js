@@ -38,3 +38,12 @@ exports.retrieveSameOrderInCart = async function (userId, storeId) {
     return sameOrderInCartResult;
     
 };
+
+//카트상세정보 가져오기
+exports.retrieveUserCartDetailInfo = async function (userId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const cartinfolistResult = await orderDao.selectCartDetailInfo(connection,userId);
+    connection.release();    
+    return cartinfolistResult;
+    
+};

@@ -336,6 +336,17 @@ async function postCoupon(connection, AddUserCouponParams) {
 
   return postBookCoupon;
 }
+
+// 유저 기본 배송지 조회
+async function selectUserDefaultAddress(connection, userId) {
+  const userDefaultAddressQuery = `
+      SELECT ai.addressLine
+      FROM AddressInfo ai
+      WHERE ai.userId = ? and isDefault=1;
+     `;
+  const [defaultAddressRow] = await connection.query(userDefaultAddressQuery, userId);
+  return defaultAddressRow;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -360,4 +371,5 @@ module.exports = {
   selectUserCoupon,
   postCoupon,
   selectUserCouponCheck,
+  selectUserDefaultAddress,
 };

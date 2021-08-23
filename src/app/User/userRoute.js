@@ -35,6 +35,9 @@ module.exports = function(app){
     // 17. 사용자 쿠폰 등록 API
     app.post('/app/users/:userId/coupon',jwtMiddleware, user.postCoupon);
 
+    // 40. 기본 배송지 조회 API
+    app.get('/app/users/:userId/default-address',jwtMiddleware, user.getdefaultAddress);
+
     
 };
 

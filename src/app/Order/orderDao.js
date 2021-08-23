@@ -63,7 +63,7 @@ async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
     return postInCartRow;
 }
 
-  // 카트 정보 조회
+// 카트 정보 미리보기 조회
 async function selectCartInfo(connection, userId) {
     const getCartInfoQuery = `
         select count(*) as 'CartCount',
@@ -97,6 +97,31 @@ async function deleteUserInCart(connection, userId) {
     const [deleteCartRow] = await connection.query(deleteCartQuery, userId);
     return deleteCartRow;
 }
+
+  // 카트 정보 상세 조회
+  async function selectCartDetailInfo(connection, userId) {
+    const getCartDetailInfoQuery = `
+        select count(*) as 'CartCount',
+	           sum(st.SumPrice) as 'SumPrice'
+        FROM OrderInfo oi join StoreInfo si on oi.storeId=si.storeIdx join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+            join DeliveryTipInfo di on si.storeIdx=di.storeId join
+            (SELECT otdi.orderTotalDetailIdx as 'CartId',
+	                sum((mi.price+ot.OptionPrice)*otdi.menuCount) as 'SumPrice',
+                    oi.storeId as 'OrderStore',
+                    otdi.menuCount as 'menuCnt'
+            FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
+	            join StoreInfo si on si.storeIdx=oi.storeId join UserInfo ui on ui.userIdx=oi.userId join
+                (select orderTotalDetailIdx as otdiId, sum(plusPrice) as 'OptionPrice'
+                from OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join OrderDetailInfo odi on odi.orderTotalId=otdi.orderTotalDetailIdx
+	                join MenuInfo mi on mi.menuIdx=otdi.menuId join MenuCategoryInfo mci on mci.menuId=mi.menuIdx join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
+                where oi.userId = ? and oi.status = 'Cart' and odi.menuDetailId=mcdi.menuDetailIdx
+                group by orderTotalDetailIdx) ot on ot.otdiId=otdi.orderTotalDetailIdx
+            WHERE oi.status = 'CART' and oi.userId = ?
+            GROUP BY otdi.orderTotalDetailIdx) st on st.CartId=otdi.orderTotalDetailIdx;
+    `;
+    const [getCartRow] = await connection.query(getCartDetailInfoQuery, [userId, userId]);
+    return getCartRow;
+}
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
@@ -105,4 +130,5 @@ async function deleteUserInCart(connection, userId) {
     selectCartInfo,
     selectSameStoreInCartInfo,
     deleteUserInCart,
+    selectCartDetailInfo,
   }
