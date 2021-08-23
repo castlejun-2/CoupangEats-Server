@@ -101,7 +101,8 @@ async function deleteUserInCart(connection, userId) {
 // 카트 정보 상세 조회(메뉴)
 async function selectCartDetailByMenuInfo(connection, userId) {
     const getCartDetailInfoQuery = `
-            SELECT mi.menuName as 'menuName',
+            SELECT oi.storeId as 'storeId',
+                   mi.menuName as 'menuName',
 	              (mi.price+pp.plusPrice)*otdi.menuCount as 'menuPrice',
                    otdi.menuCount as 'menuCount'
             FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId

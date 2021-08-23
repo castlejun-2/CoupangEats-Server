@@ -179,7 +179,8 @@ const {emit} = require("nodemon");
         for(let i=0;i<orderMenuInfo.length;i++)
             sumprice=sumprice+orderMenuInfo[i].menuPrice //메뉴의 총 가격
         
-        const delieveryTipInfo = await storeProvider.getDeliveryTip(sumprice);
+        const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
+        console.log(deliveryTipInfo)
         sumprice=sumprice+delieveryTip[0].deliveryTip //배달 팁
 
         if(couponInfo[0].couponCount > 0){

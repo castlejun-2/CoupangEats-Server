@@ -123,10 +123,10 @@ exports.retrieveStoreActive = async function (storeId) {
     return storeActiveResult;
 };
 
-exports.getDeliveryTip = async function (sumprice) {
+exports.getDeliveryTip = async function (storeId, sumprice) {
     const connection = await pool.getConnection(async (conn) => conn);
 
-    const storeDeliveryTipResult = await storeDao.selectStoreDeliveryTipInfo(connection, sumprice);
+    const storeDeliveryTipResult = await storeDao.selectStoreDeliveryTipInfo(connection, storeId, sumprice);
     connection.release();    
     return storeDeliveryTipResult;
 };
