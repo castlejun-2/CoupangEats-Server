@@ -1,6 +1,7 @@
 const jwtMiddleware = require("../../../config/jwtMiddleware");
 const orderProvider = require("../../app/Order/orderProvider");
 const storeProvider = require("../../app/Store/storeProvider");
+const userProvider = require("../../app/User/userProvider");
 const orderService = require("../../app/Order/orderService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
@@ -150,7 +151,7 @@ const {emit} = require("nodemon");
  * [GET] /app/orders/:userId/in-cart
  * path variable : userId
  */
- exports.getCart = async function (req, res) {
+ exports.getDetailCart = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
@@ -160,8 +161,12 @@ const {emit} = require("nodemon");
 
     if (userIdFromJWT != userId) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {        
-        const cartInfo = await orderProvider.retrieveUserCartDetailInfo(userId);
+    } else {
+        const result = [];
+            
+        const userAddress = await userProvider.getUserDefaultAddress(userId);
+        result.push({'User Address': userAddress});
+
         return res.send(response(baseResponse.SUCCESS, cartInfo)); 
     }  
 }
