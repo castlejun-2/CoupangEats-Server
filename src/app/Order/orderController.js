@@ -184,7 +184,6 @@ const {emit} = require("nodemon");
         
         if(couponInfo[0].couponCount > 0){
             const userCouponInfo = await userProvider.getCoupon(userId, couponId, sumprice);
-            console.log(userCouponInfo[0])
             sumprice=sumprice-userCouponInfo[0].saleCost
         }
         result.push({'Total Cost': sumprice});
