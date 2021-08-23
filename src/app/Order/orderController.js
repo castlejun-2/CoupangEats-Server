@@ -17,6 +17,7 @@ const {emit} = require("nodemon");
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
+    const type = req.query.type;
     const {storeId,menuCount,menuId,orderArray} = req.body;
     let orderId;
 
@@ -37,10 +38,12 @@ const {emit} = require("nodemon");
             return res.send(errResponse(baseResponse.STORE_NOT_ACTIVE));     
         
         const sameStoreInCartInfo = await orderProvider.retrieveSameStoreInCart(userId, storeId)        
-        if (sameStoreInCartInfo[0].exist === 1) //카트에 다른 가게의 메뉴가 담겨있는지 확인
+        if (sameStoreInCartInfo[0].exist === 1 && !type) //카트에 다른 가게의 메뉴가 담겨있는지 확인
                 return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
-
-        const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId)        
+        else if(sameStoreInCartInfo[0].exist === 1 && type === 'new') //'새로담기'를 할 때 기존 Cart 정보는 삭제 후 담기
+            const cartDelete = await orderService.deleteInCart(userId);
+        
+        const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId);       
         if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
             orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
         else
