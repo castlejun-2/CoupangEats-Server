@@ -59,7 +59,7 @@ async function selectCartInfo(connection, userId) {
 	           sum(st.SumPrice+di.deliveryTip) as 'SumPrice'
         FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId join
             (SELECT otdi.orderTotalDetailIdx as 'In-Cart Id',
-	                sum((mi.price+ot.OptionPrice*otdi.menuCount)) as 'SumPrice',
+	                sum((mi.price+ot.OptionPrice)*otdi.menuCount) as 'SumPrice',
                     oi.storeId as 'OrderStore',
                     otdi.menuCount as 'menuCnt'
             FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
