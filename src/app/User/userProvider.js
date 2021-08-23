@@ -144,3 +144,21 @@ exports.getUserDefaultAddress = async function (userId) {
 
   return userDefaultAddressResult;
 };
+
+// 사용자 이름 및 핸드폰번호 조회
+exports.getUserMyPage = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userMyPageResult = await userDao.selectUserMyPage(connection, userId);
+  connection.release();
+
+  return userMyPageResult;
+};
+
+// 사용자 배달 주소지 리스트 조회
+exports.getUserAddressList = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userAddressResult = await userDao.selectUserAddressList(connection, userId);
+  connection.release();
+
+  return userAddressResult;
+};

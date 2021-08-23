@@ -392,6 +392,50 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, getDefaultAddressResult));
     }
 };
+
+/**
+ * API No. 41
+ * API Name : MyPage 유저 이름 및 핸드폰 번호 조회 API
+ * [GET] /app/users/:userId/name-number
+ * path variable : userId
+ */
+ exports.getMyPage = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getMyPageResult = await userProvider.getUserMyPage(userId);
+        return res.send(response(baseResponse.SUCCESS, getMyPageResult));
+    }
+};
+
+/**
+ * API No. 42
+ * API Name : 배송지 목록 조회 API
+ * [GET] /app/users/:userId/address
+ * path variable : userId
+ */
+ exports.getAddressList = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getMyAddressResultResult = await userProvider.getUserAddressList(userId);
+        return res.send(response(baseResponse.SUCCESS, getMyAddressResultResult));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation

@@ -360,6 +360,31 @@ async function selectUserDefaultAddress(connection, userId) {
   const [defaultAddressRow] = await connection.query(userDefaultAddressQuery, userId);
   return defaultAddressRow;
 }
+
+// 유저 이름 및 핸드폰번호 조회
+async function selectUserMyPage(connection, userId) {
+  const userDefaultAddressQuery = `
+      SELECT ui.userName, ui.PhoneNumber
+      FROM UserInfo ui
+      WHERE ui.userIdx = ?;
+  `;
+  const [defaultAddressRow] = await connection.query(userDefaultAddressQuery, userId);
+  return defaultAddressRow;
+}
+
+// 유저 배송지 리스트 조회
+async function selectUserAddressList(connection, userId) {
+  const userAddressListQuery = `
+      SELECT case category when 0 then '집' when 1 then '회사' when 2 then '기타' end as 'classify',
+	           addressLine as 'basic address',
+             concat(addressLine,detailAddressLine) as 'detail address'
+      FROM AddressInfo ai
+      WHERE ai.status='ACTIVE' and ai.userId = ?
+      ORDER BY category;
+  `;
+  const [addressListRow] = await connection.query(userAddressListQuery, userId);
+  return addressListRow;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -386,4 +411,6 @@ module.exports = {
   selectUserCouponCheck,
   selectUserDefaultAddress,
   selectUserCouponById,
+  selectUserMyPage,
+  selectUserAddressList,
 };

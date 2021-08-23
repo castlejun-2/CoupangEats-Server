@@ -38,7 +38,11 @@ module.exports = function(app){
     // 40. 기본 배송지 조회 API
     app.get('/app/users/:userId/default-address',jwtMiddleware, user.getdefaultAddress);
 
-    
+    // 41. MyPage 유저 이름 및 핸드폰 번호 조회 API
+    app.get('/app/users/:userId/name-number',jwtMiddleware, user.getMyPage);
+
+    // 42. 배송지 목록 조회 API
+    app.get('/app/users/:userId/address',jwtMiddleware, user.getAddressList)
 };
 
 
