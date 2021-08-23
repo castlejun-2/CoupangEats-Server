@@ -10,4 +10,7 @@ module.exports = function(app){
 
     // 37. 카트 비우기 API
     app.patch('/app/orders/:userId/in-cart', jwtMiddleware, order.deleteCart);
+
+    // 38. 새로 카트에 담기 API
+    app.post('/app/orders/:userId/new-cart', jwtMiddleware, order.newCart);
 };
