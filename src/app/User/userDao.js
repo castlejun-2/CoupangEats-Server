@@ -318,9 +318,7 @@ async function selectUserCoupon(connection, userId){
 async function selectUserCouponById(connection, userId, couponId, sumprice){
   const getUserCouponQuery=`
           SELECT ci.couponName as 'couponName',
-                 ci.salePrice as 'salePrice',
-                 format(ci.limitOrderPrice,0) as 'limitOrderPrice',
-                 date_format(date_add(ci.createdAt, INTERVAL 7 DAY), '%m/%d') as 'expirationDate'
+                 ci.salePrice as 'saleCost'
           FROM CouponInfo ci join UserCouponInfo uci on ci.couponIdx = uci.couponId
           WHERE uci.userId = ? and uci.couponId = ? and ci.limitOrderPrice <= ? and uci.status = 'ACTIVE'
           ORDER BY ci.saleprice DESC;
