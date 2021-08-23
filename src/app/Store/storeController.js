@@ -175,7 +175,7 @@ exports.getDelieveryTip = async function (req, res) {
 
    const userIdFromJWT = req.verifiedToken.userId;
    const userId = req.params.userId;
-   const storeId = req.qeury.storeId;
+   const storeId = req.query.storeId;
 
    if (!userIdFromJWT || !userId) 
        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
