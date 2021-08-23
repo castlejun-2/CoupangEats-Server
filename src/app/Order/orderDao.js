@@ -56,7 +56,7 @@ async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
 async function selectCartInfo(connection, userId) {
     const getCartInfoQuery = `
         select count(*) as 'CartCount',
-	           sum(st.SumPrice+di.deliveryTip) as 'SumPrice'
+	           sum(st.SumPrice) as 'SumPrice'
         FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId join
             (SELECT otdi.orderTotalDetailIdx as 'In-Cart Id',
 	                sum((mi.price+ot.OptionPrice)*otdi.menuCount) as 'SumPrice',
