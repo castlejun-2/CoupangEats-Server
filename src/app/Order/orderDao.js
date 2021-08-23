@@ -15,6 +15,14 @@ async function postOrderInfo(connection, userId, storeId) {
 
     return getOrderIdx;
 }
+  // 카트에 존재하는 메뉴의 매장과 현재 주문하려는 매장이 일치한지 여부 조회
+  async function selectSameStoreInCartInfo(connection, userId, storeId) {
+    const getSameStoreQuery = `
+        select exists(select orderIdx from OrderInfo where userId = ? and storeId != ? and status = 'CART') as exist;
+      `;
+    const [sameStoreRow] = await connection.query(getSameStoreQuery, [userId, storeId]);
+    return sameStoreRow;
+}
 
 // 주문 세부사항 토탈 정보 담기 
 async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
@@ -47,11 +55,11 @@ async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
   // 카트 정보 조회
 async function selectCartInfo(connection, userId) {
     const getCartInfoQuery = `
-        select sum(st.menuCnt) as 'CartCount',
+        select count(*) as 'CartCount',
 	           sum(st.SumPrice+di.deliveryTip) as 'SumPrice'
         FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId join
             (SELECT otdi.orderTotalDetailIdx as 'In-Cart Id',
-	                sum(mi.price+ot.OptionPrice) as 'SumPrice',
+	                sum((mi.price+ot.OptionPrice*otdi.menuCount)) as 'SumPrice',
                     oi.storeId as 'OrderStore',
                     otdi.menuCount as 'menuCnt'
             FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
@@ -73,4 +81,5 @@ async function selectCartInfo(connection, userId) {
     postOrderTotalInfo,
     postUserOrderInfoInCart,
     selectCartInfo,
+    selectSameStoreInCartInfo,
   }

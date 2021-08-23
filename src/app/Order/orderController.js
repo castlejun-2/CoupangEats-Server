@@ -30,10 +30,15 @@ const {emit} = require("nodemon");
         if(!menuId)
             return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
         
+        //validation 처리
         const storeActiveInfo = await storeProvider.retrieveStoreActive(storeId)        
         if (storeActiveInfo[0].exist === 0) //가게가 정상 영업중인지 확인
             return res.send(errResponse(baseResponse.STORE_NOT_ACTIVE));     
-            
+        
+        const sameStoreInCartInfo = await orderProvider.retrieveSameStoreInCart(userId, storeId)        
+        if (sameStoreInCartInfo[0].exist === 1) //카트에 다른 가게의 메뉴가 담겨있는지 확인
+                return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
+
         const orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
         for(let i=0; i<orderArray.length; i++){
             if(!orderArray[i].menuCategoryId)
