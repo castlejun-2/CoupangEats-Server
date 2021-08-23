@@ -174,8 +174,8 @@ const {emit} = require("nodemon");
 
         const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
         result.push({'Coupon List': couponInfo});
-        
-        console.log(orderMenuInfo[i].menuPrice)
+
+        console.log(orderMenuInfo[0].menuPrice)
         //최종 금액 계산
         for(let i=0;i<orderMenuInfo.length;i++)
             sumprice=sumprice+orderMenuInfo[i].menuPrice //메뉴의 총 가격
