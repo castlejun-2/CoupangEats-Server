@@ -278,7 +278,7 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_STARVALUE_EMPTY));
 
         const postReviewResult = await storeService.postUserReview(userId, orderId, starValue, review);
-        console.log(postReviewResult[0].isSuccess)
+        console.log(postReviewResult.isSuccess)
         if(postReviewResult[0].isSuccess === 'false')
             return res.send(postReviewResult);
         else{
