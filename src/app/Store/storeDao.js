@@ -353,7 +353,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY isHelp DESC;
   `;
@@ -380,7 +380,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating;
   `;
@@ -407,7 +407,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating DESC;
   `;
@@ -434,9 +434,9 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
-ORDER BY createDay
+ORDER BY createDay;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByRecentListQuery, storeId);
   return reviewRows;
@@ -461,7 +461,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE'
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY isHelp DESC;
   `;
@@ -488,7 +488,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE'
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating;
   `;
@@ -515,7 +515,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE'
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating DESC;
   `;
@@ -542,7 +542,7 @@ FROM UserInfo ui join ReviewInfo ri on ui.userIdx=ri.userId left join
     (SELECT oi.orderIdx as moid, group_concat(menuName) as 'mlist'
 	 FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
 	 GROUP BY oi.orderIdx) ml on ri.orderId = ml.moid
-WHERE ri.storeId = ? and ri.status = 'ACTIVE'
+WHERE ri.storeId = ? and ri.status = 'ACTIVE' and oi.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY createDay
   `;
