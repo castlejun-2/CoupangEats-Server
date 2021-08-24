@@ -171,3 +171,12 @@ exports.getUserNotice = async function () {
 
   return userNoticeResult;
 };
+
+// 유저 카드 조회
+exports.getUserCard = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userCardResult = await userDao.selectUserCard(connection, userId);
+  connection.release();
+
+  return userCardResult;
+};

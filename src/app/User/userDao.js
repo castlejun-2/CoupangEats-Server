@@ -402,6 +402,21 @@ async function selectUserNotice(connection) {
   const [noticeRow] = await connection.query(userNoticeQuery);
   return noticeRow;
 }
+
+// 사용자 카드 조회
+async function selectUserCard(connection, userId) {
+  const userCardQuery = `
+SELECT ci.cardIdx as 'cardId',
+	   bi.bankImageUrl as 'bankImage',
+       bi.bankName as 'bankName',
+	   left(replace(ci.cardNumber,'-',''),8)
+FROM CardInfo ci join BankInfo bi on ci.bankId=bi.bankIdx
+WHERE ci.userId = ? and ci.status ='ACTIVE'
+ORDER BY isDefault DESC;
+     `;
+  const [cardRow] = await connection.query(userCardQuery, userId);
+  return cardRow;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -431,4 +446,5 @@ module.exports = {
   selectUserMyPage,
   selectUserAddressList,
   selectUserNotice,
+  selectUserCard,
 };

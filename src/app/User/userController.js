@@ -372,6 +372,28 @@ exports.login = async function (req, res) {
 };
 
 /**
+ * API No. 25
+ * API Name : 카드 조회 API
+ * [GET] /app/users/:userId/card
+ * path variable : userId
+ */
+ exports.getCard = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getCardResult = await userProvider.getUserCard(userId);
+        return res.send(response(baseResponse.SUCCESS, getCardResult));
+    }
+};
+
+/**
  * API No. 27
  * API Name : 공지사항 조회 API
  * [GET] /app/users/:userId/notice
