@@ -213,7 +213,8 @@ async function selectStoreCategory(connection) {
 // 매장 메인화면 조회 API
 async function selectMainScreen(connection, storeId) {
   const selectMainListQuery = `
-  SELECT 	image.url as 'storeImageUrl',
+  SELECT 	si.storeIdx as 'storeId',
+          image.url as 'storeImageUrl',
 		      storeName as 'storeName',
 		      case when isCheetah = 1 then '치타배달' else 'NULL' end as 'cheetahDelivery',
 		      rv.star as 'averageStarRating',
