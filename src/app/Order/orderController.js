@@ -88,9 +88,9 @@ const {emit} = require("nodemon");
         sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
  
         if(!sameOrderInCartInfo[0])
-            const totalCostResult = await orderService.postTotalCost(orderId[0].orderId, sumprice);
-        else if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
-            const totalCostResult = await orderService.postTotalCost(sameOrderInCartInfo[0].orderIdx, sumprice);
+            const totalCost1Result = await orderService.postTotalCost(orderId[0].orderId, sumprice);
+        else if(sameOrderInCartInfo[0].orderIdx) 
+            const totalCost2Result = await orderService.postTotalCost(sameOrderInCartInfo[0].orderIdx, sumprice);
         
         return res.send(response(baseResponse.SUCCESS)); 
     }  
