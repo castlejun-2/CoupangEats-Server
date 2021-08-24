@@ -15,7 +15,6 @@ const {connect} = require("http2");
 //리뷰 도움돼요 증가
 exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
-        console.log(userId,reviewId);
         const connection = await pool.getConnection(async (conn) => conn);
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(connection, userId, reviewId);
         console.log(alreadyHelpCheck[0].status)
