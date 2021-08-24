@@ -335,8 +335,8 @@ async function selectReviewTopLayerInfo(connection, storeId) {
 }
 
 // 포토리뷰 도움 많은 순 조회 API
-async function selectPhotoReviewByHelp(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectPhotoReviewByHelp(connection, storeId) {
+  const selectStoreReviewByHelpListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -357,13 +357,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
 GROUP BY oi.orderIdx
 ORDER BY isHelp DESC;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByHelpListQuery, storeId);
+  return reviewRows;
 }
 
 // 포토리뷰 별점 오름차순 조회 API
-async function selectPhotoReviewByAsce(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectPhotoReviewByAsce(connection, storeId) {
+  const selectStoreReviewByAsceListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -384,13 +384,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
 GROUP BY oi.orderIdx
 ORDER BY starRating;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByAsceListQuery, storeId);
+  return reviewRows;
 }
 
 // 포토리뷰 별점 내림차순 조회 API
-async function selectPhotoReviewBydesc(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectPhotoReviewBydesc(connection, storeId) {
+  const selectStoreReviewByDescListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -411,13 +411,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
 GROUP BY oi.orderIdx
 ORDER BY starRating DESC;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByDescListQuery, storeId);
+  return reviewRows;
 }
 
 // 포토리뷰 최신등록순 조회 API
-async function selectPhotoReviewByRecent(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectPhotoReviewByRecent(connection, storeId) {
+  const selectStoreReviewByRecentListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -438,13 +438,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE' and rimage.reviewUrl is not NULL
 GROUP BY oi.orderIdx
 ORDER BY createDay
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByRecentListQuery, storeId);
+  return reviewRows;
 }
 
 // 매장리뷰 도움 많은 순 조회 API
-async function selectReviewByHelp(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectReviewByHelp(connection, storeId) {
+  const selectStoreReviewByHelpListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -465,13 +465,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY isHelp DESC;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByHelpListQuery, storeId);
+  return reviewRows;
 }
 
 // 매장리뷰 별점 오름차순 조회 API
-async function selectReviewByAsce(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectReviewByAsce(connection, storeId) {
+  const selectStoreReviewByAsceListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -492,13 +492,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByAsceListQuery, storeId);
+  return reviewRows;
 }
 
 // 매장리뷰 별점 내림차순 조회 API
-async function selectReviewBydesc(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectReviewBydesc(connection, storeId) {
+  const selectStoreReviewByDescListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -519,13 +519,13 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY starRating DESC;
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByDescListQuery, storeId);
+  return reviewRows;
 }
 
 // 매장리뷰 최신등록순 조회 API
-async function selectReviewByRecent(connection) {
-  const selectStoreCategoryListQuery = `
+async function selectReviewByRecent(connection, storeId) {
+  const selectStoreReviewByRecentListQuery = `
 SELECT oi.orderIdx as 'oid',
 	     ui.userName as 'userName',
 	     ri.starValue as 'starRating',
@@ -546,8 +546,8 @@ WHERE ri.storeId = ? and ri.status = 'ACTIVE'
 GROUP BY oi.orderIdx
 ORDER BY createDay
   `;
-  const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
-  return categoryRows;
+  const [reviewRows] = await connection.query(selectStoreReviewByRecentListQuery, storeId);
+  return reviewRows;
 }
 
 // 리뷰 도움돼요 확인 여부

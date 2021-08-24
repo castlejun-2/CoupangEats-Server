@@ -26,6 +26,9 @@ module.exports = function(app){
     // 22. 리뷰 도움안돼요 증가 API
     app.post('/app/stores/:userId/nonhelp-review',jwtMiddleware,store.postNotHelpReview);
 
+    // 23. 리뷰 작성 API
+    app.post('/app/stores/:userId/review',jwtMiddleware,store.postReview);
+
     // 29. 치타배달 매장 조회 API
     app.get('/app/stores/:userId/cheetah',jwtMiddleware,store.getStoresByCheetah);
 

@@ -27,13 +27,16 @@ module.exports = function(app){
     app.post('/app/users/:userId/bookmark',jwtMiddleware, user.updateBookMark);
 
     // 14. 즐겨찾기 조회 API (+정렬기능)
-    app.get('/app/users/:userId/bookmark',jwtMiddleware, user.getBookMark)
+    app.get('/app/users/:userId/bookmark',jwtMiddleware, user.getBookMark);
 
     // 16. 사용자 등록 쿠폰 조회 API
-    app.get('/app/users/:userId/coupon',jwtMiddleware, user.getCoupon)
+    app.get('/app/users/:userId/coupon',jwtMiddleware, user.getCoupon);
 
     // 17. 사용자 쿠폰 등록 API
     app.post('/app/users/:userId/coupon',jwtMiddleware, user.postCoupon);
+
+    // 27. 공지사항 조회 API
+    app.get('/app/users/:userId/notice',jwtMiddleware, user.getNotice)
 
     // 40. 기본 배송지 조회 API
     app.get('/app/users/:userId/default-address',jwtMiddleware, user.getdefaultAddress);
@@ -42,7 +45,7 @@ module.exports = function(app){
     app.get('/app/users/:userId/name-number',jwtMiddleware, user.getMyPage);
 
     // 42. 배송지 목록 조회 API
-    app.get('/app/users/:userId/address',jwtMiddleware, user.getAddressList)
+    app.get('/app/users/:userId/address',jwtMiddleware, user.getAddressList);
 };
 
 
