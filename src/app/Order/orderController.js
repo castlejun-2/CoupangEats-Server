@@ -88,9 +88,9 @@ const {emit} = require("nodemon");
         sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
  
         if(!sameOrderInCartInfo[0])
-            const totalCost1Result = await orderService.postTotalCost(orderId[0].orderId, sumprice);
+            await orderService.postTotalCost(orderId[0].orderId, sumprice);
         else if(sameOrderInCartInfo[0].orderIdx) 
-            const totalCost2Result = await orderService.postTotalCost(sameOrderInCartInfo[0].orderIdx, sumprice);
+            await orderService.postTotalCost(sameOrderInCartInfo[0].orderIdx, sumprice);
         
         return res.send(response(baseResponse.SUCCESS)); 
     }  
