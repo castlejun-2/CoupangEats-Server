@@ -858,7 +858,8 @@ module.exports = {
   selectStoreCheetahPreviewInfo,
   selectReviewExist,
   updateOnlyStarValueReviewInfo,
-  updateOnlyTextReviewInfo
+  updateOnlyTextReviewInfo,
+  updateReviewInfo,
 };
 
   
