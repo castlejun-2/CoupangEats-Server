@@ -517,6 +517,7 @@ exports.login = async function (req, res) {
  exports.getReview = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
     const orderId = req.params.orderId;
 
     if (!userIdFromJWT || !userId) 
