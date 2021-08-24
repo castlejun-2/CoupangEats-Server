@@ -66,10 +66,10 @@ const {emit} = require("nodemon");
                 return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
 
         const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId);       
-        if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
-            orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
-        else
+        if(!sameOrderInCartInfo[0])
             orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
+        else if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
+            orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
 
         for(let i=0; i<orderArray.length; i++){
             if(!orderArray[i].menuCategoryId)
