@@ -407,9 +407,9 @@ async function selectUserNotice(connection) {
 async function selectUserCard(connection, userId) {
   const userCardQuery = `
 SELECT ci.cardIdx as 'cardId',
-	   bi.bankImageUrl as 'bankImage',
+	     bi.bankImageUrl as 'bankImage',
        bi.bankName as 'bankName',
-	   left(replace(ci.cardNumber,'-',''),8)
+	     left(replace(ci.cardNumber,'-',''),8) as 'cardNumber'
 FROM CardInfo ci join BankInfo bi on ci.bankId=bi.bankIdx
 WHERE ci.userId = ? and ci.status ='ACTIVE'
 ORDER BY isDefault DESC;
