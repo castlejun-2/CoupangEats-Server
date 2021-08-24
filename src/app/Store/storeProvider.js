@@ -220,6 +220,7 @@ exports.checkAlreadyNotHelpCheck = async function (userId, reviewId) {
     const connection = await pool.getConnection(async (conn) => conn);
 
     const checkNotHelpReviewResult = await storeDao.selectCheckNotHelpReviewInfo(connection, userId, reviewId);
+    console.log(checkNotHelpReviewResult[0]);
     connection.release();    
     return checkNotHelpReviewResult;
 };
