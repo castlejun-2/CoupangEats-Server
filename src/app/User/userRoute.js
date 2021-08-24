@@ -52,6 +52,9 @@ module.exports = function(app){
 
     // 42. 배송지 목록 조회 API
     app.get('/app/users/:userId/address',jwtMiddleware, user.getAddressList);
+
+    // 44. 작성한 리뷰 조회 API
+    app.get('/app/users/:userId/review',jwtMiddleware, user.getReview);
 };
 
 

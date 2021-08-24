@@ -429,6 +429,25 @@ async function updateDeleteCard(connection, userId, cardId) {
   return deleteCardRow;
 }
 
+// 리뷰 조회
+async function selectMyReviewInfo(connection, userId, orderId) {
+  const getReviewInfoQuery = `
+SELECT si.storeName as 'storeName',
+	     ri.starValue as 'starRating',
+       concat(TIMESTAMPDIFF(DAY,ri.createdAt,now()),'일 전') as 'createDay',
+       ri.review as 'reviewText',
+       ml.mlist as 'menuList',
+       ri.isHelp as 'helpCount'
+FROM StoreInfo si join ReviewInfo ri on si.storeIdx=ri.storeId left join
+	  (SELECT oi.orderIdx as moid, group_concat(menuName SEPARATOR "+") as 'mlist'
+	   FROM MenuInfo mi join OrderTotalDetailInfo otdi on mi.menuIdx=otdi.menuId join OrderInfo oi on oi.orderIdx=otdi.orderId
+	   GROUP BY oi.orderIdx) ml on ml.moid=ri.orderId
+WHERE ri.orderId=? and ri.userId=?;
+    `;
+  const [getReviewInfoRow] = await connection.query(getReviewInfoQuery, [orderId, userId]);
+  return getReviewInfoRow;
+}
+
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -459,5 +478,6 @@ module.exports = {
   selectUserAddressList,
   selectUserNotice,
   selectUserCard,
-  updateDeleteCard
+  updateDeleteCard,
+  selectMyReviewInfo
 };

@@ -507,6 +507,30 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, getMyAddressResultResult));
     }
 };
+
+/**
+ * API No. 44
+ * API Name : 작성한 리뷰 조회 API
+ * [GET] /app/users/:userId/review
+ * path variable : userId
+ */
+ exports.getAddressList = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const orderId = req.params.orderId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        if(!orderId)
+            return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
+        const getMyReviewResult = await userProvider.getMyReviewInfo(userId, orderId);
+        return res.send(response(baseResponse.SUCCESS, getMyReviewResult));
+    }
+};
 /**
  * API No. 5
  * API Name : 회원 정보 수정 API + JWT + Validation

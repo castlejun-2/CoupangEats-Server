@@ -180,3 +180,12 @@ exports.getUserCard = async function (userId) {
 
   return userCardResult;
 };
+
+//작성한 리뷰 조회
+exports.getMyReviewInfo = async function (userId, orderId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const writeReviewInfoResult = await userDao.selectMyReviewInfo(connection, userId, orderId);
+  connection.release();    
+  return writeReviewInfoResult;
+};
