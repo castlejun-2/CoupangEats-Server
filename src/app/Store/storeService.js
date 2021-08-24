@@ -68,10 +68,10 @@ exports.postReviewIsNotHelp = async function (userId, reviewId) {
 };
 
 //리뷰 작성
-exports.postUserReview = async function (userId, orderId, starValue, review, reviewImageUrl) {
+exports.postUserReview = async function (userId, orderId, starValue, review) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
-        const userOrderCheck = await orderProvider.userOrderIdEqualCheck(connection, userId, orderId);
+        const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
         
         if(userOrderCheck[0].exist === 0){
             connection.release();
