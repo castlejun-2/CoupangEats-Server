@@ -16,8 +16,7 @@ const {connect} = require("http2");
 exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
-        const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(connection, userId, reviewId);
-        console.log(alreadyHelpCheck);
+        const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(userId, reviewId);
         if(alreadyHelpCheck[0] === null){
             const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
         }
