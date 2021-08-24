@@ -45,14 +45,14 @@ exports.postReviewIsNotHelp = async function (userId, reviewId) {
         const connection = await pool.getConnection(async (conn) => conn);
         const alreadyNotHelpCheck = await storeProvider.checkAlreadyNotHelpCheck(userId, reviewId);
         
-        if(alreadyNotHelpCheck[0].status === 'ACTIVE'){
+        if(!alreadyNotHelpCheck[0]){
+            const postIsNotHelpReview = await storeDao.insertUserIsNotHelpReview(connection, userId, reviewId);
+        }
+        else if(alreadyNotHelpCheck[0].status === 'ACTIVE'){
             const updateIsNotHelpReview = await storeDao.changeUserIsNotHelpReview(connection, userId, reviewId);
             const minusReviewIsNotHelp = await storeDao.changeReviewIsNotHelp(connection, reviewId);
             connection.release();
             return response(baseResponse.SUCCESS);
-        }
-        else if(!alreadyNotHelpCheck[0].status){
-            const postIsNotHelpReview = await storeDao.insertUserIsNotHelpReview(connection, userId, reviewId);
         }
         else if(alreadyNotHelpCheck[0].status === 'DELETE'){
             const updateIsNotHelpReview = await storeDao.updateUserIsNotHelpReview(connection, userId, reviewId);
