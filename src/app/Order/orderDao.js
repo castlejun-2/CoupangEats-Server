@@ -146,6 +146,41 @@ async function selectUserIdSameOrderIdInfo(connection, userId, orderId) {
     const [getSameRow] = await connection.query(getIsSameQuery, [userId, orderId, userId, orderId]);
     return getSameRow;
 }
+
+// 주문내역 총 비용 삽입
+async function posttotalCostInOrderInfo(connection, orderId, sumPrice) {
+    const postSumCostQuery = `
+    UPDATE OrderInfo
+    SET sumCost = ?
+    WHERE orderIdx = ?;
+    `;
+    const [postSumCostRow] = await connection.query(postSumCostQuery, [sumPrice, orderId]);
+    return postSumCostRow;
+}
+
+// 과거 주문내역 조회
+async function selectOrderHistoryInfo(connection, userId) {
+    const getOrderHistoryQuery = `
+SELECT ri.reviewIdx as 'reviewId',
+	   mu.mimage as 'storeImage',
+	   si.storeName as 'storeName',
+	   date_format(oi.createdAt,'%Y-%m-%d %H:%i') as 'orderDate',
+       case when oi.status='ACTIVE' then '배달 완료'
+			when oi.status='DELETE' then '주문 취소됨' end as 'orderState',
+	   ri.starValue as 'starRating',
+       ml.menulist as 'menuList',
+       oi.sumCost as 'sumCost'
+FROM StoreInfo si join OrderInfo oi on oi.storeId=si.storeIdx join ReviewInfo ri on ri.orderId=oi.orderIdx left join
+     (Select oi.orderIdx as 'oid', group_concat(mi.menuName SEPARATOR '+') as 'menuList'
+      FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+		   join MenuInfo mi on otdi.menuId=mi.menuIdx group by oi.orderIdx) ml on ml.oid=oi.orderIdx left join
+	 (Select mi.storeId as 'msid', miu.menuImageUrl as 'mimage'
+      FROM MenuInfo mi join MenuImageUrl miu on miu.menuId=mi.menuIdx Where isMain=1 Group By mi.storeId) mu on mu.msid=si.storeIdx
+WHERE oi.userId=? and (oi.status='ACTIVE' or oi.status='INACTIVE');
+    `;
+    const [getOrderHistoryRow] = await connection.query(getOrderHistoryQuery, userId);
+    return getOrderHistoryRow;
+}
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
@@ -157,4 +192,6 @@ async function selectUserIdSameOrderIdInfo(connection, userId, orderId) {
     selectCartDetailByMenuInfo,
     selectCartDetailByCouponInfo,
     selectUserIdSameOrderIdInfo,
+    posttotalCostInOrderInfo,
+    selectOrderHistoryInfo,
   }

@@ -65,3 +65,12 @@ exports.userOrderIdEqualCheck = async function (userId, orderId) {
     return isSameResult;
     
 };
+
+//과거 주문내역 조회
+exports.retrieveOrderHistoryInfo = async function (userId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const orderHistoryResult = await orderDao.selectOrderHistoryInfo(connection, userId);
+    connection.release();    
+    return orderHistoryResult;
+    
+};

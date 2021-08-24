@@ -60,3 +60,18 @@ exports.deleteInCart = async function (userId) {
         return errResponse(baseResponse.DB_ERROR);   
     }
 };
+
+//주문 총 비용 등록
+exports.postTotalCost = async function (orderId, sumPrice) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const postTotalCostResult = await orderDao.posttotalCostInOrderInfo(connection, orderId, sumPrice);
+        connection.release();
+
+        return response(baseResponse.SUCCESS);
+    } catch (err) {
+        logger.error(`App - Post TotalCost In OrderInfo error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);   
+    }
+};

@@ -8,6 +8,29 @@ const {response, errResponse} = require("../../../config/response");
 
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
+
+/**
+ * API No. 10
+ * API Name : 과거 주문 내역 조회 API
+ * [GET] /app/orders/:userId/history
+ * path variable : userId
+ */
+ exports.getOrderHistory = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {        
+        const orderHistoryInfo = await orderProvider.retrieveOrderHistoryInfo(userId);
+        return res.send(response(baseResponse.SUCCESS, orderHistoryInfo)); 
+    }  
+}
+
 /**
  * API No. 32
  * API Name : 카트에 담기 API
@@ -20,6 +43,7 @@ const {emit} = require("nodemon");
     const userId = req.params.userId;
     const {storeId,menuCount,menuId,orderArray} = req.body;
     let orderId;
+    var sumprice = 0;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -54,6 +78,16 @@ const {emit} = require("nodemon");
                 return res.send(errResponse(baseResponse.SIGNIN_MENUDETAILID_EMPTY));
             const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderIdx, orderArray[i]);
         }
+        
+        //최종 금액 계산
+        const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
+    
+        for(let i=0;i<orderMenuInfo.length;i++)
+            sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
+        const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
+        sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
+
+        const totalCostResult = await orderService.postTotalCost(orderId[0].orderIdx, sumprice);
         return res.send(response(baseResponse.SUCCESS)); 
     }  
 }

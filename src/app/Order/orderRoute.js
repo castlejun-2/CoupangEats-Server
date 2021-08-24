@@ -2,6 +2,9 @@ module.exports = function(app){
     const order = require('./orderController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
+    // 10. 과거 주문 내역 조회 API
+    app.get('/app/orders/:userId/history', jwtMiddleware, order.getOrderHistory);
+
     // 32. 카트에 담기 API
     app.post('/app/orders/:userId/in-cart', jwtMiddleware, order.postCart); 
 
