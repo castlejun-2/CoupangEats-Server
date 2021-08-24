@@ -743,7 +743,7 @@ async function updateOnlyTextReviewInfo(connection, reviewId, review) {
   return updateReviewRows;
 }
 
-// 리뷰 수정(텍스트만)
+// 리뷰 수정(평점만)
 async function updateOnlyStarValueReviewInfo(connection, reviewId, starValue) {
   const updateReviewQuery = `
       UPDATE ReviewInfo
@@ -753,6 +753,18 @@ async function updateOnlyStarValueReviewInfo(connection, reviewId, starValue) {
   const [updateReviewRows] = await connection.query(updateReviewQuery, [starValue, reviewId]);
   return updateReviewRows;
 }
+
+// 리뷰 수정
+async function updateReviewInfo(connection, reviewId, starValue, review) {
+  const updateReviewQuery = `
+      UPDATE ReviewInfo
+      SET starValue = ?,review = ?
+      WHERE reviewIdx = ?;
+  `;
+  const [updateReviewRows] = await connection.query(updateReviewQuery, [starValue, review, reviewId]);
+  return updateReviewRows;
+}
+
 
 // 매장 배달팁 상세 조회
 async function selectDeliveryTipInfo(connection, storeId) {

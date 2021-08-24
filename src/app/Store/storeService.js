@@ -107,10 +107,15 @@ exports.updateUserReview = async function (userId, orderId, reviewId, starValue,
             connection.release();
             return response(baseResponse.SUCCESS);
         }
-        else{ //평점만 수정하는 경우
+        else if(!text){ //평점만 수정하는 경우
             const updateStarRatingReview = await storeDao.updateOnlyStarValueReviewInfo(connection, reviewId, starValue);
             connection.release();
             return response(baseResponse.SUCCESS);
+        }
+        else{
+            const updateReview = await storeDao.updateReviewInfo(connection, reviewId, starValue, review);
+            connection.release();
+            return response(baseResponse.SUCCESS);  
         }
     } catch (err) {
         logger.error(`App - Update Review Service error\n: ${err.message}`);

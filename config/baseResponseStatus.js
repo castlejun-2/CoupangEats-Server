@@ -56,6 +56,7 @@ module.exports = {
     SIGNIN_REVIEWID_EMPTY: { "isSuccess": false, "code": 2040, "message": "도움여부를 증가시킬 리뷰를 선택해주세요" },
     SIGNIN_ORDERID_EMPTY: { "isSuccess": false, "code": 2041, "message": "리뷰를 작성할 주문내역을 선택해주세요" },
     SIGNIN_STARVALUE_EMPTY: { "isSuccess": false, "code": 2042, "message": "별점을 입력해주세요" },
+    SIGNIN_REVIEWID_EMPTY: { "isSuccess": false, "code": 2043, "message": "수정할 리뷰를 선택해주세요" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },
