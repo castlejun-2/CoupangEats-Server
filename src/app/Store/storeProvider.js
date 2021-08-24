@@ -210,7 +210,7 @@ exports.retrieveStoreReview = async function (storeId, filter) {
 exports.checkAlreadyHelpCheck = async function (userId, reviewId) {
     const connection = await pool.getConnection(async (conn) => conn);
     const checkHelpReviewResult = await storeDao.selectCheckHelpReviewInfo(connection, userId, reviewId);
-    console.log(checkHelpReviewResult[0]);
+
     connection.release();    
     return checkHelpReviewResult;
 };

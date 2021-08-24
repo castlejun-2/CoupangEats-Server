@@ -17,14 +17,14 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(connection, userId, reviewId);
-        console.log(alreadyHelpCheck[0].status)
+
         if(alreadyHelpCheck[0].status === 'ACTIVE'){
             const updateIsHelpReview = await storeDao.changeUserIsHelpReview(connection, userId, reviewId);
             const minusReviewIsHelp = await storeDao.changeReviewIsHelp(connection, reviewId);
             connection.release();
             return response(baseResponse.SUCCESS);
         }
-        else if(!alreadyHelpCheck[0].status){
+        else if(!alreadyHelpCheck[0]){
             const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
         }
         else if(alreadyHelpCheck[0].status === 'DELETE'){
