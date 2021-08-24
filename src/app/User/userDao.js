@@ -217,8 +217,8 @@ async function selectUserBookMarkByRecent(connection, userId){
           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
-	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
-		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+		  join MenuInfo mui on otdi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
          (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
           from StoreInfo si join
          (select miu.menuImageUrl,mi.storeId
@@ -250,8 +250,8 @@ async function selectUserBookMarkByOrder(connection, userId){
           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
-	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
-		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+		  join MenuInfo mui on otdi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
          (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
           from StoreInfo si join
          (select miu.menuImageUrl,mi.storeId
@@ -284,8 +284,8 @@ async function selectUserBookMarkByMany(connection, userId){
           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
 FROM StoreInfo si left join
 	 (Select count(*) as cnt, round(avg(starValue),1) as star, mui.storeId as sti
-	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId
-		  join MenuInfo mui on oi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
+	 From ReviewInfo ri join OrderInfo oi on oi.orderIdx=ri.orderId join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId
+		  join MenuInfo mui on otdi.menuId = mui.menuIdx where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx join
          (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
           from StoreInfo si join
          (select miu.menuImageUrl,mi.storeId
