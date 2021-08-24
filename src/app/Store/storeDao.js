@@ -663,7 +663,7 @@ async function updateReviewIsHelp(connection, reviewId) {
   const updateHelpReviewQuery = `
   UPDATE ReviewInfo
   SET isHelp = isHelp + 1
-  WHERE reviewId = ?;
+  WHERE reviewIdx = ?;
   `;
   const [updateReviewRows] = await connection.query(updateHelpReviewQuery, reviewId);
   return updateReviewRows;

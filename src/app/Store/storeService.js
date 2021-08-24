@@ -17,7 +17,7 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(userId, reviewId);
-        if(alreadyHelpCheck[0] === null){
+        if(!alreadyHelpCheck[0]){
             const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
         }
         else if(alreadyHelpCheck[0].status === 'ACTIVE'){
