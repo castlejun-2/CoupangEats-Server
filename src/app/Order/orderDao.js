@@ -176,7 +176,8 @@ FROM StoreInfo si join OrderInfo oi on oi.storeId=si.storeIdx join ReviewInfo ri
 		   join MenuInfo mi on otdi.menuId=mi.menuIdx group by oi.orderIdx) ml on ml.oid=oi.orderIdx left join
 	 (Select mi.storeId as 'msid', miu.menuImageUrl as 'mimage'
       FROM MenuInfo mi join MenuImageUrl miu on miu.menuId=mi.menuIdx Where isMain=1 Group By mi.storeId) mu on mu.msid=si.storeIdx
-WHERE oi.userId=? and (oi.status='ACTIVE' or oi.status='INACTIVE');
+WHERE oi.userId=? and (oi.status='ACTIVE' or oi.status='INACTIVE')
+ORDER BY oi.createdAt DESC;
     `;
     const [getOrderHistoryRow] = await connection.query(getOrderHistoryQuery, userId);
     return getOrderHistoryRow;
