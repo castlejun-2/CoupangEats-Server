@@ -514,7 +514,7 @@ exports.login = async function (req, res) {
  * [GET] /app/users/:userId/review
  * path variable : userId
  */
- exports.getAddressList = async function (req, res) {
+ exports.getReview = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const orderId = req.params.orderId;
