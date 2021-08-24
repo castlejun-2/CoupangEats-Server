@@ -95,7 +95,7 @@ async function selectStoreByCheetahList(connection, userId) {
          join UserInfo ui on ui.userIdx = ?
          left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
     WHERE si.isCheetah = 1
-    HAVING distance < 30;
+    HAVING distance < 26;
   `;
   const [cheetahRows] = await connection.query(selectStoreByCheetahQuery, userId);
   return cheetahRows;
@@ -680,6 +680,15 @@ async function updateReviewIsNotHelp(connection, reviewId) {
   return updateReviewRows;
 }
 
+// 이미 작성한 리뷰인지 확인
+async function selectReviewExist(connection, userId, orderId) {
+  const checkReviewExistQuery = `
+    select exists(select reviewIdx from ReviewInfo where userId = ? and orderId = ? and status = 'ACTIVE') as exist
+  `;
+  const [reviewExistRows] = await connection.query(checkReviewExistQuery, [userId, orderId]);
+  return reviewExistRows;
+}
+
 // 리뷰 작성
 async function insertReviewInfo(connection, userId, orderId, storeId, starValue, review) {
   const insertReviewQuery = `
@@ -795,6 +804,7 @@ module.exports = {
   insertReviewImage,
   changeUserIsNotHelpReview,
   selectStoreCheetahPreviewInfo,
+  selectReviewExist,
 };
 
   

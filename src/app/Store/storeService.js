@@ -72,16 +72,19 @@ exports.postUserReview = async function (userId, orderId, starValue, review) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
-        
+        const existReviewCheck = await storeProvider.reviewExistCheck(userId, orderId);
         if(userOrderCheck[0].exist === 0){
             connection.release();
             return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);
         }
-        else{
-            const registerReview = await storeDao.insertReviewInfo(connection, userId, orderId, userOrderCheck[0].storeId, starValue, review);
+        if(existReviewCheck[0].exist === 1){
             connection.release();
-            return registerReview;
+            return errResponse(baseResponse.REVIEW_EXIST);
         }
+        const registerReview = await storeDao.insertReviewInfo(connection, userId, orderId, userOrderCheck[0].storeId, starValue, review);
+        connection.release();
+        return registerReview;
+
     } catch (err) {
         logger.error(`App - Insert Review Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);

@@ -67,6 +67,7 @@ module.exports = {
     SIGNIN_COUPON_EXIST : { "isSuccess": false, "code": 3007, "message": "이미 등록 된 쿠폰입니다." },
     ALREADY_HELP_REVIEW_CHECK : { "isSuccess": false, "code": 3008, "message": "이미 도움 여부를 증가시켰습니다." },
     ORDERID_AND_USERID_DO_NOT_MATCH : { "isSuccess": false, "code": 3008, "message": "UserID와 OrderID가 일치하지 않습니다." },
+    REVIEW_EXIST : { "isSuccess": false, "code": 3009, "message": "이미 리뷰를 작성한 주문입니다." },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},

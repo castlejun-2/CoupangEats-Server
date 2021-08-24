@@ -224,6 +224,16 @@ exports.checkAlreadyNotHelpCheck = async function (userId, reviewId) {
     return checkNotHelpReviewResult;
 };
 
+//이미 작성한 리뷰인지 확인
+exports.reviewExistCheck = async function (userId, orderId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const reviewExistResult = await storeDao.selectReviewExist(connection, userId, orderId);
+    connection.release();    
+    return reviewExistResult;
+    
+};
+
 //매장 배달팁 조회
 exports.retrievestoreDeliveryTip = async function (storeId) {
     const connection = await pool.getConnection(async (conn) => conn);
