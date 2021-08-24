@@ -29,6 +29,9 @@ module.exports = function(app){
     // 23. 리뷰 작성 API
     app.post('/app/stores/:userId/review',jwtMiddleware,store.postReview);
 
+    // 24. 리뷰 수정 API
+    app.patch('/app/stores/:userId/review',jwtMiddleware,store.updateReview);
+
     // 29. 치타배달 매장 조회 API
     app.get('/app/stores/:userId/cheetah',jwtMiddleware,store.getStoresByCheetah);
 

@@ -290,6 +290,39 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
+ * API No. 24
+ * API Name : 리뷰 수정 API
+ * [PATCH] /app/users/:userId/review
+ * path variable : userId
+ */
+ exports.updateReview = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const {orderId, starValue, review, reviewImageUrl} = req.body;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!orderId)
+            return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
+
+        const postReviewResult = await storeService.postUserReview(userId, orderId, starValue, review);
+
+        if(!postReviewResult[0])
+            return res.send(postReviewResult);
+        else{
+            for(let i=0;i<reviewImageUrl.length;i++){
+                const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
+            return res.send(baseResponse.SUCCESS);   
+        }
+    }             
+}
+
+/**
 * API No. 29
 * API Name : 치타배달 매장 조회 API
 * [GET] /app/users/:userId/cheetah
