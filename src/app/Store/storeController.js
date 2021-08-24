@@ -223,7 +223,6 @@ exports.getStoresByCategory = async function (req, res) {
     } else {
         if(!reviewId)
             return res.send(errResponse(baseResponse.SIGNIN_REVIEWID_EMPTY));
-
         const reviewHelpResult = await storeService.postReviewIsHelp(userId, reviewId); 
         return res.send(reviewHelpResult);   
     }             
