@@ -209,9 +209,8 @@ exports.retrieveStoreReview = async function (storeId, filter) {
 //리뷰 도움여부를 증가시켰는지 확인
 exports.checkAlreadyHelpCheck = async function (userId, reviewId) {
     const connection = await pool.getConnection(async (conn) => conn);
-    console.log(userId, reviewId);
     const checkHelpReviewResult = await storeDao.selectCheckHelpReviewInfo(connection, userId, reviewId);
-    console.log(checkHelpReviewResult);
+    console.log(checkHelpReviewResult[0]);
     connection.release();    
     return checkHelpReviewResult;
 };
