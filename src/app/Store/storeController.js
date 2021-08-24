@@ -279,7 +279,7 @@ exports.getStoresByCategory = async function (req, res) {
 
         const postReviewResult = await storeService.postUserReview(userId, orderId, starValue, review);
         console.log(postReviewResult)
-        if(!postReviewResult[0].reviewIdx)
+        if(postReviewResult.isSuccess === 'false')
             return res.send(postReviewResult);
         else{
             for(let i=0;i<reviewImageUrl.length;i++){
