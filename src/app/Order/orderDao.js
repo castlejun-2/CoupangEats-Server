@@ -161,7 +161,7 @@ async function posttotalCostInOrderInfo(connection, orderId, sumPrice) {
 // 과거 주문내역 조회
 async function selectOrderHistoryInfo(connection, userId) {
     const getOrderHistoryQuery = `
-SELECT ri.reviewIdx as 'reviewId',
+SELECT oi.orderIdx as 'orderId',
 	   mu.mimage as 'storeImage',
 	   si.storeName as 'storeName',
 	   date_format(oi.createdAt,'%Y-%m-%d %H:%i') as 'orderDate',
