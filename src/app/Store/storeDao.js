@@ -271,7 +271,7 @@ async function selectDetailMenu(connection, categoryId) {
 		       mi.price as 'menuPrice',
            mi.description as 'menuDescription',
            miu.menuImageUrl as 'menuImageUrl'
-    FROM MenuInfo mi join (Select menuId, MenuImageUrl From MenuImageUrl group by menuId) miu on mi.menuIdx = miu.menuId
+    FROM MenuInfo mi left join (Select menuId, MenuImageUrl From MenuImageUrl group by menuId) miu on mi.menuIdx = miu.menuId
     WHERE mi.category = ?;
   `;
   const [detailRows] = await connection.query(selectStoreCategoryListQuery, categoryId);
