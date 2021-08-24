@@ -310,7 +310,7 @@ exports.getStoresByCategory = async function (req, res) {
         if(!orderId)
             return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
         if(!reviewId)
-            return res.send(errResponse(baseResponse.SIGNIN_REVIEWID_EMPTY));
+            return res.send(errResponse(baseResponse.UPDATE_REVIEWID_EMPTY));
 
         const updateReviewResult = await storeService.updateUserReview(userId, orderId, reviewId, starValue, review);
         for(let i=0;i<insertReviewImageUrl.length;i++){ //리뷰 이미지 URL 추가

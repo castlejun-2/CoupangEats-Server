@@ -205,7 +205,8 @@ async function selectUserBookMarkCount(connection, userId){
 // 최근 추가한 순 즐겨찾기 조회
 async function selectUserBookMarkByRecent(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as 'storeImageUrl',
+  SELECT 	si.storeIdx as 'storeId',
+          image.url as 'storeImageUrl',
 		      storeName as 'storeName',
 		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
 		      rv.star as 'averageStarRating',
@@ -237,7 +238,8 @@ ORDER BY ubi.createdAt DESC;
 // 최근 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByOrder(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as 'storeImageUrl',
+  SELECT 	si.storeIdx as 'storeId',
+          image.url as 'storeImageUrl',
 		      storeName as 'storeName',
 		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
 		      rv.star as 'averageStarRating',
@@ -270,7 +272,8 @@ ORDER BY ooi.ca DESC;
 // 많이 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByMany(connection, userId){
   const getBookMarkQuery=`
-  SELECT 	image.url as 'storeImageUrl',
+  SELECT 	si.storeIdx as 'storeId',
+          image.url as 'storeImageUrl',
 		      storeName as 'storeName',
 		      case when isCheetah = 1 then '치타배달' end as 'cheetahDelivery',
 		      rv.star as 'averageStarRating',
