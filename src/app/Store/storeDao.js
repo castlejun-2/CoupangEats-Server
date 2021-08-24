@@ -577,7 +577,7 @@ async function changeReviewIsHelp(connection, reviewId) {
   const changeHelpReviewQuery = `
   UPDATE ReviewInfo
   SET isHelp = isHelp - 1
-  WHERE reviewId = ?;
+  WHERE reviewIdx = ?;
   `;
   const [changeReviewRows] = await connection.query(changeHelpReviewQuery, reviewId);
   return changeReviewRows;
@@ -588,7 +588,7 @@ async function changeReviewIsNotHelp(connection, reviewId) {
   const changeNotHelpReviewQuery = `
   UPDATE ReviewInfo
   SET isNotHelp = isNotHelp - 1
-  WHERE reviewId = ?;
+  WHERE reviewIdx = ?;
   `;
   const [changeReviewRows] = await connection.query(changeNotHelpReviewQuery, reviewId);
   return changeReviewRows;
@@ -674,7 +674,7 @@ async function updateReviewIsNotHelp(connection, reviewId) {
   const updateNotHelpReviewQuery = `
   UPDATE ReviewInfo
   SET isNotHelp = isNotHelp + 1
-  WHERE reviewId = ?;
+  WHERE reviewIdx = ?;
   `;
   const [updateReviewRows] = await connection.query(updateNotHelpReviewQuery, reviewId);
   return updateReviewRows;
