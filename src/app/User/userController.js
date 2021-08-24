@@ -320,7 +320,7 @@ exports.login = async function (req, res) {
 
 /**
  * API No. 16
- * API Name : 16. 사용자 등록 쿠폰 조회 API
+ * API Name : 사용자 등록 쿠폰 조회 API
  * [GET] /app/users/:userId/getCoupon
  * path variable : userId
  */
@@ -342,7 +342,7 @@ exports.login = async function (req, res) {
 
 /**
  * API No. 17
- * API Name : 16. 사용자 쿠폰 등록 API
+ * API Name : 사용자 쿠폰 등록 API
  * [post] /app/users/:userId/getCoupon
  * path variable : userId
  */
@@ -390,6 +390,33 @@ exports.login = async function (req, res) {
     else {
         const getCardResult = await userProvider.getUserCard(userId);
         return res.send(response(baseResponse.SUCCESS, getCardResult));
+    }
+};
+
+/**
+ * API No. 26
+ * API Name : 카드 삭제 API
+ * [patch] /app/users/:userId/card
+ * path variable : userId
+ */
+ exports.deleteCard = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const {cardId} = req.body;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        if(!cardId)
+            return res.send(errResponse(baseResponse.SIGNIN_CARDID_EMPTY));
+
+        const deleteCardResult = await userService.deleteCard(userId, cardId);
+        return res.send(deleteCardResult);
+        
     }
 };
 

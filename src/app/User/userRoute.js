@@ -38,6 +38,9 @@ module.exports = function(app){
     // 25. 카드 조회 API
     app.get('/app/users/:userId/card',jwtMiddleware, user.getCard);
 
+    // 26. 카드 삭제 API
+    app.patch('/app/users/:userId/card',jwtMiddleware, user.deleteCard);
+
     // 27. 공지사항 조회 API
     app.get('/app/users/:userId/notice',jwtMiddleware, user.getNotice);
 

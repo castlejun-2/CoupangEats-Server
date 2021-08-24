@@ -417,6 +417,18 @@ ORDER BY isDefault DESC;
   const [cardRow] = await connection.query(userCardQuery, userId);
   return cardRow;
 }
+
+// 카드 삭제
+async function updateDeleteCard(connection, userId, cardId) {
+  const deleteCardQuery = `
+      UPDATE CardInfo
+      SET status='DELETE'
+      WHERE userId = ? and cardIdx = ?;
+    `;
+  const deleteCardRow = await connection.query(deleteCardQuery, [userId, cardId]);
+  return deleteCardRow;
+}
+
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -447,4 +459,5 @@ module.exports = {
   selectUserAddressList,
   selectUserNotice,
   selectUserCard,
+  updateDeleteCard
 };

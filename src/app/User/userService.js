@@ -200,4 +200,17 @@ exports.postCoupon = async function (userId, couponId) {
     }
 };
 
+// 카드삭제
+exports.deleteCard = async function (userId, cardId) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const deleteCardResult = await userDao.updateDeleteCard(connection, userId, cardId);
+
+        connection.release();
+        return response(baseResponse.SUCCESS);
+    } catch (err) {
+        logger.error(`App - Delete Card Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);   
+    }
+}
 
