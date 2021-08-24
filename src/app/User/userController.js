@@ -518,7 +518,7 @@ exports.login = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const orderId = req.params.orderId;
+    const orderId = req.query.orderId;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
