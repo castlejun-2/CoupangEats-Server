@@ -53,6 +53,9 @@ module.exports = {
     SIGNIN_MENUDETAILID_EMPTY: { "isSuccess": false, "code": 2037, "message": "카트에 담을 메뉴의 추가옵션을 입력해주세요" },
     STORE_NOT_ACTIVE: { "isSuccess": false, "code": 2038, "message": "매장 영업시간이 아닙니다" },
     NOT_SAME_STORE_IN_CART: { "isSuccess": false, "code": 2039, "message": "이미 카트에 담겨있는 주문정보 매장과 동일하지 않습니다" },
+    SIGNIN_REVIEWID_EMPTY: { "isSuccess": false, "code": 2040, "message": "도움여부를 증가시킬 리뷰를 선택해주세요" },
+    SIGNIN_ORDERID_EMPTY: { "isSuccess": false, "code": 2041, "message": "리뷰를 작성할 주문내역을 선택해주세요" },
+    SIGNIN_STARVALUE_EMPTY: { "isSuccess": false, "code": 2042, "message": "별점을 입력해주세요" },
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },
@@ -62,6 +65,8 @@ module.exports = {
     SIGNIN_INACTIVE_ACCOUNT : { "isSuccess": false, "code": 3005, "message": "비활성화 된 계정입니다. 고객센터에 문의해주세요." },
     SIGNIN_WITHDRAWAL_ACCOUNT : { "isSuccess": false, "code": 3006, "message": "탈퇴 된 계정입니다. 고객센터에 문의해주세요." },
     SIGNIN_COUPON_EXIST : { "isSuccess": false, "code": 3007, "message": "이미 등록 된 쿠폰입니다." },
+    ALREADY_HELP_REVIEW_CHECK : { "isSuccess": false, "code": 3008, "message": "이미 도움 여부를 증가시켰습니다." },
+    ORDERID_AND_USERID_DO_NOT_MATCH : { "isSuccess": false, "code": 3008, "message": "UserID와 OrderID가 일치하지 않습니다." },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},

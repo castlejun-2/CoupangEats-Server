@@ -129,10 +129,22 @@ async function selectCartDetailByCouponInfo(connection, userId) {
                       join CouponInfo ci on si.storeIdx=ci.storeId
                       join UserCouponInfo uci on uci.couponId=ci.couponIdx
                       join UserInfo ui on ui.userIdx=uci.userId
-    WHERE oi.status='CART' and ui.userIdx=? and uci.status='ACTIVE'
+    WHERE oi.status='CART' and ui.userIdx=? and uci.status='ACTIVE';
     `;
     const [getCartRow] = await connection.query(getCartCouponInfoQuery, userId);
     return getCartRow;
+}
+
+// 사용자와 주문내역 일치여부 조회
+async function selectUserIdSameOrderIdInfo(connection, userId, orderId) {
+    const getIsSameQuery = `
+    select exists(select orderIdx from OrderInfo where userId = ? and orderIdx = ? and status = 'ACTIVE') as exist,
+           storeId
+    FROM OrderInfo
+    WHERE userId = ? and orderIdx = ? and status = 'ACTIVE';
+    `;
+    const [getSameRow] = await connection.query(getIsSameQuery, [userId, orderId, userId, orderId]);
+    return getSameRow;
 }
   module.exports = {
     postOrderInfo,
@@ -144,4 +156,5 @@ async function selectCartDetailByCouponInfo(connection, userId) {
     deleteUserInCart,
     selectCartDetailByMenuInfo,
     selectCartDetailByCouponInfo,
+    selectUserIdSameOrderIdInfo,
   }

@@ -385,6 +385,19 @@ async function selectUserAddressList(connection, userId) {
   const [addressListRow] = await connection.query(userAddressListQuery, userId);
   return addressListRow;
 }
+
+// 공지사항 조회
+async function selectUserNotice(connection) {
+  const userNoticeQuery = `
+    SELECT date_format(createdAt,'%Y.%m.%d') as 'date',
+	         noticeTitle as 'title'
+    FROM NoticeInfo
+    WHERE status = 'ACTIVE'
+    ORDER BY createdAt DESC;
+     `;
+  const [noticeRow] = await connection.query(userNoticeQuery);
+  return noticeRow;
+}
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -413,4 +426,5 @@ module.exports = {
   selectUserCouponById,
   selectUserMyPage,
   selectUserAddressList,
+  selectUserNotice,
 };

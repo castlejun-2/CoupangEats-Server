@@ -56,3 +56,12 @@ exports.getUserCoupon = async function (userId) {
     return cartInfoCouponResult;
     
 };
+
+//사용자ID 주문내역 일치여부 조회
+exports.userOrderIdEqualCheck = async function (userId, orderId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const isSameResult = await orderDao.selectUserIdSameOrderIdInfo(connection, userId, orderId);
+    connection.release();    
+    return isSameResult;
+    
+};

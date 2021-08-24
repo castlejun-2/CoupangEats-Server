@@ -16,7 +16,19 @@ module.exports = function(app){
 
     // 19. 매장 세부정보 조회 API
     app.get('/app/stores/:userId/detail-store',jwtMiddleware,store.getStoreDetail);
-    
+
+    // 20. 매장 리뷰 조회 API
+    app.get('/app/stores/:userId/review',jwtMiddleware,store.getReview);
+
+    // 21. 리뷰 도움돼요 증가 API
+    app.post('/app/stores/:userId/help-review',jwtMiddleware,store.postHelpReview);
+
+    // 22. 리뷰 도움안돼요 증가 API
+    app.post('/app/stores/:userId/nonhelp-review',jwtMiddleware,store.postNotHelpReview);
+
+    // 29. 치타배달 매장 조회 API
+    app.get('/app/stores/:userId/cheetah',jwtMiddleware,store.getStoresByCheetah);
+
     // 30. 매장 배달팁 상세 조회 API
     app.get('/app/stores/:userId/delivery-tip',jwtMiddleware,store.getDelieveryTip);
 
@@ -29,5 +41,6 @@ module.exports = function(app){
     // 36. 앱 메인화면 골라먹는 매장 조회 API
     app.get('/app/stores/:userId/main-pick',jwtMiddleware,store.getMainScreenByPickStore);
 
-
+    // 43. 치타배달 미리보기 팜업 API
+    app.get('/app/stores/:userId/preview-cheetah',jwtMiddleware,store.getStoresByPreviewCheetah);
 };

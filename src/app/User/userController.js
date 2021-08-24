@@ -372,6 +372,28 @@ exports.login = async function (req, res) {
 };
 
 /**
+ * API No. 27
+ * API Name : 공지사항 조회 API
+ * [GET] /app/users/:userId/notice
+ * path variable : userId
+ */
+ exports.getNotice = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getNoticeResult = await userProvider.getUserNotice();
+        return res.send(response(baseResponse.SUCCESS, getNoticeResult));
+    }
+};
+
+/**
  * API No. 40
  * API Name : 사용자 기본 배송지 조회 API
  * [GET] /app/users/:userId/default-address

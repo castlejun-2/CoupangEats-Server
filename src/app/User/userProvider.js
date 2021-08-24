@@ -162,3 +162,12 @@ exports.getUserAddressList = async function (userId) {
 
   return userAddressResult;
 };
+
+// 유저 공지사항 조회
+exports.getUserNotice = async function () {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userNoticeResult = await userDao.selectUserNotice(connection);
+  connection.release();
+
+  return userNoticeResult;
+};
