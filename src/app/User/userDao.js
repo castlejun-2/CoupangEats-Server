@@ -392,7 +392,8 @@ async function selectUserAddressList(connection, userId) {
 // 공지사항 조회
 async function selectUserNotice(connection) {
   const userNoticeQuery = `
-    SELECT date_format(createdAt,'%Y.%m.%d') as 'date',
+    SELECT noticeIdx as 'noticeId',
+           date_format(createdAt,'%Y.%m.%d') as 'date',
 	         noticeTitle as 'title'
     FROM NoticeInfo
     WHERE status = 'ACTIVE'
