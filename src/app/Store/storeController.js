@@ -278,9 +278,14 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_STARVALUE_EMPTY));
 
         const postReviewResult = await storeService.postUserReview(userId, orderId, starValue, review);
-        for(let i=0;i<reviewImageUrl.length;i++){
-            const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
-        return res.send(baseResponse.SUCCESS);   
+        console.log(postReviewResult)
+        if(!postReviewResult[0].reviewIdx)
+            return res.send(postReviewResult);
+        else{
+            for(let i=0;i<reviewImageUrl.length;i++){
+                const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
+            return res.send(baseResponse.SUCCESS);   
+        }
     }             
 }
 
