@@ -91,6 +91,33 @@ exports.postUserReview = async function (userId, orderId, starValue, review) {
     }
 };
 
+//리뷰 수정
+exports.updateUserReview = async function (userId, orderId, reviewId, starValue, review) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
+        if(userOrderCheck[0].exist === 0){ //validation check
+            connection.release();
+            return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);
+        }
+        if(!starValue && !review) //둘 다 수정하지 않는 경우
+            return response(baseResponse.SUCCESS);
+        else if(!starValue){ //텍스트 리뷰만 수정하는 경우
+            const updateTextReview = await storeDao.updateOnlyTextReviewInfo(connection, reviewId, review);
+            connection.release();
+            return response(baseResponse.SUCCESS);
+        }
+        else{ //평점만 수정하는 경우
+            const updateStarRatingReview = await storeDao.updateOnlyStarValueReviewInfo(connection, reviewId, starValue);
+            connection.release();
+            return response(baseResponse.SUCCESS);
+        }
+    } catch (err) {
+        logger.error(`App - Update Review Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
 //리뷰 이미지 작성
 exports.postUserReviewImage = async function (reviewId, reviewImageUrl) {
     try {
@@ -100,6 +127,19 @@ exports.postUserReviewImage = async function (reviewId, reviewImageUrl) {
             return response(baseResponse.SUCCESS);
     } catch (err) {
         logger.error(`App - Insert ReviewImage Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+//리뷰 이미지 삭제
+exports.deleteUserReviewImage = async function (reviewId, reviewImageUrlIdx) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+            const deleteReviewImage = await storeDao.deleteReviewImage(connection, reviewId, reviewImageUrlIdx);
+            connection.release();
+            return response(baseResponse.SUCCESS);
+    } catch (err) {
+        logger.error(`App - Delete ReviewImage Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };

@@ -1,7 +1,8 @@
 // 키워드로 가게 조회
 async function selectStoreByKeyword(connection, userId, keyword) {
     const selectStoreByKeywordQuery = `
-    SELECT image.url as 'storeImageUrl',
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
            storeName as 'storeName',
            case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
            averageDelivery as 'averageDeliveryTime',
@@ -37,7 +38,8 @@ async function selectStoreByKeyword(connection, userId, keyword) {
 //카테고리별 가게 조회
 async function selectStoreByCategory(connection, userId, category) {
   const selectStoreByCategoryQuery = `
-    SELECT image.url as 'storeImageUrl',
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
            storeName as 'storeName',
            case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
            averageDelivery as 'averageDeliveryTime',
@@ -73,7 +75,8 @@ async function selectStoreByCategory(connection, userId, category) {
 //치타배달 매장 조회
 async function selectStoreByCheetahList(connection, userId) {
   const selectStoreByCheetahQuery = `
-    SELECT image.url as 'storeImageUrl',
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
            storeName as 'storeName',
            case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
            averageDelivery as 'averageDeliveryTime',
@@ -104,7 +107,8 @@ async function selectStoreByCheetahList(connection, userId) {
 // 메인화면 새로 입점한 가게 리스트 조회 API
 async function selectMainScreenByNew(connection, userId) {
   const selectMainByNewListQuery = `
-          SELECT image.url as 'storeImageUrl',
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
                  storeName as 'storeName',
                  rv.star as 'averageStarRating',
                  rv.cnt as 'reviewCount',
@@ -132,7 +136,8 @@ async function selectMainScreenByNew(connection, userId) {
 // 메인화면 인기 매장 리스트 조회 API
 async function selectMainScreenByPopular(connection, userId) {
   const selectMainByPopularListQuery = `
-          SELECT image.url as 'storeImageUrl',
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
                  storeName as 'storeName',
                  rv.star as 'averageStarRating',
                  rv.cnt as 'reviewCount',
@@ -160,7 +165,8 @@ async function selectMainScreenByPopular(connection, userId) {
 // 메인화면 그 외의 매장 리스트 조회 API
 async function selectMainScreenByOther(connection, userId) {
   const selectMainByOtherListQuery = `
-    SELECT image.url as 'storeImageUrl',
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
            storeName as 'storeName',
            case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
            averageDelivery as 'averageDeliveryTime',
@@ -715,6 +721,39 @@ async function insertReviewImage(connection,  reviewId, reviewImageUrl) {
   return insertImageRows;
 }
 
+// 리뷰 이미지 삭제
+async function deleteReviewImage(connection, reviewId, reviewImageUrlIdx) {
+  const deleteReviewQuery = `
+      DELETE
+      FROM ReviewImageUrlInfo
+      WHERE reviewId = ? and reviewImageUrlIdx = ?;
+  `;
+  const [deleteImageRows] = await connection.query(deleteReviewQuery, [reviewId, reviewImageUrlIdx]);
+  return deleteImageRows;
+}
+
+// 리뷰 수정(텍스트만)
+async function updateOnlyTextReviewInfo(connection, reviewId, review) {
+  const updateReviewQuery = `
+      UPDATE ReviewInfo
+      SET review = ?
+      WHERE reviewIdx = ?;
+  `;
+  const [updateReviewRows] = await connection.query(updateReviewQuery, [review, reviewId]);
+  return updateReviewRows;
+}
+
+// 리뷰 수정(텍스트만)
+async function updateOnlyStarValueReviewInfo(connection, reviewId, starValue) {
+  const updateReviewQuery = `
+      UPDATE ReviewInfo
+      SET starValue = ?
+      WHERE reviewIdx = ?;
+  `;
+  const [updateReviewRows] = await connection.query(updateReviewQuery, [starValue, reviewId]);
+  return updateReviewRows;
+}
+
 // 매장 배달팁 상세 조회
 async function selectDeliveryTipInfo(connection, storeId) {
   const selectStoreDeliveryTipQuery = `
@@ -802,9 +841,12 @@ module.exports = {
   changeReviewIsNotHelp,
   insertReviewInfo,
   insertReviewImage,
+  deleteReviewImage,
   changeUserIsNotHelpReview,
   selectStoreCheetahPreviewInfo,
   selectReviewExist,
+  updateOnlyStarValueReviewInfo,
+  updateOnlyTextReviewInfo
 };
 
   

@@ -299,7 +299,7 @@ exports.getStoresByCategory = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const {orderId, starValue, review, reviewImageUrl} = req.body;
+    const {orderId, reviewId, starValue, review, insertReviewImageUrl, deleteReviewImageUrl} = req.body;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -310,15 +310,13 @@ exports.getStoresByCategory = async function (req, res) {
         if(!orderId)
             return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
 
-        const postReviewResult = await storeService.postUserReview(userId, orderId, starValue, review);
+        const updateReviewResult = await storeService.updateUserReview(userId, orderId, reviewId, starValue, review);
+        for(let i=0;i<insertReviewImageUrl.length;i++){ //리뷰 이미지 URL 추가
+            const postReviewImage = await storeService.postUserReviewImage(reviewId, insertReviewImageUrl[i].url);}
+        for(let i=0;i<deleteReviewImageUrl.length;i++){ //리뷰 이미지 URL 삭제
+            const postReviewImage = await storeService.deleteUserReviewImage(reviewId, deleteReviewImageUrl[i].id);}
+        return res.send(updateReviewResult);   
 
-        if(!postReviewResult[0])
-            return res.send(postReviewResult);
-        else{
-            for(let i=0;i<reviewImageUrl.length;i++){
-                const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
-            return res.send(baseResponse.SUCCESS);   
-        }
     }             
 }
 
