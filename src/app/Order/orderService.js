@@ -65,7 +65,6 @@ exports.deleteInCart = async function (userId) {
 exports.postTotalCost = async function (orderId, sumPrice) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
-        console.log(orderId,sumPrice)
         const postTotalCostResult = await orderDao.posttotalCostInOrderInfo(connection, orderId, sumPrice);
         connection.release();
 
