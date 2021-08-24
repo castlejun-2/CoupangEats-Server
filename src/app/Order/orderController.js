@@ -81,12 +81,12 @@ const {emit} = require("nodemon");
         
         //최종 금액 계산
         const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
-        console.log(orderMenuInfo[0])
+
         for(let i=0;i<orderMenuInfo.length;i++)
             sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
         const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
         sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
-        console.log(sumprice)
+        console.log(orderId[0].orderIdx, sumprice)
         const totalCostResult = await orderService.postTotalCost(orderId[0].orderIdx, sumprice);
         return res.send(response(baseResponse.SUCCESS)); 
     }  
