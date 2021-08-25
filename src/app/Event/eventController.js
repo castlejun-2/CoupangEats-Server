@@ -8,7 +8,7 @@ const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
 /**
- * API No. 8
+ * API No. 1
  * API Name : 이벤트 진행중인 쿠폰 조회 API
  * [GET] /app/events/:userId/coupon
  * path variable : userId
@@ -30,7 +30,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 15
+ * API No. 2
  * API Name : 이벤트 조회 API
  * [GET] /app/events/:userId
  * path variable : userId

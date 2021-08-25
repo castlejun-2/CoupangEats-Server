@@ -8,16 +8,7 @@ const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
 /**
- * API No. 0
- * API Name : 테스트 API
- * [GET] /app/test
- */
- exports.getTest = async function (req, res) {
-     return res.send(response(baseResponse.SUCCESS))
- }
-
-/**
- * API No. 1
+ * API No. 29
  * API Name : 유저 생성 (회원가입) API
  * [POST] /app/users/sign-up
  */
@@ -63,51 +54,7 @@ exports.postUsers = async function (req, res) {
 };
 
 /**
- * API No. 2
- * API Name : 유저 조회 API (+ 이메일로 검색 조회)
- * [GET] /app/users
- */
-/* exports.getUsers = async function (req, res) {
-
-    /**
-     * Query String: email
-     */
-    /**
-    const email = req.query.email;
-
-    if (!email) {
-        // 유저 전체 조회
-        const userListResult = await userProvider.retrieveUserList();
-        return res.send(response(baseResponse.SUCCESS, userListResult));
-    } else {
-        // 유저 검색 조회
-        const userListByEmail = await userProvider.retrieveUserList(email);
-        return res.send(response(baseResponse.SUCCESS, userListByEmail));
-    }
-}; */
-
-/**
- * API No. 3
- * API Name : 특정 유저 조회 API
- * [GET] /app/users/{userId}
- * */
- /* exports.getUserById = async function (req, res) {
-
-    /**
-     * Path Variable: userId
-     */
-    /**
-    const userId = req.params.userId;
-
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    const userByUserId = await userProvider.retrieveUser(userId);
-    return res.send(response(baseResponse.SUCCESS, userByUserId));
-}; */
-
-
-/**
- * API No. 2
+ * API No. 30
  * API Name : 로그인 API
  * [POST] /app/login
  * body : email, passsword
@@ -138,7 +85,7 @@ exports.login = async function (req, res) {
 
 
 /**
- * API No. 8
+ * API No. 31
  * API Name : 로그아웃 API
  * [POST] /users/:userId/logout
  */
@@ -169,7 +116,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 4
+ * API No. 32
  * API Name : 주소지 추가 API
  * [POST] /app/users/:userId/add-address
  * path variable : userId
@@ -202,7 +149,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 5
+ * API No. 33
  * API Name : 상세 주소 변경 API
  * [PATCH] /app/users/:userId/detail-address
  * path variable : userId
@@ -229,7 +176,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 6
+ * API No. 34
  * API Name : 기분 주소시 설정 API
  * [PATCH] /app/users/:userId/detail-address
  * path variable : userId
@@ -254,10 +201,53 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.ADDRESS_DEFAULT_SETTING_SUCCESS));
     }
 };
+/**
+ * API No. 35
+ * API Name : 사용자 기본 배송지 조회 API
+ * [GET] /app/users/:userId/default-address
+ * path variable : userId
+ */
+ exports.getdefaultAddress = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getDefaultAddressResult = await userProvider.getUserDefaultAddress(userId);
+        return res.send(response(baseResponse.SUCCESS, getDefaultAddressResult));
+    }
+};
 
 /**
- * API No. 13
- * API Name : 매장 즐겨찾기 추가 및 취소 API
+ * API No. 36
+ * API Name : 배송지 목록 조회 API
+ * [GET] /app/users/:userId/address
+ * path variable : userId
+ */
+ exports.getAddressList = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        const getMyAddressResultResult = await userProvider.getUserAddressList(userId);
+        return res.send(response(baseResponse.SUCCESS, getMyAddressResultResult));
+    }
+};
+
+/**
+ * API No. 37
+ * API Name : 즐겨찾기 추가 및 취소 API
  * [POST] /app/users/:userId/bookmark
  * path variable : userId
  * body : storeId
@@ -291,7 +281,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 14
+ * API No. 38
  * API Name : 즐겨찾기 조회 API
  * [GET] /app/users/:userId/bookmark
  * path variable : userId
@@ -318,7 +308,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 16
+ * API No. 39
  * API Name : 사용자 등록 쿠폰 조회 API
  * [GET] /app/users/:userId/getCoupon
  * path variable : userId
@@ -340,7 +330,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 17
+ * API No. 40
  * API Name : 사용자 쿠폰 등록 API
  * [post] /app/users/:userId/getCoupon
  * path variable : userId
@@ -371,7 +361,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 25
+ * API No. 41
  * API Name : 카드 조회 API
  * [GET] /app/users/:userId/card
  * path variable : userId
@@ -393,7 +383,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 26
+ * API No. 42
  * API Name : 카드 삭제 API
  * [patch] /app/users/:userId/card
  * path variable : userId
@@ -420,7 +410,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 27
+ * API No. 43
  * API Name : 공지사항 조회 API
  * [GET] /app/users/:userId/notice
  * path variable : userId
@@ -442,7 +432,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 28
+ * API No. 44
  * API Name : 영수증 조회 API
  * [GET] /app/users/:userId/receipt
  * path variable : userId
@@ -482,31 +472,8 @@ exports.login = async function (req, res) {
     }
 };
 
-
 /**
- * API No. 40
- * API Name : 사용자 기본 배송지 조회 API
- * [GET] /app/users/:userId/default-address
- * path variable : userId
- */
- exports.getdefaultAddress = async function (req, res) {
-
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-        
-    if (userIdFromJWT != userId)
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    else {
-        const getDefaultAddressResult = await userProvider.getUserDefaultAddress(userId);
-        return res.send(response(baseResponse.SUCCESS, getDefaultAddressResult));
-    }
-};
-
-/**
- * API No. 41
+ * API No. 45
  * API Name : MyPage 유저 이름 및 핸드폰 번호 조회 API
  * [GET] /app/users/:userId/name-number
  * path variable : userId
@@ -528,29 +495,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 42
- * API Name : 배송지 목록 조회 API
- * [GET] /app/users/:userId/address
- * path variable : userId
- */
- exports.getAddressList = async function (req, res) {
-
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-        
-    if (userIdFromJWT != userId)
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    else {
-        const getMyAddressResultResult = await userProvider.getUserAddressList(userId);
-        return res.send(response(baseResponse.SUCCESS, getMyAddressResultResult));
-    }
-};
-
-/**
- * API No. 44
+ * API No. 46
  * API Name : 작성한 리뷰 조회 API
  * [GET] /app/users/:userId/review
  * path variable : userId

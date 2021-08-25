@@ -10,7 +10,7 @@ const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
 /**
- * API No. 10
+ * API No. 3
  * API Name : 과거 주문 내역 조회 API
  * [GET] /app/orders/:userId/history
  * path variable : userId
@@ -32,7 +32,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 32
+ * API No. 4
  * API Name : 카트에 담기 API
  * [POST] /app/orders/:userId/in-cart
  * path variable : userId
@@ -76,7 +76,7 @@ const {emit} = require("nodemon");
                 return res.send(errResponse(baseResponse.SIGNIN_MENUCATEGORYID_EMPTY));
             if(!orderArray[i].menuDetailId)
                 return res.send(errResponse(baseResponse.SIGNIN_MENUDETAILID_EMPTY));
-            const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderIdx, orderArray[i]);
+            const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderId, orderArray[i]);
         }
         
         //최종 금액 계산
@@ -97,7 +97,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 33
+ * API No. 5
  * API Name : 카트에 담긴 정보 미리보기 조회 API
  * [GET] /app/orders/:userId/preview-cart
  * path variable : userId
@@ -119,7 +119,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 37
+ * API No. 6
  * API Name : 카트 비우기 API
  * [PATCH] /app/orders/:userId/in-cart
  * path variable : userId
@@ -141,7 +141,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 38
+ * API No. 7
  * API Name : 새로운 카트에 담기 API
  * [POST] /app/orders/:userId/new-cart
  * path variable : userId
@@ -184,7 +184,7 @@ const {emit} = require("nodemon");
 }
 
 /**
- * API No. 39
+ * API No. 8
  * API Name : 카트에 담긴 정보 상세 조회 API
  * [GET] /app/orders/:userId/in-cart
  * path variable : userId
