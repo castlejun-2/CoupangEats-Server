@@ -13,9 +13,9 @@ const Cache = require('memory-cache');
 const request = require('request');
 const CryptoJS = require('crypto-js');
 
-const NCP_serviceID = '[[ncp:sms:kr:271185330164:coupangeats_project]]';
-const NCP_accessKey = '[[GnXhRBJuQlI2XljSG6zE]]';
-const NCP_secretKey = '[[65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP]]';
+const NCP_serviceID = 'ncp:sms:kr:271185330164:coupangeats_project';
+const NCP_accessKey = 'GnXhRBJuQlI2XljSG6zE';
+const NCP_secretKey = '65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP';
 
 const date = Date.now().toString();
 const uri = NCP_serviceID;
@@ -582,7 +582,7 @@ exports.send = async function (req, res) {
         contentType: 'COMM',
         countryCode: '82',
         from: '01055300651',
-        content: `[본인 확인] 인증번호 [${verifyCode}]를 입력해주세요.`,
+        content: `[쿠팡이츠] 인증번호 [${verifyCode}]를 입력해주세요.`,
         messages: [
           {
             to: `${phoneNumber}`,
@@ -601,6 +601,7 @@ exports.send = async function (req, res) {
       res.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
     })
     .catch((err) => {
+      console.log(err)
       console.log(err.res);
       if(err.res == undefined){
         res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
