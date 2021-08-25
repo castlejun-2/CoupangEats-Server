@@ -13,24 +13,28 @@ const crypto = require("crypto");
 const {connect} = require("http2");
 
 exports.postUserOrder = async function (userId, storeId, menuId, menuCount, orderId) {
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
+        connection.beginTransaction();
         if(!orderId){
-            const connection = await pool.getConnection(async (conn) => conn);
             const getUserCardResult = await userProvider.getUserDefaultCard(userId);
             const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId, getUserCardResult[0].cardId);          
             const postOrderTotalResult = await orderDao.postOrderTotalInfo(connection, postOrderResult[0].orderIdx, menuId, menuCount);
-            connection.release();
+            connection.commit();
             return postOrderTotalResult;
         }
         else{
             const connection = await pool.getConnection(async (conn) => conn);
             const postOrderWithIdTotalResult = await orderDao.postOrderTotalInfo(connection, orderId, menuId, menuCount);
-            connection.release();
+            connection.commit();
             return postOrderWithIdTotalResult;
         }
     } catch (err) {
+        connection.rollback();
         logger.error(`App - Post OrderInfo Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   
+    } finally {
+        connection.release();
     }
 }
 

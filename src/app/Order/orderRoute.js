@@ -5,7 +5,7 @@ module.exports = function(app){
     // 3. 과거 주문 내역 조회 API
     app.get('/app/orders/:userId/history', jwtMiddleware, order.getOrderHistory);
 
-    // 4. 카트에 담기 API
+    // 4. 카트에 담기 API (transaction 적용)
     app.post('/app/orders/:userId/in-cart', jwtMiddleware, order.postCart); 
 
     // 5. 카트에 담긴 정보 미리보기 조회 API
