@@ -44,7 +44,7 @@ module.exports = function(app){
     // 27. 공지사항 조회 API
     app.get('/app/users/:userId/notice',jwtMiddleware, user.getNotice);
 
-    // 28. 사용자 쿠폰 등록 API
+    // 28. 영수증 조회 API
     app.get('/app/users/:userId/receipt',jwtMiddleware, user.getReceipt);
 
     // 40. 기본 배송지 조회 API
