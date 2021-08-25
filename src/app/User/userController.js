@@ -472,10 +472,10 @@ exports.login = async function (req, res) {
         for(let i=0;i<getReceiptDetailMenuInfo.length;i++){
             let detailMenuResult = await userProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].MenuIdx);
             result.push({"Menu Name": getReceiptDetailMenuInfo[i].menuName},
-                        {"Menu Price": getReceiptDetailMenuInfo[i].menuName},
+                        {"Menu Price": getReceiptDetailMenuInfo[i].menuPrice},
                         detailMenuResult);
         }
-        let orderPrice = getReceiptDetailMenuInfo[0].sumCost-getReceiptDetailMenuInfo[0].deliveryTip
+        var orderPrice = getReceiptDetailMenuInfo[0].sumCost-getReceiptDetailMenuInfo[0].deliveryTip
         result.push({"Order Price": orderPrice})
         result.push({"Delivery Tip": getReceiptDetailMenuInfo[0].deliveryTip})
         result.push({"Order Price": getReceiptDetailMenuInfo[0].sumCost})
