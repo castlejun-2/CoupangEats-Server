@@ -198,6 +198,191 @@ async function selectMainScreenByOther(connection, userId) {
   return mainRows;
 }
 
+// 메인화면 새로 입점한 가게 리스트 조회 API (비회원용 + 위도 및 경도)
+async function selectMainScreenByNewForAllWithLocate(connection, latitude, longitude) {
+  const selectMainByNewListQuery = `
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
+                 storeName as 'storeName',
+                 rv.star as 'averageStarRating',
+                 rv.cnt as 'reviewCount',
+                 concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+                 case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+                 case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+          FROM StoreInfo si left join
+               (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+               From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+               join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+               (select mu.storeId as imagesi, mu.menuImageUrl AS 'url'
+                from StoreInfo si join
+               (select miu.menuImageUrl,mi.storeId
+                from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+                group by mu.storeId ) image on image.imagesi=si.storeIdx
+               left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+          WHERE (DATE(NOW())-DATE(si.createdAt)) < 2
+  `;
+  const [mainRows] = await connection.query(selectMainByNewListQuery, [latitude, longitude, latitude]);
+  return mainRows;
+}
+
+// 메인화면 인기 매장 리스트 조회 API (비회원용 + 위도 및 경도)
+async function selectMainScreenByPopularForAllWithLocate(connection, latitude, longitude) {
+  const selectMainByPopularListQuery = `
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
+                 storeName as 'storeName',
+                 rv.star as 'averageStarRating',
+                 rv.cnt as 'reviewCount',
+                 concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+                 case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+                 case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+          FROM StoreInfo si left join
+               (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+               From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+               join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+               (select mu.storeId as imagesi, mu.menuImageUrl AS 'url'
+                from StoreInfo si join
+               (select miu.menuImageUrl,mi.storeId
+                from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+                group by mu.storeId ) image on image.imagesi=si.storeIdx
+               left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+		      WHERE rv.cnt >= 5 ORDER BY rv.star DESC  
+  `;
+  const [mainRows] = await connection.query(selectMainByPopularListQuery, [latitude, longitude, latitude]);
+  return mainRows;
+}
+
+// 메인화면 그 외의 매장 리스트 조회 API (비회원용 + 위도 및 경도)
+async function selectMainScreenByOtherForAllWithLocate(connection, latitude, longitude) {
+  const selectMainByOtherListQuery = `
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
+           storeName as 'storeName',
+           case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
+           averageDelivery as 'averageDeliveryTime',
+           rv.star as 'averageStarRating',
+           rv.cnt as 'reviewCount',
+           concat(format((6371*acos(cos(radians(?))*cos(radians(si.latitude))*cos(radians(si.longitude)-radians(?))+sin(radians(?))*sin(radians(si.latitude)))),1),'km') AS 'distance',
+           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+           lm.mnN as 'menuList',
+           cui.saleprice as 'Coupon',
+           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+    FROM StoreInfo si left join
+         (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+         From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+         join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+         (Select group_concat(menuName SEPARATOR ',') as mnN, mi.storeId as ssi
+          From MenuInfo mi join StoreInfo si on mi.storeId = si.storeIdx group by si.storeIdx) lm on lm.ssi = si.storeIdx left join
+         (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
+          from StoreInfo si join
+         (select miu.menuImageUrl,mi.storeId
+          from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+          group by mu.storeId ) image on image.imagesi=si.storeIdx left join
+		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
+          join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
+         left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserInfo ui on ui.userIdx = ?
+         left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx;
+  `;
+  const [mainRows] = await connection.query(selectMainByOtherListQuery, [latitude, longitude, latitude]);
+  return mainRows;
+}
+
+// 메인화면 새로 입점한 가게 리스트 조회 API (비회원용, 위치X)
+async function selectMainScreenByNewForAll(connection) {
+  const selectMainByNewListQuery = `
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
+                 storeName as 'storeName',
+                 rv.star as 'averageStarRating',
+                 rv.cnt as 'reviewCount',
+                 case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+                 case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+          FROM StoreInfo si left join
+               (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+               From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+               join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+               (select mu.storeId as imagesi, mu.menuImageUrl AS 'url'
+                from StoreInfo si join
+               (select miu.menuImageUrl,mi.storeId
+                from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+                group by mu.storeId ) image on image.imagesi=si.storeIdx
+               left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+          WHERE (DATE(NOW())-DATE(si.createdAt)) < 2
+  `;
+  const [mainRows] = await connection.query(selectMainByNewListQuery);
+  return mainRows;
+}
+
+// 메인화면 인기 매장 리스트 조회 API (비회원용, 위치X)
+async function selectMainScreenByPopularForAll(connection) {
+  const selectMainByPopularListQuery = `
+          SELECT si.storeIdx as 'storeId',
+                 image.url as 'storeImageUrl',
+                 storeName as 'storeName',
+                 rv.star as 'averageStarRating',
+                 rv.cnt as 'reviewCount',
+                 case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+                 case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+          FROM StoreInfo si left join
+               (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+               From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+               join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+               (select mu.storeId as imagesi, mu.menuImageUrl AS 'url'
+                from StoreInfo si join
+               (select miu.menuImageUrl,mi.storeId
+                from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+                group by mu.storeId ) image on image.imagesi=si.storeIdx
+               left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+               join UserInfo ui on ui.userIdx = ?
+               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
+		      WHERE rv.cnt >= 5 ORDER BY rv.star DESC  
+  `;
+  const [mainRows] = await connection.query(selectMainByPopularListQuery);
+  return mainRows;
+}
+
+// 메인화면 그 외의 매장 리스트 조회 API (비회원용, 위치X)
+async function selectMainScreenByOtherForAll(connection) {
+  const selectMainByOtherListQuery = `
+    SELECT si.storeIdx as 'storeId',
+           image.url as 'storeImageUrl',
+           storeName as 'storeName',
+           case when isCheetah = 1 then '치타배달' else 'NULL' end as 'CheetahDelivery',
+           averageDelivery as 'averageDeliveryTime',
+           rv.star as 'averageStarRating',
+           rv.cnt as 'reviewCount',
+           case when dti.deliveryTip = 0 then '무료배달' else concat(format(dti.deliveryTip,0),'원') end as 'deliveryTip',
+           lm.mnN as 'menuList',
+           cui.saleprice as 'Coupon',
+           case when si.status = 'ACTIVE' then '주문가능' else '준비중' end as 'storeStatus'
+    FROM StoreInfo si left join
+         (Select count(*) as cnt, round(avg(starValue),1) as star, si.storeIdx as sti
+         From ReviewInfo ri join StoreInfo si on si.storeIdx=ri.storeId 
+         join OrderInfo oi on orderIdx=ri.orderId where oi.status = 'ACTIVE' group by sti) rv on rv.sti = si.storeIdx left join
+         (Select group_concat(menuName SEPARATOR ',') as mnN, mi.storeId as ssi
+          From MenuInfo mi join StoreInfo si on mi.storeId = si.storeIdx group by si.storeIdx) lm on lm.ssi = si.storeIdx left join
+         (select mu.storeId as imagesi, GROUP_CONCAT( mu.menuImageUrl SEPARATOR ',') AS 'url'
+          from StoreInfo si join
+         (select miu.menuImageUrl,mi.storeId
+          from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
+          group by mu.storeId ) image on image.imagesi=si.storeIdx left join
+		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
+          join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
+         left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
+         join UserInfo ui on ui.userIdx = ?
+         left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx;
+  `;
+  const [mainRows] = await connection.query(selectMainByOtherListQuery);
+  return mainRows;
+}
+
 // 메인화면 카테고리 조회 API
 async function selectStoreCategory(connection) {
   const selectStoreCategoryListQuery = `
@@ -828,6 +1013,12 @@ module.exports = {
   selectMainScreenByNew,
   selectMainScreenByPopular,
   selectMainScreenByOther,
+  selectMainScreenByNewForAllWithLocate,
+  selectMainScreenByPopularForAllWithLocate,
+  selectMainScreenByOtherForAllWithLocate,
+  selectMainScreenByNewForAll,
+  selectMainScreenByPopularForAll,
+  selectMainScreenByOtherForAll,
   selectStoreCategory,
   selectMainScreen,
   selectMainReview,

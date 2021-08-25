@@ -49,4 +49,13 @@ module.exports = function(app){
 
     // 43. 치타배달 미리보기 팜업 API
     app.get('/app/stores/:userId/preview-cheetah',jwtMiddleware,store.getStoresByPreviewCheetah);
+
+    // 45. 앱 메인화면 신규매장 조회 API (비회원용)
+    app.get('/app/stores/:userId/main-new',store.getMainScreenByNewStoreForAll);
+
+    // 46. 앱 메인화면 인기매장 조회 API (비회원용)
+    app.get('/app/stores/:userId/main-popular',store.getMainScreenByPopularStoreForAll);
+    
+    // 47. 앱 메인화면 골라먹는 매장 조회 API (비회원용)
+     app.get('/app/stores/:userId/main-pick',store.getMainScreenByPickStoreForAll);
 };

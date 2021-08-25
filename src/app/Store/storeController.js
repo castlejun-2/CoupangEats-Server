@@ -457,3 +457,45 @@ exports.getStoresByPreviewCheetah = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, cheetahList)); 
     }  
 }
+
+/**
+ * API No. 45
+ * API Name : 앱 메인화면 신규매장 조회 API (비회원용)
+ * [GET] /app/users/main-new
+ */
+ exports.getMainScreenByNewStoreForAll = async function (req, res) {
+
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+
+    const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('new', latitude, longitude);
+    return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
+}
+
+/**
+ * API No. 46
+ * API Name : 앱 메인화면 인기매장 조회 API (비회원용)
+ * [GET] /app/users/main-popular
+ */
+ exports.getMainScreenByPopularStoreForAll = async function (req, res) {
+
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+
+    const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('popular', latitude, longitude);
+    return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
+}
+
+/**
+ * API No. 47
+ * API Name : 앱 메인화면 골라먹는매장 조회 API (비회원용)
+ * [GET] /app/stores/main-pick
+ */
+ exports.getMainScreenByPickStoreForAll = async function (req, res) {
+
+    const latitude = req.query.latitude;
+    const longitude = req.query.longitude;
+
+    const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('other', latitude, longitude);
+    return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
+}

@@ -60,6 +60,56 @@ exports.retrieveMainScreenList = async function (userId, type) {
     }
 };
 
+//메인화면 조회 API (비회원용)
+exports.retrieveMainScreenListForAll = async function (type, latitude, longitude) {
+    if(latitude && longitude){
+        if(type === 'new'){
+            const connection = await pool.getConnection(async (conn) => conn);
+            const mainScreenByNewListWithLocateResult = await storeDao.selectMainScreenByNewForAllWithLocate(connection, latitude, longitude);
+
+            connection.release();    
+            return mainScreenByNewListWithLocateResult;
+        }    
+        else if(type === 'popular'){
+            const connection = await pool.getConnection(async (conn) => conn);
+            const mainScreenByPopularListWithLocateResult = await storeDao.selectMainScreenByPopularForAllWithLocate(connection, latitude, longitude);
+        
+            connection.release();    
+            return mainScreenByPopularListWithLocateResult;
+        }
+        else{
+            const connection = await pool.getConnection(async (conn) => conn);
+    
+            const mainScreenOtherListWithLocateResult = await storeDao.selectMainScreenByOtherForAllWithLocate(connection, latitude, longitude);
+            connection.release();    
+            return mainScreenOtherListWithLocateResult;
+        }
+    }
+    else{
+        if(type === 'new'){
+            const connection = await pool.getConnection(async (conn) => conn);
+            const mainScreenByNewListResult = await storeDao.selectMainScreenByNewForAll(connection);
+
+            connection.release();    
+            return mainScreenByNewListResult;
+        }    
+        else if(type === 'popular'){
+            const connection = await pool.getConnection(async (conn) => conn);
+            const mainScreenByPopularListResult = await storeDao.selectMainScreenByPopularForAll(connection);
+        
+            connection.release();    
+            return mainScreenByPopularListResult;
+        }
+        else{
+            const connection = await pool.getConnection(async (conn) => conn);
+
+            const mainScreenOtherListResult = await storeDao.selectMainScreenByOtherForAll(connection);
+            connection.release();    
+            return mainScreenOtherListResult;
+        }
+    }
+};
+
 //쿠팡이츠 카테고리 조회
 exports.retrieveStoreCategoryList = async function () {
     const connection = await pool.getConnection(async (conn) => conn);
