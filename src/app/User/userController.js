@@ -518,31 +518,6 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.SUCCESS, getMyReviewResult));
     }
 };
-/**
- * API No. 5
- * API Name : 회원 정보 수정 API + JWT + Validation
- * [PATCH] /app/users/:userId
- * path variable : userId
- * body : nickname
- */
-exports.patchUsers = async function (req, res) {
-
-    // jwt - userId, path variable :userId
-
-    const userIdFromJWT = req.verifiedToken.userId;
-
-    const userId = req.params.userId;
-    const nickname = req.body.nickname;
-
-    if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if (!nickname) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
-
-        const editUserInfo = await userService.editUser(userId, nickname)
-        return res.send(editUserInfo);
-    }
-};
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
