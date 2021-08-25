@@ -3,6 +3,7 @@ const userProvider = require("../../app/User/userProvider");
 const userService = require("../../app/User/userService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
+const secret_key = require("../../../config/secret");
 
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
@@ -13,14 +14,10 @@ const Cache = require('memory-cache');
 const request = require('request');
 const CryptoJS = require('crypto-js');
 
-const NCP_serviceID = 'ncp:sms:kr:271185330164:coupangeats_project';
-const NCP_accessKey = 'GnXhRBJuQlI2XljSG6zE';
-const NCP_secretKey = '65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP';
-
 const date = Date.now().toString();
-const uri = NCP_serviceID;
-const secretKey = NCP_secretKey;
-const accessKey = NCP_accessKey;
+const uri = secret_key.NCP_serviceID;
+const secretKey = secret_key.NCP_secretKey;
+const accessKey = secret_key.NCP_accessKey;
 const method = 'POST';
 const space = " ";
 const newLine = "\n";
@@ -596,16 +593,16 @@ exports.send = async function (req, res) {
           // console.log(html);
         // }
       })
-    .then(function (rep) {
-      console.log('response',rep.data, rep['data']);
-      rep.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: rep.data });
+    .then(function (res) {
+      console.log('response',res.data, res['data']);
+      res.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
     })
     .catch((err) => {
-      console.log(err.rep);
+      console.log(err.res);
       if(err.rep == undefined){
-        rep.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: rep.data });
+        res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
       }
-      else rep.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.rep });
+      else res.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.res });
     });
 };
 
