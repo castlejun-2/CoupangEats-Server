@@ -29,7 +29,7 @@ module.exports = function(app){
     // 17. 리뷰 도움안돼요 증가 API
     app.post('/app/stores/:userId/nonhelp-review',jwtMiddleware,store.postNotHelpReview);
 
-    // 18. 리뷰 작성 API
+    // 18. 리뷰 작성 API (transaction 적용)
     app.post('/app/stores/:userId/review',jwtMiddleware,store.postReview);
 
     // 19. 리뷰 수정 API

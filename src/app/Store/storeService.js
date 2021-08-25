@@ -97,33 +97,39 @@ exports.postUserReview = async function (userId, orderId, starValue, review) {
 
 //리뷰 수정
 exports.updateUserReview = async function (userId, orderId, reviewId, starValue, review) {
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
+        connection.beginTransaction();
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
         if(userOrderCheck[0].exist === 0){ //validation check
-            connection.release();
+            connection.commit();
             return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);
         }
-        if(!starValue && !review) //둘 다 수정하지 않는 경우
+        if(!starValue && !review){ //둘 다 수정하지 않는 경우
+            connection.commit();
             return response(baseResponse.SUCCESS);
+        }
         else if(!starValue){ //텍스트 리뷰만 수정하는 경우
             const updateTextReview = await storeDao.updateOnlyTextReviewInfo(connection, reviewId, review);
-            connection.release();
+            connection.commit();
             return response(baseResponse.SUCCESS);
         }
         else if(!review){ //평점만 수정하는 경우
             const updateStarRatingReview = await storeDao.updateOnlyStarValueReviewInfo(connection, reviewId, starValue);
-            connection.release();
+            connection.commit();
             return response(baseResponse.SUCCESS);
         }
         else{
             const updateReview = await storeDao.updateReviewInfo(connection, reviewId, starValue, review);
-            connection.release();
+            connection.commit();
             return response(baseResponse.SUCCESS);  
         }
     } catch (err) {
+        await connection.rollback();
         logger.error(`App - Update Review Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
+    } finally{
+        connection.release();
     }
 };
 
