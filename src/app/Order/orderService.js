@@ -44,7 +44,7 @@ exports.postOrderDetail = async function (orderId, orderDetail) {
 
         return response(baseResponse.SUCCESS);
     } catch (err) {
-        logger.error(`App - Post OrderInfo In Cart error\n: ${err.message}`);
+        logger.error(`App - Post Order Detail Info In Cart error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   
     }
 };

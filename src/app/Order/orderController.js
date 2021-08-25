@@ -76,7 +76,7 @@ const {emit} = require("nodemon");
                 return res.send(errResponse(baseResponse.SIGNIN_MENUCATEGORYID_EMPTY));
             if(!orderArray[i].menuDetailId)
                 return res.send(errResponse(baseResponse.SIGNIN_MENUDETAILID_EMPTY));
-            const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderedId, orderArray[i]);
+            const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderIdx, orderArray[i]);
         }
         
         //최종 금액 계산
