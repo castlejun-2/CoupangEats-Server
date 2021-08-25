@@ -303,7 +303,7 @@ exports.login = async function (req, res) {
         const getBookMarkResult = await userProvider.getBookMark(userId, filter) //즐겨찾기 스토어 리스트
         result.push({'BookMark Store Count': countBookMarkResult[0].bookmarkStoreCount, 'BookMark Store': getBookMarkResult}); 
 
-        return res.send(response(baseResponse.SUCCESS, result));
+        return res.send(response(baseResponse.SUCCESS, getBookMarkResult));
     }
 };
 
