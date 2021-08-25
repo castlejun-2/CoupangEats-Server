@@ -471,15 +471,14 @@ exports.login = async function (req, res) {
         const getReceiptDetailMenuInfo = await userProvider.getUserReceiptMenuInfo(userId, orderId);
         for(let i=0;i<getReceiptDetailMenuInfo.length;i++){
             let detailMenuResult = await userProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].MenuIdx);
-            result.push({"Menu Name": getReceiptDetailMenuInfo[i].menuName},
-                        {"Menu Price": getReceiptDetailMenuInfo[i].menuPrice},
+            result.push({"Menu Name": getReceiptDetailMenuInfo[i].menuName, "Menu Price": getReceiptDetailMenuInfo[i].menuPrice},
                         detailMenuResult);
         }
         var orderPrice = (parseInt(getReceiptTopInfo[0].sumCost)-parseInt(getReceiptTopInfo[0].deliveryTip));
-        result.push({"Order Price": orderPrice})
-        result.push({"Delivery Tip": getReceiptTopInfo[0].deliveryTip})
-        result.push({"Total Price": getReceiptTopInfo[0].sumCost})
-        result.push({"Payment Info": getReceiptTopInfo[0].paymentInfo})
+        result.push({"Order Price": orderPrice,
+                    "Delivery Tip": getReceiptTopInfo[0].deliveryTip,
+                    "Total Price": getReceiptTopInfo[0].sumCost,
+                    "Payment Info": getReceiptTopInfo[0].paymentInfo})
         return res.send(response(baseResponse.SUCCESS, result));
     }
 };
