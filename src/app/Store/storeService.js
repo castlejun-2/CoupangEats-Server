@@ -71,23 +71,28 @@ exports.postReviewIsNotHelp = async function (userId, reviewId) {
 exports.postUserReview = async function (userId, orderId, starValue, review) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
+
+        await connection.beginTransaction(); //transaction 시작
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
         const existReviewCheck = await storeProvider.reviewExistCheck(userId, orderId);
         if(userOrderCheck[0].exist === 0){
-            connection.release();
+            connection.commit();
             return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);
         }
         if(existReviewCheck[0].exist === 1){
-            connection.release();
+            connection.commit();
             return errResponse(baseResponse.REVIEW_EXIST);
         }
         const registerReview = await storeDao.insertReviewInfo(connection, userId, orderId, userOrderCheck[0].storeId, starValue, review);
-        connection.release();
+        connection.commit();
         return registerReview;
 
     } catch (err) {
+        await connection.rollback();
         logger.error(`App - Insert Review Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
+    } finally{
+        connection.release();
     }
 };
 
