@@ -130,8 +130,8 @@ exports.getStoresByCategory = async function (req, res) {
 
         const getReceiptMenuOptionCategoryInfo = await storeProvider.getUserMenuOptionCategoryInfo(menuId); //카테고리별 옵션 조회
         for(let i=0;i<getReceiptMenuOptionCategoryInfo.length;i++){
-            let detailOptionResult = await storeProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].menuCategory);
-            result.push({'Category Name': getReceiptMenuOptionCategoryInfo[i].categoryName,"Max Select": getReceiptMenuOptionCategoryInfo[i].maxSselect,
+            let detailOptionResult = await storeProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].menuCategoryIdx);
+            result.push({'Category Name': getReceiptMenuOptionCategoryInfo[i].categoryName,"Max Select": getReceiptMenuOptionCategoryInfo[i].maxSelect,
                         detailOptionResult})
         }
         return res.send(response(baseResponse.SUCCESS, result));

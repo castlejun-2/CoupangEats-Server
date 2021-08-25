@@ -121,7 +121,7 @@ async function selectMenuInfo(connection, menuId) {
 //메뉴 카테고리 조회
 async function selectMenuCategoryInfo(connection, menuId) {
   const selectMenuInfoQuery = `
-  SELECT  mci.menuCategoryIdx as 'menuCategory',
+  SELECT  mci.menuCategoryIdx as 'menuCategoryIdx',
           mci.categoryName as 'categoryName'
   FROM MenuInfo mi join MenuCategoryInfo mci on mi.menuIdx=mci.menuId
   WHERE mi.menuIdx=?;
@@ -133,7 +133,8 @@ async function selectMenuCategoryInfo(connection, menuId) {
 //메뉴 세부 옵션 조회
 async function selectMenuDetailOptionInfo(connection, menuCategoryId) {
   const selectMenuInfoQuery = `
-SELECT mcdi.detailMenuName as 'optionName',
+SELECT mcdi.menuDetailIdx as 'menuDetailIdx',
+       mcdi.detailMenuName as 'optionName',
 	     mcdi.plusPrice as 'plusPrice'
 FROM MenuCategoryInfo mci join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
 WHERE MenuCategoryIdx = ?;
