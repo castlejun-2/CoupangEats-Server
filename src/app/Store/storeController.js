@@ -136,7 +136,7 @@ exports.getStoresByCategory = async function (req, res) {
                         detailOptionResult})
         }
         result1.push(result2);
-        return res.send(response(baseResponse.SUCCESS, result2));
+        return res.send(response(baseResponse.SUCCESS, result1));
     }
 };
 
