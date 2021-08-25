@@ -598,10 +598,9 @@ exports.send = async function (req, res) {
       })
     .then(function (res) {
       console.log('response',res.data, res['data']);
-      res.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
+      res.send({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
     })
     .catch((err) => {
-      console.log(err)
       console.log(err.res);
       if(err.res == undefined){
         res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
