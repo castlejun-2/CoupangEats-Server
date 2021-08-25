@@ -112,7 +112,8 @@ exports.getStoresByCategory = async function (req, res) {
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const menuId = req.query.menuId;
-    const result = [];
+    const result1 = [];
+    const result2 = [];
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -124,17 +125,18 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
 
         const getMenuTopInfo = await storeProvider.getMenuTopInfo(menuId); //메뉴 상단 정보 가져오기
-        result.push({'Menu Image': getMenuTopInfo[0].menuImageUrl,
+        result1.push({'Menu Image': getMenuTopInfo[0].menuImageUrl,
                      'Menu Name': getMenuTopInfo[0].menuName,
                      'Menu Price': getMenuTopInfo[0].price});
 
         const getReceiptMenuOptionCategoryInfo = await storeProvider.getUserMenuOptionCategoryInfo(menuId); //카테고리별 옵션 조회
         for(let i=0;i<getReceiptMenuOptionCategoryInfo.length;i++){
             let detailOptionResult = await storeProvider.getUserDetailMenuInRecipt(getReceiptMenuOptionCategoryInfo[i].menuCategoryIdx);
-            result.push({'Category Name': getReceiptMenuOptionCategoryInfo[i].categoryName,"Max Select": getReceiptMenuOptionCategoryInfo[i].maxSelect,
+            result2.push({'Category Name': getReceiptMenuOptionCategoryInfo[i].categoryName,"Max Select": getReceiptMenuOptionCategoryInfo[i].maxSelect,
                         detailOptionResult})
         }
-        return res.send(response(baseResponse.SUCCESS, result));
+        result1.push(result2);
+        return res.send(response(baseResponse.SUCCESS, result2));
     }
 };
 
