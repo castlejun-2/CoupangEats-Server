@@ -23,10 +23,10 @@ module.exports = function(app){
     // 15. 매장 리뷰 조회 API
     app.get('/app/stores/:userId/review',jwtMiddleware,store.getReview);
 
-    // 16. 리뷰 도움돼요 증가 API
+    // 16. 리뷰 도움돼요 증가 API (transaction 적용)
     app.post('/app/stores/:userId/help-review',jwtMiddleware,store.postHelpReview);
 
-    // 17. 리뷰 도움안돼요 증가 API
+    // 17. 리뷰 도움안돼요 증가 API (transaction 적용)
     app.post('/app/stores/:userId/nonhelp-review',jwtMiddleware,store.postNotHelpReview);
 
     // 18. 리뷰 작성 API (transaction 적용)

@@ -14,8 +14,9 @@ const {connect} = require("http2");
 
 //리뷰 도움돼요 증가
 exports.postReviewIsHelp = async function (userId, reviewId) {
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
+        connection.beginTransaction();
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(userId, reviewId);
         if(!alreadyHelpCheck[0].status){
             const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
@@ -23,19 +24,22 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
         else if(alreadyHelpCheck[0].status === 'ACTIVE'){
             const updateIsHelpReview = await storeDao.changeUserIsHelpReview(connection, userId, reviewId);
             const minusReviewIsHelp = await storeDao.changeReviewIsHelp(connection, reviewId);
-            connection.release();
+            connection.commit();
             return response(baseResponse.SUCCESS);
         }
         else if(alreadyHelpCheck[0].status === 'DELETE'){
             const updateIsHelpReview = await storeDao.updateUserIsHelpReview(connection, userId, reviewId);
         }
         const plusReviewIsHelp = await storeDao.updateReviewIsHelp(connection, reviewId);
-        connection.release();
+        connection.commit();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
+        connection.rollback();
         logger.error(`App - Update Review Is Help Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
+    } finally {
+        connection.release();
     }
 };
 
@@ -43,6 +47,7 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
 exports.postReviewIsNotHelp = async function (userId, reviewId) {
     const connection = await pool.getConnection(async (conn) => conn);
     try {
+        connection.beginTransaction();
         const alreadyNotHelpCheck = await storeProvider.checkAlreadyNotHelpCheck(userId, reviewId);
         
         if(!alreadyNotHelpCheck[0]){
