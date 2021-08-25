@@ -317,8 +317,10 @@ exports.getStoresByCategory = async function (req, res) {
         if(!postReviewResult[0])
             return res.send(postReviewResult);
         else{
-            for(let i=0;i<reviewImageUrl.length;i++){
-                const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
+            if(reviewImageUrl){
+                for(let i=0;i<reviewImageUrl.length;i++){
+                    const postReviewImage = await storeService.postUserReviewImage(postReviewResult[0].reviewIdx, reviewImageUrl[i].url);}
+            }
             return res.send(baseResponse.SUCCESS);   
         }
     }             
