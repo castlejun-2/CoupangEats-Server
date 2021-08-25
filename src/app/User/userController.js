@@ -470,7 +470,7 @@ exports.login = async function (req, res) {
 
         const getReceiptDetailMenuInfo = await userProvider.getUserReceiptMenuInfo(userId, orderId);
         for(let i=0;i<getReceiptDetailMenuInfo.length;i++){
-            let detailMenuResult = await userProvider.getUserDetailMenuInRecipt(getReceiptDetailInfo[i].MenuIdx);
+            let detailMenuResult = await userProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].MenuIdx);
             result.push({"Menu Name": getReceiptDetailMenuInfo[i].menuName},
                         {"Menu Price": getReceiptDetailMenuInfo[i].menuName},
                         detailMenuResult);
