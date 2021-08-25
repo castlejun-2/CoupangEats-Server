@@ -586,13 +586,13 @@ exports.send = async function (req, res) {
       }, 
       })
     .then(function (res) {
-      res.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
+      res.send(response(baseResponse.SMS_SEND_SUCCESS));
     })
     .catch((err) => {
       if(err.res == undefined){
-        res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
+        res.send(response(baseResponse.SMS_SEND_SUCCESS));
       }
-      else res.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.res });
+      else res.sned(errResponse(baseResponse.SMS_SEND_FAILURE));
     });
 };
 
@@ -608,13 +608,12 @@ exports.verify = async function (req, res) {
     const CacheData = Cache.get(phoneNumber);
 
     if (!CacheData) {
-      return res.send('fail');
+      return res.send(errResponse(baseResponse.FAILURE_SMS_AUTHENTICATION));
     } else if (CacheData !== verifyCode) {
-      return res.send('fail');
+        return res.send(errResponse(baseResponse.FAILURE_SMS_AUTHENTICATION));
     } else {
       Cache.del(phoneNumber);
-      return res.send('success');
-      
+      return res.send(response(baseResponse.SMS_VERIFY_SUCCESS));     
     }
 };
 
