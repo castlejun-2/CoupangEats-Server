@@ -585,7 +585,7 @@ exports.send = async function (req, res) {
         content: `[본인 확인] 인증번호 [${verifyCode}]를 입력해주세요.`,
         messages: [
           {
-            to: `01055300651`,
+            to: `${phoneNumber}`,
           },
         ],
       }, 
