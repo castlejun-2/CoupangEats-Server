@@ -8,10 +8,8 @@ const secret_key = require("../../../config/secret");
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
-const app = require('express').Router();
 const axios = require('axios');
 const Cache = require('memory-cache');
-const request = require('request');
 const CryptoJS = require('crypto-js');
 
 const date = Date.now().toString();
@@ -551,7 +549,7 @@ exports.login = async function (req, res) {
 /**
  * API No. 47
  * API Name : 문자인증(SENS를 통한) 전송 API
- * [POST] app.post('/send', user.send);
+ * [POST] /send
  */
 
 exports.send = async function (req, res) {
@@ -586,20 +584,12 @@ exports.send = async function (req, res) {
           },
         ],
       }, 
-      // function(err, res, html) {
-        // if(err) console.log(err);
-        // else {
-          // resultCode = 200;
-          // console.log(html);
-        // }
       })
     .then(function (res) {
-      console.log('response',res.data, res['data']);
       res.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
     })
     .catch((err) => {
-      console.log(err.res);
-      if(err.rep == undefined){
+      if(err.res == undefined){
         res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
       }
       else res.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.res });
@@ -609,7 +599,7 @@ exports.send = async function (req, res) {
 /**
  * API No. 48
  * API Name : 문자인증(SENS를 통한) 검증 API
- * [POST] app.post('/verify', user.send);
+ * [POST] /verify
  */
 exports.verify = async function (req, res) {
     const phoneNumber = req.body.phoneNumber;
