@@ -82,12 +82,12 @@ exports.postTotalCost = async function (orderId, deliveryTip, sumPrice) {
 };
 
 //결제하기
-exports.postOrderStatus = async function (userId) {
+exports.postOrderStatus = async function (userId, storeMessage, deliveryMessage) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
 
         const checkOrderInCart = await orderProvider.checkUserOrder(userId);
-        const postOrderResult = await orderDao.postUserOrder(connection, userId);
+        const postOrderResult = await orderDao.postUserOrder(connection, userId, storeMessage, deliveryMessage);
         
         if(!checkOrderInCart[0]){
             connection.release();

@@ -184,13 +184,13 @@ ORDER BY oi.createdAt DESC;
 }
 
 // 결제하기
-async function postUserOrder(connection, userId) {
+async function postUserOrder(connection, userId, storeMessage, deliveryMessage) {
     const postOrderQuery = `
         UPDATE OrderInfo
-        SET status = 'ACTIVE'
+        SET status = 'ACTIVE', toStoreRequest = ?, toDeliveryRequest = ?
         WHERE userId = ? and status='CART';
       `;
-    const [postOrderRow] = await connection.query(postOrderQuery, userId);
+    const [postOrderRow] = await connection.query(postOrderQuery, [userId, storeMessage, deliveryMessage]);
     return postOrderRow;
 }
 

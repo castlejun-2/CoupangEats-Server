@@ -237,6 +237,7 @@ const {emit} = require("nodemon");
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
+    const {storeMessage, deliveryMessage} = req.bpdy;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
@@ -244,7 +245,7 @@ const {emit} = require("nodemon");
     if (userIdFromJWT != userId) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
-        const postOrderResult = await orderService.postOrderStatus(userId);
+        const postOrderResult = await orderService.postOrderStatus(userId, storeMessage, deliveryMessage);
         return res.send(postOrderResult); 
     }  
 }
