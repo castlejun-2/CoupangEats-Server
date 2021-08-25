@@ -3,7 +3,7 @@ const userProvider = require("../../app/User/userProvider");
 const userService = require("../../app/User/userService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
-const secret_key = require("../../../config/secret");
+const secret_key = require("../../../config/secret_sms");
 
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");

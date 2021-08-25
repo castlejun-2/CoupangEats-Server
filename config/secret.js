@@ -1,6 +1,3 @@
 module.exports = {
-    'jwtsecret' :  '',
-    'NCP_serviceID': '',
-    'NCP_accessKey': '',
-    'NCP_secretKey': ''
+    'jwtsecret' :  'softsquared_jwt_secret_key_07040014087'
 };
