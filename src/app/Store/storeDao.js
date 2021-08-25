@@ -110,7 +110,7 @@ async function selectMenuInfo(connection, menuId) {
       SELECT  mi.menuName as 'menuName',
 		          group_concat(miu.menuImageUrl) as 'menuImageUrl',
 	            mi.price as 'price'
-      FROM MenuInfo mi join MenuImageUrl miu on mi.menuIdx=miu.menuId
+      FROM MenuInfo mi left join MenuImageUrl miu on mi.menuIdx=miu.menuId
       WHERE mi.menuIdx=?
       Group by mi.menuIdx;
   `;
@@ -124,7 +124,7 @@ async function selectMenuCategoryInfo(connection, menuId) {
   SELECT  mci.menuCategoryIdx as 'menuCategoryIdx',
           mci.categoryName as 'categoryName',
           mci.maxSelect as 'maxSelect'
-  FROM MenuInfo mi join MenuCategoryInfo mci on mi.menuIdx=mci.menuId
+  FROM MenuInfo mi left join MenuCategoryInfo mci on mi.menuIdx=mci.menuId
   WHERE mi.menuIdx=?;
   `;
   const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuId);
@@ -137,7 +137,7 @@ async function selectMenuDetailOptionInfo(connection, menuCategoryId) {
 SELECT mcdi.menuDetailIdx as 'menuDetailIdx',
        mcdi.detailMenuName as 'optionName',
 	     mcdi.plusPrice as 'plusPrice'
-FROM MenuCategoryInfo mci join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
+FROM MenuCategoryInfo mci left join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
 WHERE MenuCategoryIdx = ?;
   `;
   const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuCategoryId);
