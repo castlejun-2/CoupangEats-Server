@@ -55,4 +55,8 @@ module.exports = function(app){
 
     // 46. 작성한 리뷰 조회 API
     app.get('/app/users/:userId/review',jwtMiddleware, user.getReview);
+
+    // 47. 문자인증(SENS를 통한) API
+    app.post('/send', user.send);
+    app.post('/verify', user.verify);
 };
