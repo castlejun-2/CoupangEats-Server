@@ -13,9 +13,9 @@ const Cache = require('memory-cache');
 const request = require('request');
 const CryptoJS = require('crypto-js');
 
-const NCP_serviceID = 'ncp:sms:kr:271185330164:coupangeats_project';
-const NCP_accessKey = 'GnXhRBJuQlI2XljSG6zE';
-const NCP_secretKey = '65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP';
+const NCP_serviceID = '[[ncp:sms:kr:271185330164:coupangeats_project]]';
+const NCP_accessKey = '[[GnXhRBJuQlI2XljSG6zE]]';
+const NCP_secretKey = '[[65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP]]';
 
 const date = Date.now().toString();
 const uri = NCP_serviceID;
@@ -553,8 +553,8 @@ exports.login = async function (req, res) {
 
 /**
  * API No. 47
- * API Name : 문자인증(SENS를 통한) API
- * [GET] app.post('/send', user.send);
+ * API Name : 문자인증(SENS를 통한) 전송 API
+ * [POST] app.post('/send', user.send);
  */
 
 exports.send = async function (req, res) {
@@ -609,6 +609,11 @@ exports.send = async function (req, res) {
     });
 };
 
+/**
+ * API No. 48
+ * API Name : 문자인증(SENS를 통한) 검증 API
+ * [POST] app.post('/verify', user.send);
+ */
 exports.verify = async function (req, res) {
     const phoneNumber = req.body.phoneNumber;
     const verifyCode = req.body.verifyCode;
@@ -626,35 +631,6 @@ exports.verify = async function (req, res) {
     }
 };
 
-/**
- * API No. 
- * API Name : 푸쉬 알림
- * 
- */
-exports.fcmPush = async function (req, res) {    
-    try {
-        let message = {
-            data: {
-                title: "테스트",
-                body: "안녕하세요",
-            },
-            token: ""
-        };
-
-        admin
-            .messaging()
-            .send(message)
-            .then(function (response) {
-                console.log('성공 ! ', response);
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
-    } catch (err) {
-        logger.error(`App - nonUser Query error\n: ${JSON.stringify(err)}`);
-        return res.json(response.successFalse(4000, "서버와의 통신에 실패하였습니다."));
-    }
-}  
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
  */
