@@ -13,9 +13,9 @@ const Cache = require('memory-cache');
 const request = require('request');
 const CryptoJS = require('crypto-js');
 
-const NCP_serviceID = '[[ncp:sms:kr:271185330164:coupangeats_project]]';
-const NCP_accessKey = '[[GnXhRBJuQlI2XljSG6zE]]';
-const NCP_secretKey = '[[65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP]]';
+const NCP_serviceID = '[ncp:sms:kr:271185330164:coupangeats_project]';
+const NCP_accessKey = '[GnXhRBJuQlI2XljSG6zE]';
+const NCP_secretKey = '[65iLbbbR16GH1O1aAg5Rf8ClK8S2LTNRSomlHrtP]';
 
 const date = Date.now().toString();
 const uri = NCP_serviceID;
