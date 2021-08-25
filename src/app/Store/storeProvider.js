@@ -311,7 +311,7 @@ exports.getDeliveryTip = async function (storeId, sumprice) {
     return storeDeliveryTipResult;
 };
 
-//주문 금액별 배달팁 조회
+//치타배달 미리보기 팜업 조회
 exports.retrieveStoreByCheetahPreviewList = async function (userId) {
     const connection = await pool.getConnection(async (conn) => conn);
 

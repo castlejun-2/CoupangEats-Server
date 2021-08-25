@@ -148,13 +148,13 @@ async function selectUserIdSameOrderIdInfo(connection, userId, orderId) {
 }
 
 // 주문내역 총 비용 삽입
-async function posttotalCostInOrderInfo(connection, orderId, sumPrice) {
+async function posttotalCostInOrderInfo(connection, orderId, deliveryTip, sumPrice) {
     const postSumCostQuery = `
     UPDATE OrderInfo
-    SET sumCost = ?
+    SET sumCost = ?,deliveryTip = ?
     WHERE orderIdx = ?;
     `;
-    const [postSumCostRow] = await connection.query(postSumCostQuery, [sumPrice, orderId]);
+    const [postSumCostRow] = await connection.query(postSumCostQuery, [sumPrice, deliveryTip, orderId]);
     return postSumCostRow;
 }
 

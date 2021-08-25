@@ -444,6 +444,47 @@ exports.login = async function (req, res) {
 };
 
 /**
+ * API No. 28
+ * API Name : 영수증 조회 API
+ * [GET] /app/users/:userId/receipt
+ * path variable : userId
+ */
+ exports.getReceipt = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const orderId = req.query.orderId;
+    const result = [];
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        if(!orderId)
+            return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
+
+        const getReceiptTopInfo = await userProvider.getUserReceiptTopInfo(userId, orderId); //영수증 상단 정보 가져오기
+        result.push(getReceiptTopInfo);
+
+        const getReceiptDetailMenuInfo = await userProvider.getUserReceiptMenuInfo(userId, orderId);
+        for(let i=0;i<getReceiptDetailMenuInfo.length;i++){
+            let detailMenuResult = await userProvider.getUserDetailMenuInRecipt(getReceiptDetailInfo[i].MenuIdx);
+            result.push({"Menu Name": getReceiptDetailMenuInfo[i].menuName},
+                        {"Menu Price": getReceiptDetailMenuInfo[i].menuName},
+                        detailMenuResult);
+        }
+        let orderPrice = pasrseInt(getReceiptDetailMenuInfo[0].sumCost)-parseInt(getReceiptDetailMenuInfo[0].deliveryTip)
+        result.push({"Order Price": orderPrice})
+        result.push({"Delivery Tip": getReceiptDetailMenuInfo[0].deliveryTip})
+        result.push({"Order Price": getReceiptDetailMenuInfo[0].sumCost})
+        return res.send(response(baseResponse.SUCCESS, result));
+    }
+};
+
+
+/**
  * API No. 40
  * API Name : 사용자 기본 배송지 조회 API
  * [GET] /app/users/:userId/default-address

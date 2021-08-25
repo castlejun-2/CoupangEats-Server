@@ -448,6 +448,45 @@ WHERE ri.orderId=? and ri.userId=?;
   return getReviewInfoRow;
 }
 
+// 영수증 상단정보 조회
+async function selectUserReceiptTopInfo(connection, userId, orderId) {
+  const getReceiptInfoQuery = `
+SELECT si.storeName as 'storeName',
+	     oi.createdAt as 'orderDate',
+       oi.sumCost as 'sumCost',
+       oi.deliveryTip as 'deliveryTip'
+FROM StoreInfo si join OrderInfo oi on si.storeIdx=oi.storeId
+WHERE oi.userId=? and oi.orderIdx=?;
+    `;
+  const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, [userId, orderId]);
+  return getReceiptInfoRow;
+}
+
+// 영수증 메뉴정보 조회
+async function selectUserReceiptMenuInfo(connection, userId, orderId) {
+  const getReceiptInfoQuery = `
+SELECT otdi.orderTotalDetailIdx as 'MenuIdx',
+	     mi.menuName as 'menuName',
+       mi.price as 'menuPrice'
+FROM OrderInfo oi join OrderTotalDetailInfo otdi on oi.orderIdx=otdi.orderId join MenuInfo mi on mi.menuIdx=otdi.menuId
+Where oi.userId=? and oi.orderIdx=?;
+    `;
+  const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, [userId, orderId]);
+  return getReceiptInfoRow;
+}
+
+// 영수증 메뉴별 추가옵션정보 조회
+async function selectUserReceiptMenuOptionInfo(connection, orderTotalId) {
+  const getReceiptInfoQuery = `
+SELECT mcdi.detailMenuName as 'optionName',
+       mcdi.plusprice as 'plusprice'
+FROM OrderDetailInfo odi join MenuCategoryDetailInfo mcdi on odi.menuDetailId=mcdi.menuDetailIdx
+WHERE odi.orderTotalId=?;
+    `;
+  const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, orderTotalId);
+  return getReceiptInfoRow;
+}
+
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -479,5 +518,8 @@ module.exports = {
   selectUserNotice,
   selectUserCard,
   updateDeleteCard,
-  selectMyReviewInfo
+  selectMyReviewInfo,
+  selectUserReceiptTopInfo,
+  selectUserReceiptMenuInfo,
+  selectUserReceiptMenuOptionInfo
 };

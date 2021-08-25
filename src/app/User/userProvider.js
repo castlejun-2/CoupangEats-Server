@@ -172,6 +172,33 @@ exports.getUserNotice = async function () {
   return userNoticeResult;
 };
 
+// 영수증 상단정보 조회
+exports.getUserReceiptTopInfo = async function (userId, orderId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userReceiptTopInfoResult = await userDao.selectUserReceiptTopInfo(connection, userId, orderId);
+  connection.release();
+
+  return userReceiptTopInfoResult;
+};
+
+// 영수증 메뉴 조회
+exports.getUserReceiptMenuInfo = async function (userId, orderId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userReceiptMenuInfoResult = await userDao.selectUserReceiptMenuInfo(connection, userId, orderId);
+  connection.release();
+
+  return userReceiptMenuInfoResult;
+};
+
+// 영수증 메뉴 세부 옵션 조회
+exports.getUserDetailMenuInRecipt = async function (orderTotalId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userReceiptMenuOptionInfoResult = await userDao.selectUserReceiptMenuOptionInfo(connection, orderTotalId);
+  connection.release();
+
+  return userReceiptMenuOptionInfoResult;
+};
+
 // 유저 카드 조회
 exports.getUserCard = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);

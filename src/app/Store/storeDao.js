@@ -972,7 +972,7 @@ async function selectStoreActiveInfo(connection, storeId) {
 // 가게의 배달 팁 조회
 async function selectStoreDeliveryTipInfo(connection, storeId, sumprice) {
   const storeActiveQuery = `
-    SELECT case di.limitorder when di.limitorder < ? then '0' else deliveryTip end as 'deliveryTip'
+    SELECT case when di.limitorder < ? then '0' else deliveryTip end as 'deliveryTip'
     FROM StoreInfo si join DeliveryTipInfo di on si.storeIdx=di.storeId
     WHERE di.status='ACTIVE' and si.storeIdx = ?
   `;
