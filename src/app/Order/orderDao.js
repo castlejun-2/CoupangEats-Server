@@ -42,7 +42,7 @@ async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
           VALUES (?, ?, ?);
     `;
     const getOrderQuery = `
-          SELECT orderId as 'orderId', orderTotalDetailIdx as 'orderIdx'
+          SELECT orderId as 'orderedId', orderTotalDetailIdx as 'orderIdx'
           FROM OrderTotalDetailInfo
           WHERE orderId = ? and status = 'ACTIVE'
           ORDER BY createdAt DESC limit 1;
