@@ -479,6 +479,7 @@ exports.login = async function (req, res) {
         result.push({"Order Price": orderPrice})
         result.push({"Delivery Tip": getReceiptTopInfo[0].deliveryTip})
         result.push({"Total Price": getReceiptTopInfo[0].sumCost})
+        result.push({"Payment Info": getReceiptTopInfo[0].paymentInfo})
         return res.send(response(baseResponse.SUCCESS, result));
     }
 };
