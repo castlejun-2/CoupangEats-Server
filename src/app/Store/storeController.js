@@ -10,7 +10,7 @@ const {emit} = require("nodemon");
 /**
  * API No. 9
  * API Name : 키워드로 매장 검색 API
- * [PATCH] /app/users/:userId/keyword
+ * [PATCH] /app/stores/:userId/keyword
  * path variable : userId
  */
 exports.getStoresByKeyword = async function (req, res) {
@@ -38,7 +38,7 @@ exports.getStoresByKeyword = async function (req, res) {
 /**
  * API No. 10
  * API Name : 카테고리로 매장 조회 API
- * [GET] /app/users/:userId/category
+ * [GET] /app/stores/:userId/category
  * path variable : userId
  */
 exports.getStoresByCategory = async function (req, res) {
@@ -66,7 +66,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 11
  * API Name : 앱 메인화면 통합 조회 API
- * [GET] /app/users/:userId/main
+ * [GET] /app/stores/:userId/main
  * path variable : userId
  */
  exports.getMainScreen = async function (req, res) {
@@ -139,7 +139,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 13
  * API Name : 매장 메인화면 조회 API
- * [GET] /app/users/:userId/mainstore
+ * [GET] /app/stores/:userId/mainstore
  * path variable : userId
  */
  exports.getStoreMain = async function (req, res) {
@@ -176,7 +176,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 14
  * API Name : 매장 세부정보 조회 API
- * [GET] /app/users/:userId/detail-store
+ * [GET] /app/stores/:userId/detail-store
  * path variable : userId
  */
  exports.getStoreDetail = async function (req, res) {
@@ -202,7 +202,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 15
  * API Name : 매장 리뷰 조회 API
- * [GET] /app/users/:userId/review
+ * [GET] /app/stores/:userId/review
  * path variable : userId
  */
  exports.getReview = async function (req, res) {
@@ -241,7 +241,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 16
  * API Name : 리뷰 도움돼요 증가 API
- * [POST] /app/users/:userId/help-review
+ * [POST] /app/stores/:userId/help-review
  * path variable : userId
  */
  exports.postHelpReview = async function (req, res) {
@@ -266,7 +266,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 17
  * API Name : 리뷰 도움안돼요 증가 API
- * [POST] /app/users/:userId/nonhelp-review
+ * [POST] /app/stores/:userId/nonhelp-review
  * path variable : userId
  */
  exports.postNotHelpReview = async function (req, res) {
@@ -292,7 +292,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 18
  * API Name : 리뷰 작성 API
- * [POST] /app/users/:userId/review
+ * [POST] /app/stores/:userId/review
  * path variable : userId
  */
  exports.postReview = async function (req, res) {
@@ -329,7 +329,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
  * API No. 19
  * API Name : 리뷰 수정 API
- * [PATCH] /app/users/:userId/review
+ * [PATCH] /app/stores/:userId/review
  * path variable : userId
  */
  exports.updateReview = async function (req, res) {
@@ -366,7 +366,7 @@ exports.getStoresByCategory = async function (req, res) {
 /**
 * API No. 20
 * API Name : 치타배달 매장 조회 API
-* [GET] /app/users/:userId/cheetah
+* [GET] /app/stores/:userId/cheetah
 * path variable : userId
 */
 exports.getStoresByCheetah = async function (req, res) {
@@ -388,7 +388,7 @@ exports.getStoresByCheetah = async function (req, res) {
 /**
 * API No. 21
 * API Name : 치타배달 미리보기 팜업 API
-* [GET] /app/users/:userId/preview-cheetah
+* [GET] /app/stores/:userId/preview-cheetah
 * path variable : userId
 */
 exports.getStoresByPreviewCheetah = async function (req, res) {
@@ -410,7 +410,7 @@ exports.getStoresByPreviewCheetah = async function (req, res) {
 /**
 * API No. 22
 * API Name : 매장 배달팁 상세 조회 API
-* [GET] /app/users/:userId/delievery-tip
+* [GET] /app/stores/:userId/delievery-tip
 * path variable : userId
 */
 exports.getDelieveryTip = async function (req, res) {
@@ -436,7 +436,7 @@ exports.getDelieveryTip = async function (req, res) {
 /**
  * API No. 23
  * API Name : 앱 메인화면 신규매장 조회 API
- * [GET] /app/users/:userId/main-new
+ * [GET] /app/stores/:userId/main-new
  * path variable : userId
  */
  exports.getMainScreenByNewStore = async function (req, res) {
@@ -458,7 +458,7 @@ exports.getDelieveryTip = async function (req, res) {
 /**
  * API No. 24
  * API Name : 앱 메인화면 인기매장 조회 API
- * [GET] /app/users/:userId/main-popular
+ * [GET] /app/stores/:userId/main-popular
  * path variable : userId
  */
  exports.getMainScreenByPopularStore = async function (req, res) {
@@ -502,7 +502,7 @@ exports.getDelieveryTip = async function (req, res) {
 /**
  * API No. 26
  * API Name : 앱 메인화면 신규매장 조회 API (비회원용)
- * [GET] /app/users/main-new
+ * [GET] /app/stores/main-new
  */
  exports.getMainScreenByNewStoreForAll = async function (req, res) {
 
@@ -516,7 +516,7 @@ exports.getDelieveryTip = async function (req, res) {
 /**
  * API No. 27
  * API Name : 앱 메인화면 인기매장 조회 API (비회원용)
- * [GET] /app/users/main-popular
+ * [GET] /app/stores/main-popular
  */
  exports.getMainScreenByPopularStoreForAll = async function (req, res) {
 
