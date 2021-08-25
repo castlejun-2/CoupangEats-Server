@@ -32,7 +32,7 @@ module.exports = function(app){
     // 18. 리뷰 작성 API (transaction 적용)
     app.post('/app/stores/:userId/review',jwtMiddleware,store.postReview);
 
-    // 19. 리뷰 수정 API 
+    // 19. 리뷰 수정 API (transaction 적용)
     app.patch('/app/stores/:userId/review',jwtMiddleware,store.updateReview);
 
     // 20. 치타배달 매장 조회 API

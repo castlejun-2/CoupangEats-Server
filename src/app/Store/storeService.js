@@ -41,8 +41,8 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
 
 //리뷰 도움안돼요 증가
 exports.postReviewIsNotHelp = async function (userId, reviewId) {
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
         const alreadyNotHelpCheck = await storeProvider.checkAlreadyNotHelpCheck(userId, reviewId);
         
         if(!alreadyNotHelpCheck[0]){
@@ -51,19 +51,22 @@ exports.postReviewIsNotHelp = async function (userId, reviewId) {
         else if(alreadyNotHelpCheck[0].status === 'ACTIVE'){
             const updateIsNotHelpReview = await storeDao.changeUserIsNotHelpReview(connection, userId, reviewId);
             const minusReviewIsNotHelp = await storeDao.changeReviewIsNotHelp(connection, reviewId);
-            connection.release();
+            connection.commit();
             return response(baseResponse.SUCCESS);
         }
         else if(alreadyNotHelpCheck[0].status === 'DELETE'){
             const updateIsNotHelpReview = await storeDao.updateUserIsNotHelpReview(connection, userId, reviewId);
         }
         const plusReviewIsNotHelp = await storeDao.updateReviewIsNotHelp(connection, reviewId);
-        connection.release();
+        connection.commit();
         return response(baseResponse.SUCCESS);
 
     } catch (err) {
+        connection.rollback();
         logger.error(`App - Update Review Is Not Help Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
+    } finally{
+        connection.release();
     }
 };
 
