@@ -124,9 +124,7 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
 
         const getMenuTopInfo = await storeProvider.getMenuTopInfo(menuId); //메뉴 상단 정보 가져오기
-        result.push({'Menu Image': getMenuTopInfo[0].menuImageUrl,
-                     'Menu Name': getMenuTopInfo[0].menuName,
-                     'Menu Price': getMenuTopInfo[0].price});
+        result.push(getMenuTopInfo[0]);
 
         const getReceiptMenuOptionCategoryInfo = await storeProvider.getUserMenuOptionCategoryInfo(menuId); //카테고리별 옵션 조회
         for(let i=0;i<getReceiptMenuOptionCategoryInfo.length;i++){
