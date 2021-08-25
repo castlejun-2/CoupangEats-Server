@@ -311,9 +311,9 @@ exports.login = async function (req, res) {
     } else {    
         const countBookMarkResult = await userProvider.getBookMarkCount(userId);
         result.push({'BookMark Store Count': countBookMarkResult});
-        countBookMarkResult.push({'BookMark Store': getBookMarkResult});
 
         const getBookMarkResult = await userProvider.getBookMark(userId, filter)
+        countBookMarkResult.push({'BookMark Store': getBookMarkResult});
         result.push({'BookMark Store': getBookMarkResult});
         return res.send(response(baseResponse.SUCCESS, countBookMarkResult));
     }
