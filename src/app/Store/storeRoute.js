@@ -51,11 +51,11 @@ module.exports = function(app){
     app.get('/app/stores/:userId/preview-cheetah',jwtMiddleware,store.getStoresByPreviewCheetah);
 
     // 45. 앱 메인화면 신규매장 조회 API (비회원용)
-    app.get('/app/stores/:userId/main-new',store.getMainScreenByNewStoreForAll);
+    app.get('/app/stores/main-new',store.getMainScreenByNewStoreForAll);
 
     // 46. 앱 메인화면 인기매장 조회 API (비회원용)
-    app.get('/app/stores/:userId/main-popular',store.getMainScreenByPopularStoreForAll);
+    app.get('/app/stores/main-popular',store.getMainScreenByPopularStoreForAll);
     
     // 47. 앱 메인화면 골라먹는 매장 조회 API (비회원용)
-     app.get('/app/stores/:userId/main-pick',store.getMainScreenByPickStoreForAll);
+     app.get('/app/stores/main-pick',store.getMainScreenByPickStoreForAll);
 };
