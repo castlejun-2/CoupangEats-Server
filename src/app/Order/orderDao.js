@@ -193,6 +193,17 @@ async function postUserOrder(connection, userId) {
     const [postOrderRow] = await connection.query(postOrderQuery, userId);
     return postOrderRow;
 }
+
+// 카트 존재 여부 확인
+async function selectCartExistInfo(connection, userId) {
+    const selectCartQuery = `
+        SELECT orderIdx
+        FROM OrderInfo
+        WHERE userid=? and status='CART';
+      `;
+    const [getCartInfoRow] = await connection.query(selectCartQuery, userId);
+    return getCartInfoRow;
+}
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
@@ -207,4 +218,5 @@ async function postUserOrder(connection, userId) {
     posttotalCostInOrderInfo,
     selectOrderHistoryInfo,
     postUserOrder,
+    selectCartExistInfo,
   }

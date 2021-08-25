@@ -85,11 +85,12 @@ exports.postTotalCost = async function (orderId, deliveryTip, sumPrice) {
 exports.postOrderStatus = async function (userId) {
     try {
         const connection = await pool.getConnection(async (conn) => conn);
+
+        const checkOrderInCart = await orderProvider.checkUserOrder(userId);
         const postOrderResult = await orderDao.postUserOrder(connection, userId);
 
-        console.log(postOrderResult[0].changedRows)
         
-        if(postOrderResult[0].changedRows === 0){
+        if(!checkOrderInCart[0]){
             connection.release();
             return errResponse(baseResponse.CART_IN_EMPTY);
         }

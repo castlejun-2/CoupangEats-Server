@@ -2,14 +2,6 @@ const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 
 const orderDao = require("./orderDao");
-//카트정보 가져오기
-exports.retrieveUserCartInfo = async function (userId) {
-    const connection = await pool.getConnection(async (conn) => conn);
-    const cartinfolistResult = await orderDao.selectCartInfo(connection,userId);
-    connection.release();    
-    return cartinfolistResult;
-    
-};
 
 //카트정보 가져오기
 exports.retrieveUserCartInfo = async function (userId) {
@@ -71,5 +63,23 @@ exports.retrieveOrderHistoryInfo = async function (userId) {
     const orderHistoryResult = await orderDao.selectOrderHistoryInfo(connection, userId);
     connection.release();    
     return orderHistoryResult;
+    
+};
+
+//사용자ID 주문내역 일치여부 조회
+exports.userOrderIdEqualCheck = async function (userId, orderId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const isSameResult = await orderDao.selectUserIdSameOrderIdInfo(connection, userId, orderId);
+    connection.release();    
+    return isSameResult;
+    
+};
+
+//카트여부 확인하기
+exports.checkUserOrder = async function (userId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const cartinfolistResult = await orderDao.selectCartExistInfo(connection, userId);
+    connection.release();    
+    return cartinfolistResult;
     
 };
