@@ -310,12 +310,10 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {    
         const countBookMarkResult = await userProvider.getBookMarkCount(userId); //즐겨찾기 갯수 count
-        result.push({'BookMark Store Count': countBookMarkResult}); 
-
         const getBookMarkResult = await userProvider.getBookMark(userId, filter) //즐겨찾기 스토어 리스트
-        result.push({'BookMark Store': getBookMarkResult});
+        result.push({'BookMark Store Count': countBookMarkResult, 'BookMark Store': getBookMarkResult}); 
 
-        return res.send(response(baseResponse.SUCCESS, getBookMarkResult));
+        return res.send(response(baseResponse.SUCCESS, result));
     }
 };
 
