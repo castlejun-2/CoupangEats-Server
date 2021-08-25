@@ -549,7 +549,7 @@ exports.login = async function (req, res) {
 /**
  * API No. 47
  * API Name : 문자인증(SENS를 통한) 전송 API
- * [POST] /send
+ * [POST] /app/send
  */
 
 exports.send = async function (req, res) {
@@ -599,7 +599,7 @@ exports.send = async function (req, res) {
 /**
  * API No. 48
  * API Name : 문자인증(SENS를 통한) 검증 API
- * [POST] /verify
+ * [POST] /app/verify
  */
 exports.verify = async function (req, res) {
     const phoneNumber = req.body.phoneNumber;
