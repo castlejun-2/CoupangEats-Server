@@ -216,3 +216,11 @@ exports.getMyReviewInfo = async function (userId, orderId) {
   connection.release();    
   return writeReviewInfoResult;
 };
+
+//사용자의 Default Card정보 가져오기
+exports.getUserDefaultCard = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const getCardInfoResult = await userDao.selectUserDefaultCardInfo(connection, userId);
+  connection.release();    
+  return getCardInfoResult;
+};

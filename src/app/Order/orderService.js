@@ -2,6 +2,7 @@ const {logger} = require("../../../config/winston");
 const {pool} = require("../../../config/database");
 const secret_config = require("../../../config/secret");
 const orderProvider = require("./orderProvider");
+const userProvider = require("../../app/User/userProvider");
 const orderDao = require("./orderDao");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response} = require("../../../config/response");
@@ -15,7 +16,8 @@ exports.postUserOrder = async function (userId, storeId, menuId, menuCount, orde
     try {
         if(!orderId){
             const connection = await pool.getConnection(async (conn) => conn);
-            const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId);
+            const getUserCardResult = await userProvider.getUserDefaultCard(userId);
+            const postOrderResult = await orderDao.postOrderInfo(connection, userId, storeId, getUserCardResult[0].cardId);          
             const postOrderTotalResult = await orderDao.postOrderTotalInfo(connection, postOrderResult[0].orderIdx, menuId, menuCount);
             connection.release();
             return postOrderTotalResult;

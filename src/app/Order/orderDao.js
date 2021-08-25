@@ -1,8 +1,8 @@
 // 주문 정보 등록 및 IDX 반환
-async function postOrderInfo(connection, userId, storeId) {
+async function postOrderInfo(connection, userId, storeId, cardId) {
     const postOrderQuery = `
-          INSERT INTO OrderInfo(userId, storeId)
-          VALUES (?, ?);
+          INSERT INTO OrderInfo(userId, storeId, cardId)
+          VALUES (?, ?, ?);
     `;
     const getOrderQuery = `
           SELECT orderIdx
@@ -10,7 +10,7 @@ async function postOrderInfo(connection, userId, storeId) {
           WHERE userId = ? and storeId = ? and status = 'CART'
           ORDER BY createdAt DESC limit 1;
     `;
-    const postOrder = await connection.query(postOrderQuery, [userId, storeId]);
+    const postOrder = await connection.query(postOrderQuery, [userId, storeId, cardId]);
     const [getOrderIdx] = await connection.query(getOrderQuery, [userId, storeId]);
 
     return getOrderIdx;

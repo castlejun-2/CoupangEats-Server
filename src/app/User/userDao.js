@@ -491,6 +491,17 @@ WHERE odi.orderTotalId=?;
   return getReceiptInfoRow;
 }
 
+// 사용자 Default 카드정보 가져오기
+async function selectUserDefaultCardInfo(connection, userId){
+  const defaultCardInfoQuery=`
+  SELECT ci.cardIdx as 'cardId'
+  FROM CardInfo ci
+  where ci.userId = ? and isDefault=1 and ci.status='ACTIVE';
+  `;
+  const [cardInfoRows] = await connection.query(defaultCardInfoQuery, userId);
+  return cardInfoRows;
+}
+
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -525,5 +536,6 @@ module.exports = {
   selectMyReviewInfo,
   selectUserReceiptTopInfo,
   selectUserReceiptMenuInfo,
-  selectUserReceiptMenuOptionInfo
+  selectUserReceiptMenuOptionInfo,
+  selectUserDefaultCardInfo
 };
