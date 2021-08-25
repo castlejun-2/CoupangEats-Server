@@ -452,7 +452,7 @@ WHERE ri.orderId=? and ri.userId=?;
 async function selectUserReceiptTopInfo(connection, userId, orderId) {
   const getReceiptInfoQuery = `
 SELECT si.storeName as 'storeName',
-	     oi.createdAt as 'orderDate',
+       date_format(oi.createdAt,'%Y-%m-%d %H:%i') as 'orderDate',
        oi.sumCost as 'sumCost',
        oi.deliveryTip as 'deliveryTip',
        pi.payment as 'paymentInfo'
