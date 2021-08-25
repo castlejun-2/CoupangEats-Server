@@ -477,8 +477,8 @@ exports.login = async function (req, res) {
         }
         var orderPrice = (parseInt(getReceiptTopInfo[0].sumCost)-parseInt(getReceiptTopInfo[0].deliveryTip));
         result.push({"Order Price": orderPrice})
-        result.push({"Delivery Tip": getReceiptDetailMenuInfo[0].deliveryTip})
-        result.push({"Order Price": getReceiptDetailMenuInfo[0].sumCost})
+        result.push({"Delivery Tip": getReceiptTopInfo[0].deliveryTip})
+        result.push({"Order Price": getReceiptTopInfo[0].sumCost})
         return res.send(response(baseResponse.SUCCESS, result));
     }
 };
