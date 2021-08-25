@@ -308,13 +308,14 @@ exports.login = async function (req, res) {
         
     if (userIdFromJWT != userId) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
+    } else {    
         const countBookMarkResult = await userProvider.getBookMarkCount(userId);
         result.push({'BookMark Store Count': countBookMarkResult});
+        countBookMarkResult.push({'BookMark Store': getBookMarkResult});
 
         const getBookMarkResult = await userProvider.getBookMark(userId, filter)
         result.push({'BookMark Store': getBookMarkResult});
-        return res.send(response(baseResponse.SUCCESS, result));
+        return res.send(response(baseResponse.SUCCESS, countBookMarkResult));
     }
 };
 
@@ -527,7 +528,7 @@ exports.login = async function (req, res) {
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     else {
         if(!orderId)
-            return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
+            return res.send(errResponse(baseResponse.SIGNIN_ORDERID_FOR_GET_REVIEW_EMPTY));
         const getMyReviewResult = await userProvider.getMyReviewInfo(userId, orderId);
         return res.send(response(baseResponse.SUCCESS, getMyReviewResult));
     }
