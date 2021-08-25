@@ -4,6 +4,7 @@ package-lock.json
 README.md
 config/database.js
 config/secret.js
+config/secret_sms.js
 index.js
 log/*
 .DS_Store
