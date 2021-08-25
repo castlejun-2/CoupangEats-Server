@@ -122,7 +122,8 @@ async function selectMenuInfo(connection, menuId) {
 async function selectMenuCategoryInfo(connection, menuId) {
   const selectMenuInfoQuery = `
   SELECT  mci.menuCategoryIdx as 'menuCategoryIdx',
-          mci.categoryName as 'categoryName'
+          mci.categoryName as 'categoryName',
+          mci.maxSelect as 'maxSelect'
   FROM MenuInfo mi join MenuCategoryInfo mci on mi.menuIdx=mci.menuId
   WHERE mi.menuIdx=?;
   `;
