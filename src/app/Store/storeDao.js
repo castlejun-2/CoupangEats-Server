@@ -480,7 +480,8 @@ async function selectMainMenuCategory(connection, storeId) {
 // 매장 메뉴 카테고리별 메뉴 조회
 async function selectDetailMenu(connection, categoryId) {
   const selectStoreCategoryListQuery = `
-    SELECT mi.menuName as 'menuName',
+    SELECT mi.menuIdx as 'menuIdx',
+           mi.menuName as 'menuName',
 		       mi.price as 'menuPrice',
            mi.description as 'menuDescription',
            miu.menuImageUrl as 'menuImageUrl'
