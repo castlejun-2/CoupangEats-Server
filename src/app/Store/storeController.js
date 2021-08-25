@@ -350,10 +350,14 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(errResponse(baseResponse.UPDATE_REVIEWID_EMPTY));
 
         const updateReviewResult = await storeService.updateUserReview(userId, orderId, reviewId, starValue, review);
-        for(let i=0;i<insertReviewImageUrl.length;i++){ //리뷰 이미지 URL 추가
-            const postReviewImage = await storeService.postUserReviewImage(reviewId, insertReviewImageUrl[i].url);}
-        for(let i=0;i<deleteReviewImageUrl.length;i++){ //리뷰 이미지 URL 삭제
-            const postReviewImage = await storeService.deleteUserReviewImage(reviewId, deleteReviewImageUrl[i].id);}
+        if(insertReviewImageUrl){
+            for(let i=0;i<insertReviewImageUrl.length;i++){ //리뷰 이미지 URL 추가
+                const postReviewImage = await storeService.postUserReviewImage(reviewId, insertReviewImageUrl[i].url);}
+        }
+        if(deleteReviewImageUrl){
+            for(let i=0;i<deleteReviewImageUrl.length;i++){ //리뷰 이미지 URL 삭제
+                const postReviewImage = await storeService.deleteUserReviewImage(reviewId, deleteReviewImageUrl[i].id);}
+        }
         return res.send(updateReviewResult);   
 
     }             
