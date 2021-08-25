@@ -80,3 +80,21 @@ exports.postTotalCost = async function (orderId, deliveryTip, sumPrice) {
         return errResponse(baseResponse.DB_ERROR);   
     }
 };
+
+//결제하기
+exports.postOrderStatus = async function (userId) {
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const postOrderResult = await orderDao.postUserOrder(connection, userId);
+
+        if(!postOrderResult[0]){
+            connection.release();
+            return errResponse(baseResponse.CART_IN_EMPTY);
+        }
+        connection.release();
+        return response(baseResponse.SUCCESS);
+    } catch (err) {
+        logger.error(`App - Post Order error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);   
+    }
+};

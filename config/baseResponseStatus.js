@@ -62,7 +62,7 @@ module.exports = {
     UPDATE_REVIEWID_EMPTY: { "isSuccess": false, "code": 2043, "message": "수정할 리뷰를 선택해주세요" },
     SIGNIN_CARDID_EMPTY: { "isSuccess": false, "code": 2044, "message": "삭제할 카드를 선택해주세요" },
     SIGNIN_ORDERID_FOR_GET_REVIEW_EMPTY: { "isSuccess": false, "code": 2045, "message": "리뷰를 조회할 주문번호를 선택해주세요" },
-    SMS_SEND_FAILURE: { "isSuccess": false, "code": 2046, "message": "본인인증 문자 발송 성공" },
+    SMS_SEND_FAILURE: { "isSuccess": false, "code": 2046, "message": "본인인증 문자 발송 실패" },
 
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
@@ -77,6 +77,7 @@ module.exports = {
     ORDERID_AND_USERID_DO_NOT_MATCH : { "isSuccess": false, "code": 3008, "message": "UserID와 OrderID가 일치하지 않습니다." },
     REVIEW_EXIST : { "isSuccess": false, "code": 3009, "message": "이미 리뷰를 작성한 주문입니다." },
     FAILURE_SMS_AUTHENTICATION : { "isSuccess": false, "code": 3010, "message": "인증번호가 맞지 않습니다." },
+    CART_IN_EMPTY : { "isSuccess": false, "code": 3011, "message": "카트가 비어있습니다." },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},

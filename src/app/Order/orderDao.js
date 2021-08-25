@@ -182,6 +182,17 @@ ORDER BY oi.createdAt DESC;
     const [getOrderHistoryRow] = await connection.query(getOrderHistoryQuery, userId);
     return getOrderHistoryRow;
 }
+
+// 결제하기
+async function postUserOrder(connection, userId) {
+    const postOrderQuery = `
+        UPDATE OrderInfo
+        SET status = 'ACTIVE'
+        WHERE userId = ? and status='CART';
+      `;
+    const [postOrderRow] = await connection.query(postOrderQuery, userId);
+    return postOrderRow;
+}
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,
@@ -195,4 +206,5 @@ ORDER BY oi.createdAt DESC;
     selectUserIdSameOrderIdInfo,
     posttotalCostInOrderInfo,
     selectOrderHistoryInfo,
+    postUserOrder,
   }

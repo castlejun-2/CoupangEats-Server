@@ -19,4 +19,7 @@ module.exports = function(app){
 
     // 8. 카트에 담긴 정보 상세 조회 API
     app.get('/app/orders/:userId/in-cart', jwtMiddleware, order.getDetailCart);
+
+    // 9. 결제하기 API
+    app.post('/app/orders/:userId/payment', jwtMiddleware, order.postOrder);
 };

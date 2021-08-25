@@ -226,3 +226,25 @@ const {emit} = require("nodemon");
         return res.send(response(baseResponse.SUCCESS, result)); 
     }  
 }
+
+/**
+ * API No. 9
+ * API Name : 결제하기 API
+ * [POST] /app/orders/:userId/payment
+ * path variable : userId
+ */
+ exports.getDetailCart = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const postOrderResult = await orderService.postOrderStatus(userId);
+        return res.send(response(baseResponse.SUCCESS)); 
+    }  
+}

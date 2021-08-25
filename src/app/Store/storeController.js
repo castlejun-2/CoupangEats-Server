@@ -8,7 +8,7 @@ const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
 /**
- * API No. 9
+ * API No. 10
  * API Name : 키워드로 매장 검색 API
  * [PATCH] /app/stores/:userId/keyword
  * path variable : userId
@@ -36,7 +36,7 @@ exports.getStoresByKeyword = async function (req, res) {
 }
 
 /**
- * API No. 10
+ * API No. 11
  * API Name : 카테고리로 매장 조회 API
  * [GET] /app/stores/:userId/category
  * path variable : userId
@@ -64,7 +64,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 11
+ * API No. 12
  * API Name : 앱 메인화면 통합 조회 API
  * [GET] /app/stores/:userId/main
  * path variable : userId
@@ -102,7 +102,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 12
+ * API No. 13
  * API Name : 메뉴 정보 조회 API
  * [GET] /app/stores/:userId/menu
  * path variable : userId
@@ -137,7 +137,7 @@ exports.getStoresByCategory = async function (req, res) {
 };
 
 /**
- * API No. 13
+ * API No. 14
  * API Name : 매장 메인화면 조회 API
  * [GET] /app/stores/:userId/mainstore
  * path variable : userId
@@ -174,7 +174,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 14
+ * API No. 15
  * API Name : 매장 세부정보 조회 API
  * [GET] /app/stores/:userId/detail-store
  * path variable : userId
@@ -200,7 +200,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 15
+ * API No. 16
  * API Name : 매장 리뷰 조회 API
  * [GET] /app/stores/:userId/review
  * path variable : userId
@@ -239,7 +239,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 16
+ * API No. 17
  * API Name : 리뷰 도움돼요 증가 API
  * [POST] /app/stores/:userId/help-review
  * path variable : userId
@@ -264,7 +264,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 17
+ * API No. 18
  * API Name : 리뷰 도움안돼요 증가 API
  * [POST] /app/stores/:userId/nonhelp-review
  * path variable : userId
@@ -290,7 +290,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 18
+ * API No. 19
  * API Name : 리뷰 작성 API
  * [POST] /app/stores/:userId/review
  * path variable : userId
@@ -327,7 +327,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
- * API No. 19
+ * API No. 20
  * API Name : 리뷰 수정 API
  * [PATCH] /app/stores/:userId/review
  * path variable : userId
@@ -364,7 +364,7 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
-* API No. 20
+* API No. 21
 * API Name : 치타배달 매장 조회 API
 * [GET] /app/stores/:userId/cheetah
 * path variable : userId
@@ -386,7 +386,7 @@ exports.getStoresByCheetah = async function (req, res) {
  }
 
 /**
-* API No. 21
+* API No. 22
 * API Name : 치타배달 미리보기 팜업 API
 * [GET] /app/stores/:userId/preview-cheetah
 * path variable : userId
@@ -408,7 +408,7 @@ exports.getStoresByPreviewCheetah = async function (req, res) {
 }
 
 /**
-* API No. 22
+* API No. 23
 * API Name : 매장 배달팁 상세 조회 API
 * [GET] /app/stores/:userId/delievery-tip
 * path variable : userId
@@ -434,7 +434,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 23
+ * API No. 24
  * API Name : 앱 메인화면 신규매장 조회 API
  * [GET] /app/stores/:userId/main-new
  * path variable : userId
@@ -456,7 +456,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 24
+ * API No. 25
  * API Name : 앱 메인화면 인기매장 조회 API
  * [GET] /app/stores/:userId/main-popular
  * path variable : userId
@@ -478,7 +478,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 25
+ * API No. 26
  * API Name : 앱 메인화면 골라먹는매장 조회 API
  * [GET] /app/stores/:userId/main-pick
  * path variable : userId
@@ -500,7 +500,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 26
+ * API No. 27
  * API Name : 앱 메인화면 신규매장 조회 API (비회원용)
  * [GET] /app/stores/main-new
  */
@@ -514,7 +514,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 27
+ * API No. 28
  * API Name : 앱 메인화면 인기매장 조회 API (비회원용)
  * [GET] /app/stores/main-popular
  */
@@ -528,7 +528,7 @@ exports.getDelieveryTip = async function (req, res) {
 }
 
 /**
- * API No. 28
+ * API No. 29
  * API Name : 앱 메인화면 골라먹는매장 조회 API (비회원용)
  * [GET] /app/stores/main-pick
  */

@@ -35,7 +35,7 @@ hmac.update(accessKey);
 const hash = hmac.finalize();
 const signature = hash.toString(CryptoJS.enc.Base64);
 /**
- * API No. 29
+ * API No. 30
  * API Name : 유저 생성 (회원가입) API
  * [POST] /app/users/sign-up
  */
@@ -81,7 +81,7 @@ exports.postUsers = async function (req, res) {
 };
 
 /**
- * API No. 30
+ * API No. 31
  * API Name : 로그인 API
  * [POST] /app/login
  * body : email, passsword
@@ -112,7 +112,7 @@ exports.login = async function (req, res) {
 
 
 /**
- * API No. 31
+ * API No. 32
  * API Name : 로그아웃 API
  * [POST] /users/:userId/logout
  */
@@ -143,7 +143,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 32
+ * API No. 33
  * API Name : 주소지 추가 API
  * [POST] /app/users/:userId/add-address
  * path variable : userId
@@ -176,7 +176,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 33
+ * API No. 34
  * API Name : 상세 주소 변경 API
  * [PATCH] /app/users/:userId/detail-address
  * path variable : userId
@@ -203,7 +203,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 34
+ * API No. 35
  * API Name : 기분 주소시 설정 API
  * [PATCH] /app/users/:userId/detail-address
  * path variable : userId
@@ -229,7 +229,7 @@ exports.login = async function (req, res) {
     }
 };
 /**
- * API No. 35
+ * API No. 36
  * API Name : 사용자 기본 배송지 조회 API
  * [GET] /app/users/:userId/default-address
  * path variable : userId
@@ -251,7 +251,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 36
+ * API No. 37
  * API Name : 배송지 목록 조회 API
  * [GET] /app/users/:userId/address
  * path variable : userId
@@ -273,7 +273,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 37
+ * API No. 38
  * API Name : 즐겨찾기 추가 및 취소 API
  * [POST] /app/users/:userId/bookmark
  * path variable : userId
@@ -308,7 +308,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 38
+ * API No. 39
  * API Name : 즐겨찾기 조회 API
  * [GET] /app/users/:userId/bookmark
  * path variable : userId
@@ -335,7 +335,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 39
+ * API No. 40
  * API Name : 사용자 등록 쿠폰 조회 API
  * [GET] /app/users/:userId/getCoupon
  * path variable : userId
@@ -357,7 +357,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 40
+ * API No. 41
  * API Name : 사용자 쿠폰 등록 API
  * [post] /app/users/:userId/getCoupon
  * path variable : userId
@@ -388,7 +388,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 41
+ * API No. 42
  * API Name : 카드 조회 API
  * [GET] /app/users/:userId/card
  * path variable : userId
@@ -410,7 +410,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 42
+ * API No. 43
  * API Name : 카드 삭제 API
  * [patch] /app/users/:userId/card
  * path variable : userId
@@ -437,7 +437,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 43
+ * API No. 44
  * API Name : 공지사항 조회 API
  * [GET] /app/users/:userId/notice
  * path variable : userId
@@ -459,7 +459,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 44
+ * API No. 45
  * API Name : 영수증 조회 API
  * [GET] /app/users/:userId/receipt
  * path variable : userId
@@ -500,7 +500,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 45
+ * API No. 46
  * API Name : MyPage 유저 이름 및 핸드폰 번호 조회 API
  * [GET] /app/users/:userId/name-number
  * path variable : userId
@@ -522,7 +522,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 46
+ * API No. 47
  * API Name : 작성한 리뷰 조회 API
  * [GET] /app/users/:userId/review
  * path variable : userId
@@ -547,7 +547,7 @@ exports.login = async function (req, res) {
 };
 
 /**
- * API No. 47
+ * API No. 48
  * API Name : 문자인증(SENS를 통한) 전송 API
  * [POST] /app/send
  */
@@ -597,7 +597,7 @@ exports.send = async function (req, res) {
 };
 
 /**
- * API No. 48
+ * API No. 49
  * API Name : 문자인증(SENS를 통한) 검증 API
  * [POST] /app/verify
  */
