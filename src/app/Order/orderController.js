@@ -237,7 +237,7 @@ const {emit} = require("nodemon");
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
-    const {storeMessage, deliveryMessage} = req.bpdy;
+    const {storeMessage, deliveryMessage} = req.body;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
