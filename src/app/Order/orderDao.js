@@ -190,7 +190,7 @@ async function postUserOrder(connection, userId, storeMessage, deliveryMessage) 
         SET status = 'ACTIVE', toStoreRequest = ?, toDeliveryRequest = ?
         WHERE userId = ? and status='CART';
       `;
-    const [postOrderRow] = await connection.query(postOrderQuery, [userId, storeMessage, deliveryMessage]);
+    const [postOrderRow] = await connection.query(postOrderQuery, [storeMessage, deliveryMessage, userId]);
     return postOrderRow;
 }
 
