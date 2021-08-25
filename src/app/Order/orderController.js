@@ -245,6 +245,6 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {
         const postOrderResult = await orderService.postOrderStatus(userId);
-        return res.send(response(baseResponse.SUCCESS)); 
+        return res.send(postOrderResult); 
     }  
 }

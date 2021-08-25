@@ -88,7 +88,6 @@ exports.postOrderStatus = async function (userId) {
 
         const checkOrderInCart = await orderProvider.checkUserOrder(userId);
         const postOrderResult = await orderDao.postUserOrder(connection, userId);
-
         
         if(!checkOrderInCart[0]){
             connection.release();
