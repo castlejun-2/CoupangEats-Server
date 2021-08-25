@@ -69,9 +69,8 @@ exports.postReviewIsNotHelp = async function (userId, reviewId) {
 
 //리뷰 작성
 exports.postUserReview = async function (userId, orderId, starValue, review) {
+    const connection = await pool.getConnection(async (conn) => conn);
     try {
-        const connection = await pool.getConnection(async (conn) => conn);
-
         await connection.beginTransaction(); //transaction 시작
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
         const existReviewCheck = await storeProvider.reviewExistCheck(userId, orderId);
