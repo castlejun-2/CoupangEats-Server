@@ -10,6 +10,9 @@ module.exports = function(app){
 
     // 9. 앱 메인화면 통합 조회 API
     app.get('/app/stores/:userId/main',jwtMiddleware,store.getMainScreen);
+    
+    // 12. 메뉴 정보 조회 API
+    app.get('/app/stores/:userId/menu',jwtMiddleware,store.getMenu); 
 
     // 18. 매장 메인화면 조회 API
     app.get('/app/stores/:userId/mainstore',jwtMiddleware,store.getStoreMain);

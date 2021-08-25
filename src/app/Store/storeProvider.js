@@ -33,6 +33,33 @@ exports.retrieveStoreByCheetahList = async function (userId) {
     return storeListByCheetahResult;
 };
 
+//메뉴 정보 API
+exports.getMenuTopInfo = async function (menuId) {
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const menuInfoList = await storeDao.selectMenuInfo(connection, menuId);
+        connection.release();    
+        return menuInfoList;
+};
+
+//메뉴 옵션 카테고리 조회 API
+exports.getUserMenuOptionCategoryInfo = async function (menuId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const menuCategoryInfoList = await storeDao.selectMenuCategoryInfo(connection, menuId);
+    connection.release();    
+    return menuCategoryInfoList;
+};
+
+//메뉴 세부 옵션 조회 API
+exports.getUserDetailMenuInRecipt = async function (menuCategoryId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    const menuDetailOptionInfoList = await storeDao.selectMenuDetailOptionInfo(connection, menuCategoryId);
+    connection.release();    
+    return menuDetailOptionInfoList;
+};
+
 //메인화면 조회 API
 exports.retrieveMainScreenList = async function (userId, type) {
     if(type){

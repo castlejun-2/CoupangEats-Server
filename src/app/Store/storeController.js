@@ -102,6 +102,43 @@ exports.getStoresByCategory = async function (req, res) {
 }
 
 /**
+ * API No. 12
+ * API Name : 메뉴 정보 조회 API
+ * [GET] /app/stores/:userId/menu
+ * path variable : userId
+ */
+ exports.getMenu = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const userId = req.params.userId;
+    const menuId = req.query.menuId;
+    const result = [];
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId)
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    else {
+        if(!menuId)
+            return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
+
+        const getMenuTopInfo = await storeProvider.getMenuTopInfo(menuId); //메뉴 상단 정보 가져오기
+        result.push({'Menu Image': getMenuTopInfo[0].menuImageUrl,
+                     'Menu Name': getMenuTopInfo[0].menuName,
+                     'Menu Price': getMenuTopInfo[0].price});
+
+        const getReceiptMenuOptionCategoryInfo = await storeProvider.getUserMenuOptionCategoryInfo(menuId); //카테고리별 옵션 조회
+        for(let i=0;i<getReceiptMenuOptionCategoryInfo.length;i++){
+            let detailOptionResult = await storeProvider.getUserDetailMenuInRecipt(getReceiptDetailMenuInfo[i].menuCategory);
+            result.push({'Category Name': getReceiptMenuOptionCategoryInfo[i].categoryName,"Max Select": getReceiptMenuOptionCategoryInfo[i].maxSselect,
+                        detailOptionResult})
+        }
+        return res.send(response(baseResponse.SUCCESS, result));
+    }
+};
+
+/**
  * API No. 18
  * API Name : 매장 메인화면 조회 API
  * [GET] /app/users/:userId/mainstore

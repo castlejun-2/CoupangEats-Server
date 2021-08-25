@@ -104,6 +104,44 @@ async function selectStoreByCheetahList(connection, userId) {
   return cheetahRows;
 }
 
+//메뉴 정보 조회
+async function selectMenuInfo(connection, menuId) {
+  const selectMenuInfoQuery = `
+      SELECT  mi.menuName as 'menuName',
+		          group_concat(miu.menuImageUrl) as 'menuImageUrl',
+	            mi.price as 'price'
+      FROM MenuInfo mi join MenuImageUrl miu on mi.menuIdx=miu.menuId
+      WHERE mi.menuIdx=?
+      Group by mi.menuIdx;
+  `;
+  const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuId);
+  return menuInfoRows;
+}
+
+//메뉴 카테고리 조회
+async function selectMenuCategoryInfo(connection, menuId) {
+  const selectMenuInfoQuery = `
+  SELECT  mci.menuCategoryIdx as 'menuCategory',
+          mci.categoryName as 'categoryName'
+  FROM MenuInfo mi join MenuCategoryInfo mci on mi.menuIdx=mci.menuId
+  WHERE mi.menuIdx=?;
+  `;
+  const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuId);
+  return menuInfoRows;
+}
+
+//메뉴 세부 옵션 조회
+async function selectMenuDetailOptionInfo(connection, menuCategoryId) {
+  const selectMenuInfoQuery = `
+SELECT mcdi.detailMenuName as 'optionName',
+	     mcdi.plusPrice as 'plusPrice'
+FROM MenuCategoryInfo mci join MenuCategoryDetailInfo mcdi on mcdi.menuCategoryId=mci.menuCategoryIdx
+WHERE MenuCategoryIdx = ?;
+  `;
+  const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuCategoryId);
+  return menuInfoRows;
+}
+
 // 메인화면 새로 입점한 가게 리스트 조회 API
 async function selectMainScreenByNew(connection, userId) {
   const selectMainByNewListQuery = `
@@ -1048,6 +1086,9 @@ module.exports = {
   updateOnlyStarValueReviewInfo,
   updateOnlyTextReviewInfo,
   updateReviewInfo,
+  selectMenuInfo,
+  selectMenuCategoryInfo,
+  selectMenuDetailOptionInfo
 };
 
   
