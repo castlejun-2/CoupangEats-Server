@@ -596,16 +596,16 @@ exports.send = async function (req, res) {
           // console.log(html);
         // }
       })
-    .then(function (res) {
-      console.log('response',res.data, res['data']);
-      res.send({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: res.data });
+    .then(function (rep) {
+      console.log('response',rep.data, rep['data']);
+      rep.json({isSuccess: true, code: 202, message: "본인인증 문자 발송 성공", result: rep.data });
     })
     .catch((err) => {
-      console.log(err.res);
-      if(err.res == undefined){
-        res.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: res.data });
+      console.log(err.rep);
+      if(err.rep == undefined){
+        rep.json({isSuccess: true, code: 200, message: "본인인증 문자 발송 성공", result: rep.data });
       }
-      else res.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.res });
+      else rep.json({isSuccess: true, code: 204, message: "본인인증 문자 발송에 문제가 있습니다.", result: err.rep });
     });
 };
 
