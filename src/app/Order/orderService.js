@@ -87,7 +87,11 @@ exports.postOrderStatus = async function (userId) {
         const connection = await pool.getConnection(async (conn) => conn);
         const postOrderResult = await orderDao.postUserOrder(connection, userId);
 
-        if(postOrderResult.affectedRows === 0){
+        console.log(postOrderResult)
+        console.log(postOrderResult.affectedRows)
+        console.log(postOrderResult[0].affeectedRows)
+        
+        if(postOrderResult.changedRows === 0){
             connection.release();
             return errResponse(baseResponse.CART_IN_EMPTY);
         }
