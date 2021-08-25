@@ -233,7 +233,7 @@ const {emit} = require("nodemon");
  * [POST] /app/orders/:userId/payment
  * path variable : userId
  */
- exports.getDetailCart = async function (req, res) {
+ exports.postOrder = async function (req, res) {
 
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
