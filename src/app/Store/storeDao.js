@@ -219,8 +219,6 @@ async function selectMainScreenByNewForAllWithLocate(connection, latitude, longi
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-               join UserInfo ui on ui.userIdx = ?
-               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
           WHERE (DATE(NOW())-DATE(si.createdAt)) < 2
   `;
   const [mainRows] = await connection.query(selectMainByNewListQuery, [latitude, longitude, latitude]);
@@ -248,8 +246,6 @@ async function selectMainScreenByPopularForAllWithLocate(connection, latitude, l
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-               join UserInfo ui on ui.userIdx = ?
-               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
 		      WHERE rv.cnt >= 5 ORDER BY rv.star DESC  
   `;
   const [mainRows] = await connection.query(selectMainByPopularListQuery, [latitude, longitude, latitude]);
@@ -285,8 +281,6 @@ async function selectMainScreenByOtherForAllWithLocate(connection, latitude, lon
 		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
           join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
          left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-         join UserInfo ui on ui.userIdx = ?
-         left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx;
   `;
   const [mainRows] = await connection.query(selectMainByOtherListQuery, [latitude, longitude, latitude]);
   return mainRows;
@@ -312,8 +306,6 @@ async function selectMainScreenByNewForAll(connection) {
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-               join UserInfo ui on ui.userIdx = ?
-               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
           WHERE (DATE(NOW())-DATE(si.createdAt)) < 2
   `;
   const [mainRows] = await connection.query(selectMainByNewListQuery);
@@ -340,8 +332,6 @@ async function selectMainScreenByPopularForAll(connection) {
                 from MenuImageUrl miu join MenuInfo mi where mi.menuIdx=miu.menuId and isMain=1) mu on mu.storeId=si.storeIdx
                 group by mu.storeId ) image on image.imagesi=si.storeIdx
                left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-               join UserInfo ui on ui.userIdx = ?
-               left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx
 		      WHERE rv.cnt >= 5 ORDER BY rv.star DESC  
   `;
   const [mainRows] = await connection.query(selectMainByPopularListQuery);
@@ -376,8 +366,6 @@ async function selectMainScreenByOtherForAll(connection) {
 		     (select ci.storeId, ci.salePrice as 'saleprice' from CouponInfo ci
           join StoreInfo si on ci.storeId=si.storeIdx group by ci.storeId) cui on cui.storeId=si.storeIdx
          left join DeliveryTipInfo dti on si.storeIdx=dti.storeId
-         join UserInfo ui on ui.userIdx = ?
-         left join (select latitude,longitude,userId from AddressInfo where isDefault=1) ad on ad.userId=ui.userIdx;
   `;
   const [mainRows] = await connection.query(selectMainByOtherListQuery);
   return mainRows;
