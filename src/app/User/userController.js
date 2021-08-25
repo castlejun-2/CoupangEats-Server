@@ -466,7 +466,7 @@ exports.login = async function (req, res) {
             return res.send(errResponse(baseResponse.SIGNIN_ORDERID_EMPTY));
 
         const getReceiptTopInfo = await userProvider.getUserReceiptTopInfo(userId, orderId); //영수증 상단 정보 가져오기
-        result.push({"Store Name": getReceiptTopInfo[0].storeName},{"Order Date": getReceiptTopInfo[0].orderDate});
+        result.push({'Store Name': getReceiptTopInfo[0].storeName, "Order Date": getReceiptTopInfo[0].orderDate});
 
         const getReceiptDetailMenuInfo = await userProvider.getUserReceiptMenuInfo(userId, orderId);
         for(let i=0;i<getReceiptDetailMenuInfo.length;i++){
