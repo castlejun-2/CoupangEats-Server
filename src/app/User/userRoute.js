@@ -13,6 +13,9 @@ module.exports = function(app){
 
     // 33. 주소지 추가 API (일반 주소)
     app.post('/app/users/:userId/add-address',jwtMiddleware, user.postAddress);
+    
+    // 33-1. 주소지 추가 API (클라이언트 요청 버전)
+    app.post('/app/users/address',jwtMiddleware, user.registerAddress);
 
     // 34. 상세 주소 수정 API
     app.patch('/app/users/:userId/detail-address',jwtMiddleware, user.detailAddress);
@@ -64,4 +67,5 @@ module.exports = function(app){
 
     // 50. 푸쉬 알림 API
     app.post('/app/push', user.pushAlarm);
+
 };

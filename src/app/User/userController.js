@@ -182,6 +182,37 @@ exports.login = async function (req, res) {
 };
 
 /**
+ * API No. 33-1
+ * API Name : 주소지 추가 API (클라이언트 요청 버전)
+ * [POST] /app/users/address
+ * body : userId, address, detailAddress, infoAddress, category
+ */
+ exports.registerAddress = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const {userId, address, detailAddress, infoAddress, latitude, longitude, category} = req.body;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+        
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if (!address)
+            return res.send(errResponse(baseResponse.SIGNUP_ADDRESS_EMPTY));
+        if(!latitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LATITUDE_EMPTY));
+        if(!longitude)
+            return res.send(errResponse(baseResponse.SIGNIN_LONGITUDE_EMPTY));                
+        if(!category)
+            res.send(errResponse(baseResponse.ADDRESS_CATEGORY_EMPTY));
+
+        const postAddressInfo = await userService.postAddAddress(userId, address, detailAddress, infoAddress, latitude, longitude, category)
+        return res.send(postAddressInfo);
+    }
+};
+
+/**
  * API No. 34
  * API Name : 상세 주소 변경 API
  * [PATCH] /app/users/:userId/detail-address

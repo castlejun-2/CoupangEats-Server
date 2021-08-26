@@ -41,7 +41,7 @@ module.exports = function(app){
     // 22. 치타배달 미리보기 팜업 API
     app.get('/app/stores/:userId/preview-cheetah',jwtMiddleware,store.getStoresByPreviewCheetah);
     
-    // 23. 매장 배달팁 상세 조회 API
+    // 23. 매장 배달팁 조회 API
     app.get('/app/stores/:userId/delivery-tip',jwtMiddleware,store.getDelieveryTip);
 
     // 24. 앱 메인화면 신규매장 조회 API

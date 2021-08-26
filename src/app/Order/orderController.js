@@ -97,6 +97,69 @@ const {emit} = require("nodemon");
 }
 
 /**
+ * API No. 4-1
+ * API Name : 카트에 담기 API (클라이언트 요청버전)
+ * [POST] /app/orders/in-cart
+ */
+ exports.registerCart = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const {userId,storeId,menuCount,menuId,orderArray} = req.body;
+    let orderId;
+    var sumprice = 0;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        if(!storeId)
+            return res.send(errResponse(baseResponse.SIGNIN_STOREID_EMPTY));
+        if(!menuId)
+            return res.send(errResponse(baseResponse.SIGNIN_MENUID_EMPTY));
+        
+        //validation 처리
+        const storeActiveInfo = await storeProvider.retrieveStoreActive(storeId)        
+        if (storeActiveInfo[0].exist === 0) //가게가 정상 영업중인지 확인
+            return res.send(errResponse(baseResponse.STORE_NOT_ACTIVE));     
+        
+        const sameStoreInCartInfo = await orderProvider.retrieveSameStoreInCart(userId, storeId)        
+        if (sameStoreInCartInfo[0].exist === 1) //카트에 다른 가게의 메뉴가 담겨있는지 확인
+                return res.send(errResponse(baseResponse.NOT_SAME_STORE_IN_CART));
+
+        const sameOrderInCartInfo = await orderProvider.retrieveSameOrderInCart(userId, storeId);       
+        if(!sameOrderInCartInfo[0])
+            orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount);
+        else if(sameOrderInCartInfo[0].orderIdx) //storeId가 기존 Cart 정보에 있으면 해당 OrderId 사용
+            orderId = await orderService.postUserOrder(userId, storeId, menuId, menuCount, sameOrderInCartInfo[0].orderIdx);
+
+        for(let i=0; i<orderArray.length; i++){
+            if(!orderArray[i].menuCategoryId)
+                return res.send(errResponse(baseResponse.SIGNIN_MENUCATEGORYID_EMPTY));
+            if(!orderArray[i].menuDetailId)
+                return res.send(errResponse(baseResponse.SIGNIN_MENUDETAILID_EMPTY));
+            const postOrderDetailList = await orderService.postOrderDetail(orderId[0].orderIdx, orderArray[i]);
+        }
+        
+        //최종 금액 계산
+        const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
+
+        for(let i=0;i<orderMenuInfo.length;i++)
+            sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
+        const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
+        sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
+ 
+        if(!sameOrderInCartInfo[0])
+            await orderService.postTotalCost(orderId[0].orderedId, delieveryTipInfo[0].deliveryTip, sumprice);
+        else if(sameOrderInCartInfo[0].orderIdx) 
+            await orderService.postTotalCost(sameOrderInCartInfo[0].orderIdx, delieveryTipInfo[0].deliveryTip, sumprice);
+        
+        return res.send(response(baseResponse.SUCCESS)); 
+    }  
+}
+
+/**
  * API No. 5
  * API Name : 카트에 담긴 정보 미리보기 조회 API
  * [GET] /app/orders/:userId/preview-cart
@@ -247,6 +310,27 @@ const {emit} = require("nodemon");
     const userIdFromJWT = req.verifiedToken.userId;
     const userId = req.params.userId;
     const {storeMessage, deliveryMessage} = req.body;
+
+    if (!userIdFromJWT || !userId) 
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    if (userIdFromJWT != userId) {
+        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
+    } else {
+        const postOrderResult = await orderService.postOrderStatus(userId, storeMessage, deliveryMessage);
+        return res.send(postOrderResult); 
+    }  
+}
+
+/**
+ * API No. 9
+ * API Name : 결제하기 API (클라이언트 요청버전)
+ * [POST] /app/orders/payment
+ */
+ exports.registerOrder = async function (req, res) {
+
+    const userIdFromJWT = req.verifiedToken.userId;
+    const {userId,storeMessage, deliveryMessage} = req.body;
 
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
