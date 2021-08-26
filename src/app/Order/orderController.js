@@ -209,22 +209,25 @@ const {emit} = require("nodemon");
 
         const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
         result.push({'Menu List': orderMenuInfo});
+        if(orderMenuInfo[0]){
+            const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
+            result.push({'Coupon List': couponInfo[0].couponCount});
 
-        const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
-        result.push({'Coupon List': couponInfo[0].couponCount});
+            //최종 금액 계산
+            for(let i=0;i<orderMenuInfo.length;i++)
+                sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
+            result.push({'Order Price': sumprice});
 
-        //최종 금액 계산
-        for(let i=0;i<orderMenuInfo.length;i++)
-            sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
-        result.push({'Order Price': sumprice});
+            const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
+            result.push({'Delivery Tip': parseInt(delieveryTipInfo[0].deliveryTip)});
+            sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
 
-        const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
-        result.push({'Delivery Tip': parseInt(delieveryTipInfo[0].deliveryTip)});
-        sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁
+            result.push({'Total Cost': sumprice});
 
-        result.push({'Total Cost': sumprice});
-
-        return res.send(response(baseResponse.SUCCESS, result)); 
+            return res.send(response(baseResponse.SUCCESS, result));
+        }else{
+            return res.send(errResponse(baseResponse.CART_IN_EMPTY));
+        }
     }  
 }
 
