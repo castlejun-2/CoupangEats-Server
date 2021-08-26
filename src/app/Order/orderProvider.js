@@ -1,4 +1,5 @@
 const { pool } = require("../../../config/database");
+const { response } = require("../../../config/response");
 const { logger } = require("../../../config/winston");
 
 const orderDao = require("./orderDao");
@@ -34,6 +35,8 @@ exports.retrieveSameOrderInCart = async function (userId, storeId) {
 exports.getUserOrderMenu = async function (userId) {
     const connection = await pool.getConnection(async (conn) => conn);
     const cartInfolistResult = await orderDao.selectCartDetailByMenuInfo(connection,userId);
+    if(!cartInfolistResult[0])
+        return errResponse(baseResponse.CART_IN_EMPTY);
     connection.release();    
     return cartInfolistResult;
     

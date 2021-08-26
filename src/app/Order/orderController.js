@@ -217,6 +217,7 @@ const {emit} = require("nodemon");
         for(let i=0;i<orderMenuInfo.length;i++)
             sumprice+=parseInt(orderMenuInfo[i].menuPrice) //메뉴의 총 가격
         result.push({'Order Price': sumprice});
+
         const delieveryTipInfo = await storeProvider.getDeliveryTip(orderMenuInfo[0].storeId,sumprice);
         result.push({'Delivery Tip': parseInt(delieveryTipInfo[0].deliveryTip)});
         sumprice+=parseInt(delieveryTipInfo[0].deliveryTip) //배달 팁

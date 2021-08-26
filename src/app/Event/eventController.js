@@ -10,23 +10,12 @@ const {emit} = require("nodemon");
 /**
  * API No. 1
  * API Name : 이벤트 진행중인 쿠폰 조회 API
- * [GET] /app/events/:userId/coupon
- * path variable : userId
+ * [GET] /app/events/coupon
  */
  exports.getCouponList = async function (req, res) {
   
-    const userIdFromJWT = req.verifiedToken.userId;
-    const userId = req.params.userId;
-  
-    if (!userIdFromJWT || !userId) 
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    if (userIdFromJWT != userId) {
-        return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        const couponList = await eventProvider.retrieveCouponList();
-        return res.send(response(baseResponse.SUCCESS, couponList)); 
-    }  
+    const couponList = await eventProvider.retrieveCouponList();
+    return res.send(response(baseResponse.SUCCESS, couponList)); 
 }
 
 /**
