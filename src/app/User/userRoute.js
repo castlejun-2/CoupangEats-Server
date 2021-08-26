@@ -61,4 +61,7 @@ module.exports = function(app){
 
     // 49. 문자인증(SENS를 통한) 검증 API
     app.post('/app/verify', user.verify);
+
+    // 50. 푸쉬 알림 API
+    app.post('/app/push', user.pushAlarm);
 };

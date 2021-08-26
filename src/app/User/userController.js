@@ -34,6 +34,12 @@ hmac.update(accessKey);
 
 const hash = hmac.finalize();
 const signature = hash.toString(CryptoJS.enc.Base64);
+
+//regix
+const admin = require('firebase-admin');
+const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}/; // 비밀번호 정규표현식, 8~16 자 이내 숫자 + 영문
+const regUserName = /^[a-zA-Z]{2,8}$/; // 사용자 닉네임, 2~8 자 이내 영문
+
 /**
  * API No. 30
  * API Name : 유저 생성 (회원가입) API
@@ -618,12 +624,12 @@ exports.verify = async function (req, res) {
 };
 
 /**
- * API No. 35
+ * API No. 50
  * API Name : 푸시 알림 API
  * [POST] /app/pushAlarms
  */
 exports.pushAlarm = async function(req, res){
-    let deviceToken=`token값 입력`
+    let deviceToken=`원하는 유저의 token 입력`
     let message = {
         notification:{
              title: '[Coupang-Eats] PushAlarm',
@@ -640,7 +646,7 @@ exports.pushAlarm = async function(req, res){
             return res.send(response(baseResponse.SUCCESS));
         })
         .catch(function(err) {
-            console.log('Error Sending message!!! : ', err)
+            console.log('Error Sending message: ', err)
             return res.send(errResponse(baseResponse.PUSH_ALARM_FAILURE));
         });
 }
