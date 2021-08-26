@@ -36,9 +36,9 @@ const hash = hmac.finalize();
 const signature = hash.toString(CryptoJS.enc.Base64);
 
 //regix
-const admin = require('firebase-admin');
-const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}/; // 비밀번호 정규표현식, 8~16 자 이내 숫자 + 영문
-const regUserName = /^[a-zA-Z]{2,8}$/; // 사용자 닉네임, 2~8 자 이내 영문
+// const admin = require('firebase-admin');
+// const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}/; // 비밀번호 정규표현식, 8~16 자 이내 숫자 + 영문
+// const regUserName = /^[a-zA-Z]{2,8}$/; // 사용자 닉네임, 2~8 자 이내 영문
 
 /**
  * API No. 30
