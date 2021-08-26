@@ -78,7 +78,7 @@ module.exports = {
     FAILURE_SMS_AUTHENTICATION : { "isSuccess": false, "code": 3010, "message": "인증번호가 맞지 않습니다." },
     CART_IN_EMPTY : { "isSuccess": false, "code": 3011, "message": "카트가 비어있습니다." },
     SMS_SEND_FAILURE: { "isSuccess": false, "code": 3012, "message": "본인인증 문자 발송 실패" },
-    SMS_SEND_FAILURE: { "isSuccess": false, "code": 3013, "message": "푸쉬알림 발송 실패" },
+    PUSH_ALARM_FAILURE: { "isSuccess": false, "code": 3013, "message": "푸쉬알림 발송 실패" },
 
     //Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},

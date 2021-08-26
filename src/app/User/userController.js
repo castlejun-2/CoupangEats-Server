@@ -617,6 +617,34 @@ exports.verify = async function (req, res) {
     }
 };
 
+/**
+ * API No. 35
+ * API Name : 푸시 알림 API
+ * [POST] /app/pushAlarms
+ */
+exports.pushAlarm = async function(req, res){
+    let deviceToken=`token값 입력`
+    let message = {
+        notification:{
+             title: '[Coupang-Eats] PushAlarm',
+             body:'A New Alarm From Coupang-Eats !',
+         },
+         token:deviceToken,
+    }
+
+    admin
+        .messaging()
+        .send(message)
+        .then(function(response){
+            console.log('Successfully sent message:', response)
+            return res.send(response(baseResponse.SUCCESS));
+        })
+        .catch(function(err) {
+            console.log('Error Sending message!!! : ', err)
+            return res.send(errResponse(baseResponse.PUSH_ALARM_FAILURE));
+        });
+}
+
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
  */

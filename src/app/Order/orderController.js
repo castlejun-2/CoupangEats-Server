@@ -114,6 +114,10 @@ const {emit} = require("nodemon");
         return res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
     } else {        
         const cartInfo = await orderProvider.retrieveUserCartInfo(userId);
+
+        //validation 처리
+        if(!cartInfo[0])
+            return res.send(errResponse(baseResponse.CART_IN_EMPTY));
         return res.send(response(baseResponse.SUCCESS, cartInfo)); 
     }  
 }
@@ -209,7 +213,8 @@ const {emit} = require("nodemon");
 
         const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
         result.push({'Menu List': orderMenuInfo});
-        if(orderMenuInfo[0]){
+        
+        if(orderMenuInfo[0]){//validation 처리
             const couponInfo = await orderProvider.getUserCoupon(userId); //해당 매장 사용가능한 쿠폰 조회
             result.push({'Coupon List': couponInfo[0].couponCount});
 
