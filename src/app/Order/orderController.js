@@ -272,7 +272,7 @@ const {emit} = require("nodemon");
         var sumprice = 0;
             
         const userAddress = await userProvider.getUserDefaultAddress(userId); //기본 배송지 삽입
-        result.push({'User Address': userAddress});
+        result.push({'User Address': userAddress[0].address});
 
         const orderMenuInfo = await orderProvider.getUserOrderMenu(userId); //주문 메뉴 리스트 조회
         result.push({'Menu List': orderMenuInfo});

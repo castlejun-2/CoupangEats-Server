@@ -356,7 +356,7 @@ async function postCoupon(connection, AddUserCouponParams) {
 // 유저 기본 배송지 조회
 async function selectUserDefaultAddress(connection, userId) {
   const userDefaultAddressQuery = `
-      SELECT ai.addressLine
+      SELECT ai.addressLine as 'address'
       FROM AddressInfo ai
       WHERE ai.userId = ? and isDefault=1;
      `;
