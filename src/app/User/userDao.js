@@ -380,7 +380,7 @@ async function selectUserAddressList(connection, userId) {
   const userAddressListQuery = `
       SELECT case category when 0 then '집' when 1 then '회사' when 2 then '기타' end as 'classify',
 	           addressLine as 'basic address',
-             concat(addressLine,detailAddressLine) as 'detail address'
+             concat(addressLine," ",detailAddressLine) as 'detail address'
       FROM AddressInfo ai
       WHERE ai.status='ACTIVE' and ai.userId = ?
       ORDER BY category;
