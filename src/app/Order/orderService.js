@@ -24,7 +24,6 @@ exports.postUserOrder = async function (userId, storeId, menuId, menuCount, orde
             return postOrderTotalResult;
         }
         else{
-            const connection = await pool.getConnection(async (conn) => conn);
             const postOrderWithIdTotalResult = await orderDao.postOrderTotalInfo(connection, orderId, menuId, menuCount);
             connection.commit();
             return postOrderWithIdTotalResult;

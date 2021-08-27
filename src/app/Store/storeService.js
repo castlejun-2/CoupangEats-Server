@@ -18,18 +18,18 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
         connection.beginTransaction();
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(userId, reviewId);
-        if(!alreadyHelpCheck[0].status){
-            const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
+        if(alreadyHelpCheck[0]){
+            if(alreadyHelpCheck[0].status === 'ACTIVE'){
+                const updateIsHelpReview = await storeDao.changeUserIsHelpReview(connection, userId, reviewId);
+                const minusReviewIsHelp = await storeDao.changeReviewIsHelp(connection, reviewId);
+                connection.commit();
+                return response(baseResponse.SUCCESS);
+            }
+            else if(alreadyHelpCheck[0].status === 'DELETE'){
+                const updateIsHelpReview = await storeDao.updateUserIsHelpReview(connection, userId, reviewId);
+            }
         }
-        else if(alreadyHelpCheck[0].status === 'ACTIVE'){
-            const updateIsHelpReview = await storeDao.changeUserIsHelpReview(connection, userId, reviewId);
-            const minusReviewIsHelp = await storeDao.changeReviewIsHelp(connection, reviewId);
-            connection.commit();
-            return response(baseResponse.SUCCESS);
-        }
-        else if(alreadyHelpCheck[0].status === 'DELETE'){
-            const updateIsHelpReview = await storeDao.updateUserIsHelpReview(connection, userId, reviewId);
-        }
+        const postIsHelpReview = await storeDao.insertUserIsHelpReview(connection, userId, reviewId);
         const plusReviewIsHelp = await storeDao.updateReviewIsHelp(connection, reviewId);
         connection.commit();
         return response(baseResponse.SUCCESS);
