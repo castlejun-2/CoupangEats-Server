@@ -12,7 +12,7 @@ module.exports = function(app){
     app.post('/app/:userId/logout', jwtMiddleware, user.logout);
 
     // 33. 주소지 추가 API (일반 주소)
-    app.post('/app/users/:userId/add-address',jwtMiddleware, user.postAddress);
+    app.post('/app/users/:userId/address',jwtMiddleware, user.postAddress);
     
     // 33-1. 주소지 추가 API (클라이언트 요청 버전)
     app.post('/app/users/address',jwtMiddleware, user.registerAddress);

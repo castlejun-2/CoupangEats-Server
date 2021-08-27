@@ -37,6 +37,9 @@ const signature = hash.toString(CryptoJS.enc.Base64);
 
 //regix
 // const admin = require('firebase-admin');
+// let serviceAccount = require("C:\Users\82105\OneDrive\바탕 화면/coupang-eatsb-firebase-adminsdk-h5g2h-1a6fb7e0e2.json");
+// admin.initializeApp({ credential: admin.credential.cert(serviceAccount), });
+
 // const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}/; // 비밀번호 정규표현식, 8~16 자 이내 숫자 + 영문
 // const regUserName = /^[a-zA-Z]{2,8}$/; // 사용자 닉네임, 2~8 자 이내 영문
 
@@ -124,13 +127,9 @@ exports.login = async function (req, res) {
  */
  exports.logout = async function (req, res) {
 
-    // Request JWT Token
     const userIdFromJWT = req.verifiedToken.userId;
-
-    // Request body
     const userId = req.params.userId;
 
-    // Validation Check (Request Error)
     if (!userIdFromJWT || !userId) 
         return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
@@ -141,7 +140,7 @@ exports.login = async function (req, res) {
 
     if (checkUserIdx[0].exist === 0)
         return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
-    // Result
+
     const logoutResult = await userService.logout(userId);
 
     return res.send(logoutResult);
