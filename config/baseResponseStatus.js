@@ -6,12 +6,12 @@ module.exports = {
     SMS_SEND_SUCCESS : { "isSuccess": true, "code": 1002, "message":"본인인증 문자 발송 성공" },
     SMS_VERIFY_SUCCESS : { "isSuccess": true, "code": 1003, "message":"본인인증 성공" },
 
-    // Common
+    // Jwt
     TOKEN_EMPTY : { "isSuccess": false, "code": 2000, "message":"JWT 토큰을 입력해주세요." },
     TOKEN_VERIFICATION_FAILURE : { "isSuccess": false, "code": 3000, "message":"JWT 토큰 검증 실패" },
     TOKEN_VERIFICATION_SUCCESS : { "isSuccess": true, "code": 1001, "message":"JWT 토큰 검증 성공" }, // ?
 
-    //Request error
+    // Request error
     SIGNUP_EMAIL_EMPTY : { "isSuccess": false, "code": 2001, "message":"이메일을 입력해주세요" },
     SIGNUP_EMAIL_LENGTH : { "isSuccess": false, "code": 2002, "message":"이메일은 30자리 미만으로 입력해주세요." },
     SIGNUP_EMAIL_ERROR_TYPE : { "isSuccess": false, "code": 2003, "message":"이메일을 형식을 정확하게 입력해주세요." },
@@ -80,7 +80,7 @@ module.exports = {
     SMS_SEND_FAILURE: { "isSuccess": false, "code": 3012, "message": "본인인증 문자 발송 실패" },
     PUSH_ALARM_FAILURE: { "isSuccess": false, "code": 3013, "message": "푸쉬알림 발송 실패" },
 
-    //Connection, Transaction 등의 서버 오류
+    // Connection, Transaction 등의 서버 오류
     DB_ERROR : { "isSuccess": false, "code": 4000, "message": "데이터 베이스 에러"},
     SERVER_ERROR : { "isSuccess": false, "code": 4001, "message": "서버 에러"},
  

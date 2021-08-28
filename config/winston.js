@@ -6,7 +6,7 @@ const env = process.env.NODE_ENV || 'development';
 const logDir = 'log';
 
 // https://lovemewithoutall.github.io/it/winston-example/
-// Create the log directory if it does not exist
+
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir)
 }
