@@ -11,7 +11,6 @@ exports.retrieveEventList = async function () {
     connection.release();
 
     return eventListResult;
-
 };
 
 // 쿠폰 리스트 읽어오기
@@ -22,5 +21,4 @@ exports.retrieveCouponList = async function () {
     connection.release();
 
     return couponListResult;
-
 };

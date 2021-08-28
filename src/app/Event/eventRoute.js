@@ -7,5 +7,4 @@ module.exports = function(app){
 
     // 2. 이벤트 조회 API
     app.get('/app/events',event.getEvent); 
-
 };

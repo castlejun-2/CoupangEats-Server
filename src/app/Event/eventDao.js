@@ -9,7 +9,7 @@ async function selectEvent(connection) {
             WHERE status='ACTIVE';`;
     const [eventRows] = await connection.query(selectEventListQuery);
     return eventRows;
-}
+};
 
 // 진행중인 이벤트 쿠폰 조회
 async function selectCoupon(connection) {
@@ -25,7 +25,7 @@ async function selectCoupon(connection) {
   `;
   const [couponRows] = await connection.query(selectCouponListQuery);
   return couponRows;
-}
+};
 
 module.exports = {
     selectEvent,

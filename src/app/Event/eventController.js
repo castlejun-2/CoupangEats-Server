@@ -4,9 +4,6 @@ const eventService = require("../../app/Event/eventService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
 
-const regexEmail = require("regex-email");
-const {emit} = require("nodemon");
-
 /**
  * API No. 1
  * API Name : 이벤트 진행중인 쿠폰 조회 API
