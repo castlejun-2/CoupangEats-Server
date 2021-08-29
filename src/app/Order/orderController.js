@@ -29,7 +29,7 @@ const {emit} = require("nodemon");
         const orderHistoryInfo = await orderProvider.retrieveOrderHistoryInfo(userId);
         return res.send(response(baseResponse.SUCCESS, orderHistoryInfo)); 
     }  
-}
+};
 
 /**
  * API No. 4
@@ -94,7 +94,7 @@ const {emit} = require("nodemon");
         
         return res.send(response(baseResponse.SUCCESS)); 
     }  
-}
+};
 
 /**
  * API No. 4-1
@@ -157,7 +157,7 @@ const {emit} = require("nodemon");
         
         return res.send(response(baseResponse.SUCCESS)); 
     }  
-}
+};
 
 /**
  * API No. 5
@@ -183,7 +183,7 @@ const {emit} = require("nodemon");
             return res.send(errResponse(baseResponse.CART_IN_EMPTY));
         return res.send(response(baseResponse.SUCCESS, cartInfo)); 
     }  
-}
+};
 
 /**
  * API No. 6
@@ -205,7 +205,7 @@ const {emit} = require("nodemon");
         const cartDelete = await orderService.deleteInCart(userId);
         return res.send(response(baseResponse.SUCCESS)); 
     } 
-}
+};
 
 /**
  * API No. 7
@@ -248,7 +248,7 @@ const {emit} = require("nodemon");
         }
         return res.send(response(baseResponse.SUCCESS)); 
     }  
-}
+};
 
 /**
  * API No. 8
@@ -297,7 +297,7 @@ const {emit} = require("nodemon");
             return res.send(errResponse(baseResponse.CART_IN_EMPTY));
         }
     }  
-}
+};
 
 /**
  * API No. 9
@@ -320,7 +320,7 @@ const {emit} = require("nodemon");
         const postOrderResult = await orderService.postOrderStatus(userId, storeMessage, deliveryMessage);
         return res.send(postOrderResult); 
     }  
-}
+};
 
 /**
  * API No. 9
@@ -341,4 +341,4 @@ const {emit} = require("nodemon");
         const postOrderResult = await orderService.postOrderStatus(userId, storeMessage, deliveryMessage);
         return res.send(postOrderResult); 
     }  
-}
+};

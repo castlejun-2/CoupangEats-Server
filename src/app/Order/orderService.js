@@ -35,7 +35,7 @@ exports.postUserOrder = async function (userId, storeId, menuId, menuCount, orde
     } finally {
         connection.release();
     }
-}
+};
 
 //주문 세부사항 등록
 exports.postOrderDetail = async function (orderId, orderDetail) {

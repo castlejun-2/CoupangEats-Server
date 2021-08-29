@@ -14,7 +14,8 @@ async function postOrderInfo(connection, userId, storeId, cardId) {
     const [getOrderIdx] = await connection.query(getOrderQuery, [userId, storeId]);
 
     return getOrderIdx;
-}
+};
+
 // 카트에 존재하는 메뉴의 매장과 현재 주문하려는 매장이 일치한지 여부 조회
 async function selectSameStoreInCartInfo(connection, userId, storeId) {
     const getSameStoreQuery = `
@@ -22,7 +23,7 @@ async function selectSameStoreInCartInfo(connection, userId, storeId) {
       `;
     const [sameStoreRow] = await connection.query(getSameStoreQuery, [userId, storeId]);
     return sameStoreRow;
-}
+};
 
 // 카트에 존재하는 동일 매장의 OrderIdx 가져오기
 async function selectSameOrderInCartInfo(connection, userId, storeId) {
@@ -33,7 +34,7 @@ async function selectSameOrderInCartInfo(connection, userId, storeId) {
       `;
     const [sameOrderRow] = await connection.query(getSameOrderQuery, [userId, storeId]);
     return sameOrderRow;
-}
+};
 
 // 주문 세부사항 토탈 정보 담기 
 async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
@@ -51,9 +52,9 @@ async function postOrderTotalInfo(connection, orderId, menuId, menuCount) {
     const [getOrderIdx] = await connection.query(getOrderQuery, orderId);
 
     return getOrderIdx;
-}
+};
 
-  // 주문정보 카트에 담기
+// 주문정보 카트에 담기
 async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
     const postOrderInCartQuery = `
           INSERT INTO OrderDetailInfo(orderTotalId,menuCategoryId,menuDetailId)
@@ -61,7 +62,7 @@ async function postUserOrderInfoInCart(connection, postOrderDetailParams) {
       `;
     const [postInCartRow] = await connection.query(postOrderInCartQuery, postOrderDetailParams);
     return postInCartRow;
-}
+};
 
 // 카트 정보 미리보기 조회
 async function selectCartInfo(connection, userId) {
@@ -85,7 +86,7 @@ async function selectCartInfo(connection, userId) {
     `;
     const [getCartRow] = await connection.query(getCartInfoQuery, [userId, userId]);
     return getCartRow;
-}
+};
 
 // 카트 비우기
 async function deleteUserInCart(connection, userId) {
@@ -96,7 +97,7 @@ async function deleteUserInCart(connection, userId) {
       `;
     const [deleteCartRow] = await connection.query(deleteCartQuery, userId);
     return deleteCartRow;
-}
+};
 
 // 카트 정보 상세 조회(메뉴)
 async function selectCartDetailByMenuInfo(connection, userId) {
@@ -119,7 +120,7 @@ async function selectCartDetailByMenuInfo(connection, userId) {
     `;
     const [getCartRow] = await connection.query(getCartDetailInfoQuery, [userId, userId]);
     return getCartRow;
-}
+};
 
 // 카트 정보 상세 조회(사용 가능 쿠폰)
 async function selectCartDetailByCouponInfo(connection, userId) {
@@ -145,7 +146,7 @@ async function selectUserIdSameOrderIdInfo(connection, userId, orderId) {
     `;
     const [getSameRow] = await connection.query(getIsSameQuery, [userId, orderId, userId, orderId]);
     return getSameRow;
-}
+};
 
 // 주문내역 총 비용 삽입
 async function posttotalCostInOrderInfo(connection, orderId, deliveryTip, sumPrice) {
@@ -156,7 +157,7 @@ async function posttotalCostInOrderInfo(connection, orderId, deliveryTip, sumPri
     `;
     const [postSumCostRow] = await connection.query(postSumCostQuery, [sumPrice, deliveryTip, orderId]);
     return postSumCostRow;
-}
+};
 
 // 과거 주문내역 조회
 async function selectOrderHistoryInfo(connection, userId) {
@@ -181,7 +182,7 @@ ORDER BY oi.createdAt DESC;
     `;
     const [getOrderHistoryRow] = await connection.query(getOrderHistoryQuery, userId);
     return getOrderHistoryRow;
-}
+};
 
 // 결제하기
 async function postUserOrder(connection, userId, storeMessage, deliveryMessage) {
@@ -192,7 +193,7 @@ async function postUserOrder(connection, userId, storeMessage, deliveryMessage) 
       `;
     const [postOrderRow] = await connection.query(postOrderQuery, [storeMessage, deliveryMessage, userId]);
     return postOrderRow;
-}
+};
 
 // 카트 존재 여부 확인
 async function selectCartExistInfo(connection, userId) {
@@ -203,7 +204,8 @@ async function selectCartExistInfo(connection, userId) {
       `;
     const [getCartInfoRow] = await connection.query(selectCartQuery, userId);
     return getCartInfoRow;
-}
+};
+
   module.exports = {
     postOrderInfo,
     postOrderTotalInfo,

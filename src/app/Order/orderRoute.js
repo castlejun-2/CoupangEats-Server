@@ -11,7 +11,7 @@ module.exports = function(app){
     // 4-1. 카트에 담기 API (클라이언트 요청버전)
     app.post('/app/orders/in-cart', jwtMiddleware, order.registerCart);
 
-    // 5. 카트에 담긴 정보 미리보기 조회 API
+    // 5. 카트에 담긴 정보 미리보기 팜업 API
     app.get('/app/orders/:userId/preview-cart', jwtMiddleware, order.getCart);
 
     // 6. 카트 비우기 API
