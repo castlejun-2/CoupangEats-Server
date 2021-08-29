@@ -35,28 +35,31 @@ exports.retrieveStoreByCheetahList = async function (userId) {
 
 //메뉴 정보 API
 exports.getMenuTopInfo = async function (menuId) {
-        const connection = await pool.getConnection(async (conn) => conn);
 
+        const connection = await pool.getConnection(async (conn) => conn);
         const menuInfoList = await storeDao.selectMenuInfo(connection, menuId);
-        connection.release();    
+        connection.release(); 
+           
         return menuInfoList;
 };
 
 //메뉴 옵션 카테고리 조회 API
 exports.getUserMenuOptionCategoryInfo = async function (menuId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const menuCategoryInfoList = await storeDao.selectMenuCategoryInfo(connection, menuId);
     connection.release();    
+
     return menuCategoryInfoList;
 };
 
 //메뉴 세부 옵션 조회 API
 exports.getUserDetailMenuInRecipt = async function (menuCategoryId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const menuDetailOptionInfoList = await storeDao.selectMenuDetailOptionInfo(connection, menuCategoryId);
-    connection.release();    
+    connection.release();   
+
     return menuDetailOptionInfoList;
 };
 
@@ -139,83 +142,92 @@ exports.retrieveMainScreenListForAll = async function (type, latitude, longitude
 
 //쿠팡이츠 카테고리 조회
 exports.retrieveStoreCategoryList = async function () {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const storeCategoryListResult = await storeDao.selectStoreCategory(connection);
     connection.release();    
+
     return storeCategoryListResult;
     
 };
 
 //매장 메인화면 조회
 exports.retrieveMainList = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreListResult = await storeDao.selectMainScreen(connection, storeId);
     connection.release();    
+
     return mainStoreListResult;
 };
 
 //매장 메인화면 리뷰 미리보기 조회
 exports.retrieveReviewList = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreReviewListResult = await storeDao.selectMainReview(connection, storeId);
     connection.release();    
+
     return mainStoreReviewListResult;
 };
 
 //매장 메인화면 메뉴카테고리 조회
 exports.retrieveMenuCategoryList = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreCategoryListResult = await storeDao.selectMainMenuCategory(connection, storeId);
     connection.release();    
+
     return mainStoreCategoryListResult;
 };
 
 //매장 메인화면 카테고리별 메뉴 조회
 exports.getMenu = async function (categoryId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreDetailMenuListResult = await storeDao.selectDetailMenu(connection, categoryId);
     connection.release();    
+
     return mainStoreDetailMenuListResult;
 };
 
 //메뉴별 카테고리 조회
 exports.retrieveMenuList = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreCategoryListResult = await storeDao.selectMainCategory(connection, storeId);
     connection.release();    
+
     return mainStoreCategoryListResult;
 };
 
 //메뉴 카테고리별 상세 옵션 조회(추가금액 등)
 exports.getDetailMenu = async function (categoryId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const mainStoreDetailMenuListResult = await storeDao.selectCategoryDetailMenu(connection, categoryId);
     connection.release();    
+
     return mainStoreDetailMenuListResult;
 };
 
 //매장정보 상세 조회
 exports.retrieveStoreDetail = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const storeDetailResult = await storeDao.selectStoreDetailInfo(connection, storeId);
     connection.release();    
+
     return storeDetailResult;
 };
 
 //리뷰 상단 요약 조회
 exports.retrieveReviewTopLayer = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const reviewTopLayerResult = await storeDao.selectReviewTopLayerInfo(connection, storeId);
     connection.release();    
+
     return reviewTopLayerResult;
 };
 
@@ -285,64 +297,71 @@ exports.retrieveStoreReview = async function (storeId, filter) {
 
 //리뷰 도움여부를 증가시켰는지 확인
 exports.checkAlreadyHelpCheck = async function (userId, reviewId) {
+
     const connection = await pool.getConnection(async (conn) => conn);
     const checkHelpReviewResult = await storeDao.selectCheckHelpReviewInfo(connection, userId, reviewId);
-
     connection.release();    
+
     return checkHelpReviewResult;
 };
 
 //리뷰 도움안돼요 여부를 증가시켰는지 확인
 exports.checkAlreadyNotHelpCheck = async function (userId, reviewId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const checkNotHelpReviewResult = await storeDao.selectCheckNotHelpReviewInfo(connection, userId, reviewId);
     connection.release();    
+
     return checkNotHelpReviewResult;
 };
 
 //이미 작성한 리뷰인지 확인
 exports.reviewExistCheck = async function (userId, orderId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const reviewExistResult = await storeDao.selectReviewExist(connection, userId, orderId);
-    connection.release();    
+    connection.release();  
+
     return reviewExistResult;
     
 };
 
 //매장 배달팁 조회
 exports.retrievestoreDeliveryTip = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const deliveryTipResult = await storeDao.selectDeliveryTipInfo(connection, storeId);
     connection.release();    
+
     return deliveryTipResult;
 };
 
 //매장 오픈여부 조회
 exports.retrieveStoreActive = async function (storeId) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const storeActiveResult = await storeDao.selectStoreActiveInfo(connection, storeId);
     connection.release();    
+
     return storeActiveResult;
 };
 
 //주문 금액별 배달팁 조회
 exports.getDeliveryTip = async function (storeId, sumprice) {
-    const connection = await pool.getConnection(async (conn) => conn);
 
+    const connection = await pool.getConnection(async (conn) => conn);
     const storeDeliveryTipResult = await storeDao.selectStoreDeliveryTipInfo(connection, storeId, sumprice);
     connection.release();    
+
     return storeDeliveryTipResult;
 };
 
 //치타배달 미리보기 팜업 조회
 exports.retrieveStoreByCheetahPreviewList = async function (userId) {
+    
     const connection = await pool.getConnection(async (conn) => conn);
-
     const storeDeliveryTipResult = await storeDao.selectStoreCheetahPreviewInfo(connection, userId);
     connection.release();    
+    
     return storeDeliveryTipResult;
 };

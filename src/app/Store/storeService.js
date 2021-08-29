@@ -18,6 +18,7 @@ exports.postReviewIsHelp = async function (userId, reviewId) {
     try {
         connection.beginTransaction();
         const alreadyHelpCheck = await storeProvider.checkAlreadyHelpCheck(userId, reviewId);
+
         if(alreadyHelpCheck[0]){
             if(alreadyHelpCheck[0].status === 'ACTIVE'){
                 const updateIsHelpReview = await storeDao.changeUserIsHelpReview(connection, userId, reviewId);
@@ -82,6 +83,7 @@ exports.postUserReview = async function (userId, orderId, starValue, review) {
         await connection.beginTransaction(); //transaction 시작
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
         const existReviewCheck = await storeProvider.reviewExistCheck(userId, orderId);
+
         if(userOrderCheck[0].exist === 0){
             connection.commit();
             return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);
@@ -109,6 +111,7 @@ exports.updateUserReview = async function (userId, orderId, reviewId, starValue,
     try {
         connection.beginTransaction();
         const userOrderCheck = await orderProvider.userOrderIdEqualCheck(userId, orderId);
+        
         if(userOrderCheck[0].exist === 0){ //validation check
             connection.commit();
             return errResponse(baseResponse.ORDERID_AND_USERID_DO_NOT_MATCH);

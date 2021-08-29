@@ -33,7 +33,7 @@ async function selectStoreByKeyword(connection, userId, keyword) {
 `;
     const [listRows] = await connection.query(selectStoreByKeywordQuery, [userId, keyword, keyword]);
     return listRows;
-}
+};
 
 //카테고리별 가게 조회
 async function selectStoreByCategory(connection, userId, category) {
@@ -70,7 +70,7 @@ async function selectStoreByCategory(connection, userId, category) {
   `;
   const [listRows] = await connection.query(selectStoreByCategoryQuery, [userId, category]);
   return listRows;
-}
+};
 
 //치타배달 매장 조회
 async function selectStoreByCheetahList(connection, userId) {
@@ -102,7 +102,7 @@ async function selectStoreByCheetahList(connection, userId) {
   `;
   const [cheetahRows] = await connection.query(selectStoreByCheetahQuery, userId);
   return cheetahRows;
-}
+};
 
 //메뉴 정보 조회
 async function selectMenuInfo(connection, menuId) {
@@ -116,7 +116,7 @@ async function selectMenuInfo(connection, menuId) {
   `;
   const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuId);
   return menuInfoRows;
-}
+};
 
 //메뉴 카테고리 조회
 async function selectMenuCategoryInfo(connection, menuId) {
@@ -129,7 +129,7 @@ async function selectMenuCategoryInfo(connection, menuId) {
   `;
   const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuId);
   return menuInfoRows;
-}
+};
 
 //메뉴 세부 옵션 조회
 async function selectMenuDetailOptionInfo(connection, menuCategoryId) {
@@ -142,7 +142,7 @@ WHERE MenuCategoryIdx = ?;
   `;
   const [menuInfoRows] = await connection.query(selectMenuInfoQuery, menuCategoryId);
   return menuInfoRows;
-}
+};
 
 // 메인화면 새로 입점한 가게 리스트 조회 API
 async function selectMainScreenByNew(connection, userId) {
@@ -171,7 +171,7 @@ async function selectMainScreenByNew(connection, userId) {
   `;
   const [mainRows] = await connection.query(selectMainByNewListQuery, userId);
   return mainRows;
-}
+};
 
 // 메인화면 인기 매장 리스트 조회 API
 async function selectMainScreenByPopular(connection, userId) {
@@ -200,7 +200,7 @@ async function selectMainScreenByPopular(connection, userId) {
   `;
   const [mainRows] = await connection.query(selectMainByPopularListQuery, userId);
   return mainRows;
-}
+};
 
 // 메인화면 그 외의 매장 리스트 조회 API
 async function selectMainScreenByOther(connection, userId) {
@@ -236,7 +236,7 @@ async function selectMainScreenByOther(connection, userId) {
   `;
   const [mainRows] = await connection.query(selectMainByOtherListQuery, userId);
   return mainRows;
-}
+};
 
 // 메인화면 새로 입점한 가게 리스트 조회 API (비회원용 + 위도 및 경도)
 async function selectMainScreenByNewForAllWithLocate(connection, latitude, longitude) {
@@ -263,7 +263,7 @@ async function selectMainScreenByNewForAllWithLocate(connection, latitude, longi
   `;
   const [mainRows] = await connection.query(selectMainByNewListQuery, [latitude, longitude, latitude]);
   return mainRows;
-}
+};
 
 // 메인화면 인기 매장 리스트 조회 API (비회원용 + 위도 및 경도)
 async function selectMainScreenByPopularForAllWithLocate(connection, latitude, longitude) {
@@ -290,7 +290,7 @@ async function selectMainScreenByPopularForAllWithLocate(connection, latitude, l
   `;
   const [mainRows] = await connection.query(selectMainByPopularListQuery, [latitude, longitude, latitude]);
   return mainRows;
-}
+};
 
 // 메인화면 그 외의 매장 리스트 조회 API (비회원용 + 위도 및 경도)
 async function selectMainScreenByOtherForAllWithLocate(connection, latitude, longitude) {
@@ -324,7 +324,7 @@ async function selectMainScreenByOtherForAllWithLocate(connection, latitude, lon
   `;
   const [mainRows] = await connection.query(selectMainByOtherListQuery, [latitude, longitude, latitude]);
   return mainRows;
-}
+};
 
 // 메인화면 새로 입점한 가게 리스트 조회 API (비회원용, 위치X)
 async function selectMainScreenByNewForAll(connection) {
@@ -350,7 +350,7 @@ async function selectMainScreenByNewForAll(connection) {
   `;
   const [mainRows] = await connection.query(selectMainByNewListQuery);
   return mainRows;
-}
+};
 
 // 메인화면 인기 매장 리스트 조회 API (비회원용, 위치X)
 async function selectMainScreenByPopularForAll(connection) {
@@ -376,7 +376,7 @@ async function selectMainScreenByPopularForAll(connection) {
   `;
   const [mainRows] = await connection.query(selectMainByPopularListQuery);
   return mainRows;
-}
+};
 
 // 메인화면 그 외의 매장 리스트 조회 API (비회원용, 위치X)
 async function selectMainScreenByOtherForAll(connection) {
@@ -409,7 +409,7 @@ async function selectMainScreenByOtherForAll(connection) {
   `;
   const [mainRows] = await connection.query(selectMainByOtherListQuery);
   return mainRows;
-}
+};
 
 // 메인화면 카테고리 조회 API
 async function selectStoreCategory(connection) {
@@ -421,7 +421,7 @@ async function selectStoreCategory(connection) {
   `;
   const [categoryRows] = await connection.query(selectStoreCategoryListQuery);
   return categoryRows;
-}
+};
 
 // 매장 메인화면 조회 API
 async function selectMainScreen(connection, storeId) {
@@ -449,7 +449,7 @@ async function selectMainScreen(connection, storeId) {
   `;
   const [mainRows] = await connection.query(selectMainListQuery, storeId);
   return mainRows;
-}
+};
 
 // 매장 리뷰 리스트 조회
 async function selectMainReview(connection, storeId) {
@@ -462,7 +462,7 @@ async function selectMainReview(connection, storeId) {
   `;
   const [reviewRows] = await connection.query(selectStoreReviewListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 매장 메뉴 분류 리스트 조회
 async function selectMainMenuCategory(connection, storeId) {
@@ -475,7 +475,7 @@ async function selectMainMenuCategory(connection, storeId) {
   `;
   const [categoryRows] = await connection.query(selectStoreCategoryListQuery, storeId);
   return categoryRows;
-}
+};
 
 // 매장 메뉴 카테고리별 메뉴 조회
 async function selectDetailMenu(connection, categoryId) {
@@ -490,7 +490,7 @@ async function selectDetailMenu(connection, categoryId) {
   `;
   const [detailRows] = await connection.query(selectStoreCategoryListQuery, categoryId);
   return detailRows;
-}
+};
 
 // 매장 카테고리 리스트 조회
 async function selectMainCategory(connection, storeId) {
@@ -503,7 +503,7 @@ async function selectMainCategory(connection, storeId) {
   `;
   const [categoryRows] = await connection.query(selectStoreCategoryListQuery, storeId);
   return categoryRows;
-}
+};
 
 // 카테고리별 옵션 조회
 async function selectCategoryDetailMenu(connection, categoryId) {
@@ -515,7 +515,7 @@ async function selectCategoryDetailMenu(connection, categoryId) {
   `;
   const [detailRows] = await connection.query(selectStoreCategoryListQuery, categoryId);
   return detailRows;
-}
+};
 
 // 매장 세부정보 조회 API
 async function selectStoreDetailInfo(connection, storeId) {
@@ -537,7 +537,7 @@ WHERE storeIdx = ?;
   `;
   const [detailRows] = await connection.query(selectStoreDetailListQuery, storeId);
   return detailRows;
-}
+};
 
 // 매장 리뷰 상단리스트(이름,평균평점,평점 갯수) 조회
 async function selectReviewTopLayerInfo(connection, storeId) {
@@ -553,7 +553,7 @@ async function selectReviewTopLayerInfo(connection, storeId) {
   `;
   const [reviewInfoRows] = await connection.query(selectStoreReviewTopListQuery, storeId);
   return reviewInfoRows;
-}
+};
 
 // 포토리뷰 도움 많은 순 조회 API
 async function selectPhotoReviewByHelp(connection, storeId) {
@@ -581,7 +581,7 @@ ORDER BY isHelp DESC;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByHelpListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 포토리뷰 별점 오름차순 조회 API
 async function selectPhotoReviewByAsce(connection, storeId) {
@@ -609,7 +609,7 @@ ORDER BY starRating;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByAsceListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 포토리뷰 별점 내림차순 조회 API
 async function selectPhotoReviewBydesc(connection, storeId) {
@@ -637,7 +637,7 @@ ORDER BY starRating DESC;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByDescListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 포토리뷰 최신등록순 조회 API
 async function selectPhotoReviewByRecent(connection, storeId) {
@@ -665,7 +665,7 @@ ORDER BY createDay;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByRecentListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 매장리뷰 도움 많은 순 조회 API
 async function selectReviewByHelp(connection, storeId) {
@@ -693,7 +693,7 @@ ORDER BY isHelp DESC;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByHelpListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 매장리뷰 별점 오름차순 조회 API
 async function selectReviewByAsce(connection, storeId) {
@@ -721,7 +721,7 @@ ORDER BY starRating;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByAsceListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 매장리뷰 별점 내림차순 조회 API
 async function selectReviewBydesc(connection, storeId) {
@@ -749,7 +749,7 @@ ORDER BY starRating DESC;
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByDescListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 매장리뷰 최신등록순 조회 API
 async function selectReviewByRecent(connection, storeId) {
@@ -777,7 +777,7 @@ ORDER BY createDay
   `;
   const [reviewRows] = await connection.query(selectStoreReviewByRecentListQuery, storeId);
   return reviewRows;
-}
+};
 
 // 리뷰 도움돼요 확인 여부
 async function selectCheckHelpReviewInfo(connection, userId, reviewId) {
@@ -788,7 +788,7 @@ async function selectCheckHelpReviewInfo(connection, userId, reviewId) {
   `;
   const [checkReviewRows] = await connection.query(selectCheckHelpReviewQuery, [userId, reviewId]);
   return checkReviewRows;
-}
+};
 
 // 리뷰 도움안돼요 확인 여부
 async function selectCheckNotHelpReviewInfo(connection, userId, reviewId) {
@@ -799,7 +799,7 @@ async function selectCheckNotHelpReviewInfo(connection, userId, reviewId) {
   `;
   const [checkReviewRows] = await connection.query(selectCheckHelpReviewQuery, [userId, reviewId]);
   return checkReviewRows;
-}
+};
 
 // 리뷰 도움여부 증가를 한번 더 누를시 감소
 async function changeReviewIsHelp(connection, reviewId) {
@@ -810,7 +810,7 @@ async function changeReviewIsHelp(connection, reviewId) {
   `;
   const [changeReviewRows] = await connection.query(changeHelpReviewQuery, reviewId);
   return changeReviewRows;
-}
+};
 
 // 리뷰 도움안돼요여부 증가를 한번 더 누를시 감소
 async function changeReviewIsNotHelp(connection, reviewId) {
@@ -821,7 +821,7 @@ async function changeReviewIsNotHelp(connection, reviewId) {
   `;
   const [changeReviewRows] = await connection.query(changeNotHelpReviewQuery, reviewId);
   return changeReviewRows;
-}
+};
 
 // 리뷰 도움여부 상태 변경
 async function changeUserIsHelpReview(connection, userId, reviewId) {
@@ -832,7 +832,7 @@ async function changeUserIsHelpReview(connection, userId, reviewId) {
   `;
   const [changeReviewRows] = await connection.query(changeHelpReviewQuery, [userId, reviewId]);
   return changeReviewRows;
-}
+};
 
 // 리뷰 도움안돼요여부 상태 변경
 async function changeUserIsNotHelpReview(connection, userId, reviewId) {
@@ -843,7 +843,7 @@ async function changeUserIsNotHelpReview(connection, userId, reviewId) {
   `;
   const [changeReviewRows] = await connection.query(changeNotHelpReviewQuery, [userId, reviewId]);
   return changeReviewRows;
-}
+};
 
 // 리뷰 도움여부 증가를 시켰음을 확인
 async function insertUserIsHelpReview(connection, userId, reviewId) {
@@ -853,7 +853,7 @@ async function insertUserIsHelpReview(connection, userId, reviewId) {
   `;
   const [insertReviewRows] = await connection.query(insertHelpReviewQuery, [userId, reviewId]);
   return insertReviewRows;
-}
+};
 
 // 리뷰 도움안돼요여부 증가를 시켰음을 확인
 async function insertUserIsNotHelpReview(connection, userId, reviewId) {
@@ -863,7 +863,7 @@ async function insertUserIsNotHelpReview(connection, userId, reviewId) {
   `;
   const [insertReviewRows] = await connection.query(insertNotHelpReviewQuery, [userId, reviewId]);
   return insertReviewRows;
-}
+};
 
 // 리뷰 도움여부 증가를 시켰음을 확인(수정)
 async function updateUserIsHelpReview(connection, userId, reviewId) {
@@ -874,7 +874,7 @@ async function updateUserIsHelpReview(connection, userId, reviewId) {
   `;
   const [updateReviewRows] = await connection.query(updateHelpReviewQuery, [userId, reviewId]);
   return updateReviewRows;
-}
+};
 
 // 리뷰 도움안돼요여부 증가를 시켰음을 확인(수정)
 async function updateUserIsNotHelpReview(connection, userId, reviewId) {
@@ -885,7 +885,7 @@ async function updateUserIsNotHelpReview(connection, userId, reviewId) {
   `;
   const [updateReviewRows] = await connection.query(updateNotHelpReviewQuery, [userId, reviewId]);
   return updateReviewRows;
-}
+};
 
 // 리뷰 도움여부 증가
 async function updateReviewIsHelp(connection, reviewId) {
@@ -896,7 +896,7 @@ async function updateReviewIsHelp(connection, reviewId) {
   `;
   const [updateReviewRows] = await connection.query(updateHelpReviewQuery, reviewId);
   return updateReviewRows;
-}
+};
 
 // 리뷰 도움안돼요여부 증가
 async function updateReviewIsNotHelp(connection, reviewId) {
@@ -907,7 +907,7 @@ async function updateReviewIsNotHelp(connection, reviewId) {
   `;
   const [updateReviewRows] = await connection.query(updateNotHelpReviewQuery, reviewId);
   return updateReviewRows;
-}
+};
 
 // 이미 작성한 리뷰인지 확인
 async function selectReviewExist(connection, userId, orderId) {
@@ -916,7 +916,7 @@ async function selectReviewExist(connection, userId, orderId) {
   `;
   const [reviewExistRows] = await connection.query(checkReviewExistQuery, [userId, orderId]);
   return reviewExistRows;
-}
+};
 
 // 리뷰 작성
 async function insertReviewInfo(connection, userId, orderId, storeId, starValue, review) {
@@ -932,7 +932,7 @@ async function insertReviewInfo(connection, userId, orderId, storeId, starValue,
   const [insertReviewRows] = await connection.query(insertReviewQuery, [orderId, userId, storeId, starValue, review]);
   const [selectReviewIdRows] = await connection.query(selectReviewId, [orderId, userId]);
   return selectReviewIdRows;
-}
+};
 
 // 리뷰 이미지 작성
 async function insertReviewImage(connection,  reviewId, reviewImageUrl) {
@@ -942,7 +942,7 @@ async function insertReviewImage(connection,  reviewId, reviewImageUrl) {
   `;
   const [insertImageRows] = await connection.query(insertReviewQuery, [ reviewId, reviewImageUrl]);
   return insertImageRows;
-}
+};
 
 // 리뷰 이미지 삭제
 async function deleteReviewImage(connection, reviewId, reviewImageUrlIdx) {
@@ -953,7 +953,7 @@ async function deleteReviewImage(connection, reviewId, reviewImageUrlIdx) {
   `;
   const [deleteImageRows] = await connection.query(deleteReviewQuery, [reviewId, reviewImageUrlIdx]);
   return deleteImageRows;
-}
+};
 
 // 리뷰 수정(텍스트만)
 async function updateOnlyTextReviewInfo(connection, reviewId, review) {
@@ -964,7 +964,7 @@ async function updateOnlyTextReviewInfo(connection, reviewId, review) {
   `;
   const [updateReviewRows] = await connection.query(updateReviewQuery, [review, reviewId]);
   return updateReviewRows;
-}
+};
 
 // 리뷰 수정(평점만)
 async function updateOnlyStarValueReviewInfo(connection, reviewId, starValue) {
@@ -975,7 +975,7 @@ async function updateOnlyStarValueReviewInfo(connection, reviewId, starValue) {
   `;
   const [updateReviewRows] = await connection.query(updateReviewQuery, [starValue, reviewId]);
   return updateReviewRows;
-}
+};
 
 // 리뷰 수정
 async function updateReviewInfo(connection, reviewId, starValue, review) {
@@ -986,7 +986,7 @@ async function updateReviewInfo(connection, reviewId, starValue, review) {
   `;
   const [updateReviewRows] = await connection.query(updateReviewQuery, [starValue, review, reviewId]);
   return updateReviewRows;
-}
+};
 
 
 // 매장 배달팁 상세 조회
@@ -999,7 +999,7 @@ WHERE si.storeIdx = ? and dti.status = 'ACTIVE';
   `;
   const [deliveryTipRows] = await connection.query(selectStoreDeliveryTipQuery, storeId);
   return deliveryTipRows;
-}
+};
 
 // 가게 오픈 여부
 async function selectStoreActiveInfo(connection, storeId) {
@@ -1008,7 +1008,7 @@ async function selectStoreActiveInfo(connection, storeId) {
   `;
   const [storeActiveRow] = await connection.query(storeActiveQuery, storeId);
   return storeActiveRow;
-}
+};
 
 // 가게의 배달 팁 조회
 async function selectStoreDeliveryTipInfo(connection, storeId, sumprice) {
@@ -1019,7 +1019,7 @@ async function selectStoreDeliveryTipInfo(connection, storeId, sumprice) {
   `;
   const [storeActiveRow] = await connection.query(storeActiveQuery, [sumprice, storeId]);
   return storeActiveRow;
-}
+};
 
 // 주변 치타배달 매장 미리보기 팜업 조회
 async function selectStoreCheetahPreviewInfo(connection, userId) {
@@ -1033,8 +1033,7 @@ async function selectStoreCheetahPreviewInfo(connection, userId) {
   `;
   const [nearStoreRow] = await connection.query(storeCheetahPreviewQuery, userId);
   return nearStoreRow;
-}
-
+};
 
 module.exports = {
   selectStoreByKeyword,

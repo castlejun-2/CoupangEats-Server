@@ -33,7 +33,7 @@ exports.getStoresByKeyword = async function (req, res) {
         const storeList = await storeProvider.retrieveStoreByKeywordList(userId, keyword);
         return res.send(response(baseResponse.SUCCESS, storeList)); 
     }  
-}
+};
 
 /**
  * API No. 11
@@ -61,7 +61,7 @@ exports.getStoresByCategory = async function (req, res) {
         const storeList = await storeProvider.retrieveStoreByCategoryList(userId, category);
         return res.send(response(baseResponse.SUCCESS, storeList));   
     } 
-}
+};
 
 /**
  * API No. 12
@@ -99,7 +99,7 @@ exports.getStoresByCategory = async function (req, res) {
 
         return res.send(response(baseResponse.SUCCESS, result));         
     } 
-}
+};
 
 /**
  * API No. 13
@@ -171,7 +171,7 @@ exports.getStoresByCategory = async function (req, res) {
         }
         return res.send(response(baseResponse.SUCCESS, result));      
     } 
-}
+};
 
 /**
  * API No. 15
@@ -197,7 +197,7 @@ exports.getStoresByCategory = async function (req, res) {
         const storeDetailList = await storeProvider.retrieveStoreDetail(storeId);
         return res.send(response(baseResponse.SUCCESS, storeDetailList));      
     } 
-}
+};
 
 /**
  * API No. 16
@@ -236,7 +236,7 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(response(baseResponse.SUCCESS, result));   
         }            
     } 
-}
+};
 
 /**
  * API No. 17
@@ -261,7 +261,7 @@ exports.getStoresByCategory = async function (req, res) {
         const reviewHelpResult = await storeService.postReviewIsHelp(userId, reviewId); 
         return res.send(reviewHelpResult);   
     }             
-}
+};
 
 /**
  * API No. 18
@@ -287,7 +287,7 @@ exports.getStoresByCategory = async function (req, res) {
         const reviewHelpResult = await storeService.postReviewIsNotHelp(userId, reviewId); 
         return res.send(reviewHelpResult);   
     }             
-}
+};
 
 /**
  * API No. 19
@@ -324,7 +324,7 @@ exports.getStoresByCategory = async function (req, res) {
             return res.send(baseResponse.SUCCESS);   
         }
     }             
-}
+};
 
 /**
  * API No. 20
@@ -361,7 +361,7 @@ exports.getStoresByCategory = async function (req, res) {
         return res.send(updateReviewResult);   
 
     }             
-}
+};
 
 /**
 * API No. 21
@@ -383,7 +383,7 @@ exports.getStoresByCheetah = async function (req, res) {
          const storeList = await storeProvider.retrieveStoreByCheetahList(userId);
          return res.send(response(baseResponse.SUCCESS, storeList)); 
      }  
- }
+};
 
 /**
 * API No. 22
@@ -405,7 +405,7 @@ exports.getStoresByPreviewCheetah = async function (req, res) {
         const cheetahList = await storeProvider.retrieveStoreByCheetahPreviewList(userId);
         return res.send(response(baseResponse.SUCCESS, cheetahList)); 
     }  
-}
+};
 
 /**
 * API No. 23
@@ -431,7 +431,7 @@ exports.getDelieveryTip = async function (req, res) {
        const storeDeliveryTipResult = await storeProvider.retrievestoreDeliveryTip(storeId);
        return res.send(response(baseResponse.SUCCESS, storeDeliveryTipResult));         
    } 
-}
+};
 
 /**
  * API No. 24
@@ -453,7 +453,7 @@ exports.getDelieveryTip = async function (req, res) {
         const mainListByNew = await storeProvider.retrieveMainScreenList(userId, 'new');
         return res.send(response(baseResponse.SUCCESS, mainListByNew));         
     } 
-}
+};
 
 /**
  * API No. 25
@@ -475,7 +475,7 @@ exports.getDelieveryTip = async function (req, res) {
         const mainListByPopular = await storeProvider.retrieveMainScreenList(userId, 'popular');
         return res.send(response(baseResponse.SUCCESS, mainListByPopular));         
     } 
-}
+};
 
 /**
  * API No. 26
@@ -497,7 +497,7 @@ exports.getDelieveryTip = async function (req, res) {
         const mainListByPick = await storeProvider.retrieveMainScreenList(userId, 0);
         return res.send(response(baseResponse.SUCCESS, mainListByPick));         
     } 
-}
+};
 
 /**
  * API No. 27
@@ -511,7 +511,7 @@ exports.getDelieveryTip = async function (req, res) {
 
     const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('new', latitude, longitude);
     return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
-}
+};
 
 /**
  * API No. 28
@@ -525,7 +525,7 @@ exports.getDelieveryTip = async function (req, res) {
 
     const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('popular', latitude, longitude);
     return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
-}
+};
 
 /**
  * API No. 29
@@ -539,4 +539,4 @@ exports.getDelieveryTip = async function (req, res) {
 
     const mainListByNewWithLocate = await storeProvider.retrieveMainScreenListForAll('other', latitude, longitude);
     return res.send(response(baseResponse.SUCCESS, mainListByNewWithLocate));
-}
+};
