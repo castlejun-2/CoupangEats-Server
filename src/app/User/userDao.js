@@ -449,8 +449,8 @@ SELECT si.storeName as 'storeName',
        oi.deliveryTip as 'deliveryTip',
        pi.payment as 'paymentInfo'
 FROM StoreInfo si join OrderInfo oi on si.storeIdx=oi.storeId join
-	(Select ci.cardIdx as 'cid', concat(bankName,' ',(left(replace(ci.cardNumber,'-',''),8))) as 'payment'
-	 From CardInfo ci join BankInfo bi on ci.bankId=bi.bankIdx join OrderInfo oi on oi.cardId=ci.cardIdx
+	  (Select ci.cardIdx as 'cid', concat(bankName,' ',(left(replace(ci.cardNumber,'-',''),8))) as 'payment'
+	   From CardInfo ci join BankInfo bi on ci.bankId=bi.bankIdx join OrderInfo oi on oi.cardId=ci.cardIdx
      Where oi.orderIdx=?) pi on pi.cid=oi.cardId														     
 WHERE oi.userId=? and oi.orderIdx=?;
     `;
