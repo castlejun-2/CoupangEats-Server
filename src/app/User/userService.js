@@ -11,8 +11,6 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const {connect} = require("http2");
 
-// Service: Create, Update, Delete 비즈니스 로직 처리
-
 exports.createUser = async function (email, password, username, phonenumber) {
     try {
         // 이메일 중복 확인
@@ -212,5 +210,5 @@ exports.deleteCard = async function (userId, cardId) {
         logger.error(`App - Delete Card Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);   
     }
-}
+};
 

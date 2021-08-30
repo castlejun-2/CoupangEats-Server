@@ -6,7 +6,7 @@ async function selectUser(connection) {
                 `;
   const [userRows] = await connection.query(selectUserListQuery);
   return userRows;
-}
+};
 
 // 이메일로 회원 조회
 async function selectUserEmail(connection, email) {
@@ -17,7 +17,7 @@ async function selectUserEmail(connection, email) {
                 `;
   const [emailRows] = await connection.query(selectUserEmailQuery, email);
   return emailRows;
-}
+};
 
 // userId 회원 조회
 async function selectUserId(connection, userId) {
@@ -28,7 +28,7 @@ async function selectUserId(connection, userId) {
                  `;
   const [userRow] = await connection.query(selectUserIdQuery, userId);
   return userRow;
-}
+};
 
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams) {
@@ -36,13 +36,9 @@ async function insertUserInfo(connection, insertUserInfoParams) {
         INSERT INTO UserInfo(email, password, userName, phoneNumber)
         VALUES (?, ?, ?, ?);
     `;
-  const insertUserInfoRow = await connection.query(
-    insertUserInfoQuery,
-    insertUserInfoParams
-  );
-
+  const insertUserInfoRow = await connection.query(insertUserInfoQuery,insertUserInfoParams);
   return insertUserInfoRow;
-}
+};
 
 // 유저 IDX 체크
 async function selectUserIdx(connection, userId) {
@@ -51,7 +47,7 @@ async function selectUserIdx(connection, userId) {
      `;
   const [userIdxRow] = await connection.query(userIdxQuery, userId);
   return userIdxRow;
-}
+};
 
 // 패스워드 체크
 async function selectUserPassword(connection, selectUserPasswordParams) {
@@ -65,7 +61,7 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
   );
 
   return selectUserPasswordRow;
-}
+};
 
 // 유저 계정 상태 체크 (jwt 생성 위해 id 값도 가져온다.)
 async function selectUserAccount(connection, email) {
@@ -80,7 +76,7 @@ async function selectUserAccount(connection, email) {
   const selectUserAccountRow = await connection.query(selectUserAccountQuery, email);
   const setUserLoginRow = await connection.query(setUserLoginQuery, email);
   return selectUserAccountRow[0];
-}
+};
 
 // 로그아웃
 async function userLogout(connection, userId) {
@@ -91,7 +87,7 @@ async function userLogout(connection, userId) {
   `;
   const logoutRow = await connection.query(logoutQuery, userId);
   return logoutRow[0];
-}
+};
 
 async function updateUserInfo(connection, id, userName) {
   const updateUserQuery = `
@@ -100,7 +96,7 @@ async function updateUserInfo(connection, id, userName) {
   WHERE userIdx = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [userName, id]);
   return updateUserRow[0];
-}
+};
 
 // 주소지 추가
 async function insertUserAddress(connection, insertUserAddressParams) {
@@ -114,7 +110,7 @@ async function insertUserAddress(connection, insertUserAddressParams) {
   );
 
   return insertUserAddressInfoRow;
-}
+};
 
 // 상세주소 변경
 async function updateUserAddress(connection, updateUserAddressParams) {
@@ -129,7 +125,7 @@ async function updateUserAddress(connection, updateUserAddressParams) {
   );
 
   return updateUserDetailAddressRow;
-}
+};
 
 // 기본 배송지 설정전 세팅
 async function setdefaultAddress(connection, userId){
@@ -140,7 +136,7 @@ async function setdefaultAddress(connection, userId){
   `;
   const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, userId);
   return SetdefaultAddressRows;
-}
+};
 
 // 기본 배송지 설정
 async function settingdefaultAddress(connection, updateUserAddressParams){
@@ -151,7 +147,7 @@ async function settingdefaultAddress(connection, updateUserAddressParams){
   `;
   const [SetdefaultAddressRows] = await connection.query(defaultAddressSettingQuery, updateUserAddressParams);
   return SetdefaultAddressRows;
-}
+};
 
 // 유저 북마크 체크
 async function selectUserBookMarkCheck(connection, userId, storeId) {
@@ -160,7 +156,7 @@ async function selectUserBookMarkCheck(connection, userId, storeId) {
      `;
   const [userIdxRow] = await connection.query(userBookMarkQuery, [userId, storeId]);
   return userIdxRow;
-}
+};
 
 // 사용자 매장 즐겨찾기 삭제
 async function deleteBookMark(connection, AddUserBookMarkParams) {
@@ -175,7 +171,7 @@ async function deleteBookMark(connection, AddUserBookMarkParams) {
   );
 
   return deleteBookMarkRow;
-}
+};
 
 // 사용자 매장 즐겨찾기 추가
 async function postBookMark(connection, AddUserBookMarkParams) {
@@ -189,7 +185,7 @@ async function postBookMark(connection, AddUserBookMarkParams) {
   );
 
   return postBookMarkRow;
-}
+};
 
 // 즐겨찾기 매장 갯수 조회
 async function selectUserBookMarkCount(connection, userId){
@@ -200,7 +196,7 @@ async function selectUserBookMarkCount(connection, userId){
   `;
   const [BookMarkCountRows] = await connection.query(defaultAddressSettingQuery, userId);
   return BookMarkCountRows;
-}
+};
 
 // 최근 추가한 순 즐겨찾기 조회
 async function selectUserBookMarkByRecent(connection, userId){
@@ -233,7 +229,7 @@ ORDER BY ubi.createdAt DESC;
   `;
   const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
-}
+};
 
 // 최근 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByOrder(connection, userId){
@@ -267,7 +263,7 @@ ORDER BY ooi.ca DESC;
   `;
   const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
-}
+};
 
 // 많이 주문한 순 즐겨찾기 조회
 async function selectUserBookMarkByMany(connection, userId){
@@ -301,7 +297,7 @@ ORDER BY ooi.cs DESC;
   `;
   const [getBookMarkRows] = await connection.query(getBookMarkQuery, userId);
   return getBookMarkRows;
-}
+};
 
 // 사용자가 등록한 쿠폰 조회 
 async function selectUserCoupon(connection, userId){
@@ -315,7 +311,7 @@ async function selectUserCoupon(connection, userId){
   `;
   const [getCouponRows] = await connection.query(getUserCouponQuery, userId);
   return getCouponRows;
-}
+};
 
 // 쿠폰아이디를 통한 사용자 쿠폰정보 조회 
 async function selectUserCouponById(connection, userId, couponId, sumprice){
@@ -328,7 +324,7 @@ async function selectUserCouponById(connection, userId, couponId, sumprice){
   `;
   const [getCouponRows] = await connection.query(getUserCouponQuery, [userId, couponId, sumprice]);
   return getCouponRows;
-}
+};
 
 // 유저 쿠폰 체크
 async function selectUserCouponCheck(connection, userId, couponId) {
@@ -337,7 +333,7 @@ async function selectUserCouponCheck(connection, userId, couponId) {
      `;
   const [CouponRow] = await connection.query(userCouponQuery, [userId, couponId]);
   return CouponRow;
-}
+};
 
 // 사용자 쿠폰 등록
 async function postCoupon(connection, AddUserCouponParams) {
@@ -345,13 +341,9 @@ async function postCoupon(connection, AddUserCouponParams) {
         INSERT INTO UserCouponInfo(userId, couponId)
         VALUES (?, ?);
     `;
-  const postBookCoupon = await connection.query(
-    postCouponQuery,
-    AddUserCouponParams
-  );
-
+  const postBookCoupon = await connection.query(postCouponQuery,AddUserCouponParams);
   return postBookCoupon;
-}
+};
 
 // 유저 기본 배송지 조회
 async function selectUserDefaultAddress(connection, userId) {
@@ -362,7 +354,7 @@ async function selectUserDefaultAddress(connection, userId) {
      `;
   const [defaultAddressRow] = await connection.query(userDefaultAddressQuery, userId);
   return defaultAddressRow;
-}
+};
 
 // 유저 이름 및 핸드폰번호 조회
 async function selectUserMyPage(connection, userId) {
@@ -373,7 +365,7 @@ async function selectUserMyPage(connection, userId) {
   `;
   const [defaultAddressRow] = await connection.query(userDefaultAddressQuery, userId);
   return defaultAddressRow;
-}
+};
 
 // 유저 배송지 리스트 조회
 async function selectUserAddressList(connection, userId) {
@@ -387,7 +379,7 @@ async function selectUserAddressList(connection, userId) {
   `;
   const [addressListRow] = await connection.query(userAddressListQuery, userId);
   return addressListRow;
-}
+};
 
 // 공지사항 조회
 async function selectUserNotice(connection) {
@@ -401,7 +393,7 @@ async function selectUserNotice(connection) {
      `;
   const [noticeRow] = await connection.query(userNoticeQuery);
   return noticeRow;
-}
+};
 
 // 사용자 카드 조회
 async function selectUserCard(connection, userId) {
@@ -416,7 +408,7 @@ ORDER BY isDefault DESC;
      `;
   const [cardRow] = await connection.query(userCardQuery, userId);
   return cardRow;
-}
+};
 
 // 카드 삭제
 async function updateDeleteCard(connection, userId, cardId) {
@@ -427,7 +419,7 @@ async function updateDeleteCard(connection, userId, cardId) {
     `;
   const deleteCardRow = await connection.query(deleteCardQuery, [userId, cardId]);
   return deleteCardRow;
-}
+};
 
 // 리뷰 조회
 async function selectMyReviewInfo(connection, userId, orderId) {
@@ -446,7 +438,7 @@ WHERE ri.orderId=? and ri.userId=?;
     `;
   const [getReviewInfoRow] = await connection.query(getReviewInfoQuery, [orderId, userId]);
   return getReviewInfoRow;
-}
+};
 
 // 영수증 상단정보 조회
 async function selectUserReceiptTopInfo(connection, userId, orderId) {
@@ -464,7 +456,7 @@ WHERE oi.userId=? and oi.orderIdx=?;
     `;
   const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, [orderId, userId, orderId]);
   return getReceiptInfoRow;
-}
+};
 
 // 영수증 메뉴정보 조회
 async function selectUserReceiptMenuInfo(connection, userId, orderId) {
@@ -477,7 +469,7 @@ Where oi.userId=? and oi.orderIdx=?;
     `;
   const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, [userId, orderId]);
   return getReceiptInfoRow;
-}
+};
 
 // 영수증 메뉴별 추가옵션정보 조회
 async function selectUserReceiptMenuOptionInfo(connection, orderTotalId) {
@@ -489,7 +481,7 @@ WHERE odi.orderTotalId=?;
     `;
   const [getReceiptInfoRow] = await connection.query(getReceiptInfoQuery, orderTotalId);
   return getReceiptInfoRow;
-}
+};
 
 // 사용자 Default 카드정보 가져오기
 async function selectUserDefaultCardInfo(connection, userId){
@@ -500,7 +492,7 @@ async function selectUserDefaultCardInfo(connection, userId){
   `;
   const [cardInfoRows] = await connection.query(defaultCardInfoQuery, userId);
   return cardInfoRows;
-}
+};
 
 module.exports = {
   selectUser,

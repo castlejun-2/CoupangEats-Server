@@ -264,6 +264,7 @@ exports.login = async function (req, res) {
         return res.send(response(baseResponse.ADDRESS_DEFAULT_SETTING_SUCCESS));
     }
 };
+
 /**
  * API No. 36
  * API Name : 사용자 기본 배송지 조회 API
@@ -587,7 +588,6 @@ exports.login = async function (req, res) {
  * API Name : 문자인증(SENS를 통한) 전송 API
  * [POST] /app/send
  */
-
 exports.send = async function (req, res) {
     const phoneNumber = req.body.phoneNumber;
   

@@ -67,5 +67,4 @@ module.exports = function(app){
 
     // 50. 푸쉬 알림 API
     app.post('/app/push', user.pushAlarm);
-
 };

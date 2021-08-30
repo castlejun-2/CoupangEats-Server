@@ -50,6 +50,7 @@ exports.passwordCheck = async function (selectUserPasswordParams) {
 };
 
 exports.accountCheck = async function (email) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userAccountResult = await userDao.selectUserAccount(connection, email);
   connection.release();
@@ -59,6 +60,7 @@ exports.accountCheck = async function (email) {
 
 // 유저 여부 조회
 exports.userCheck = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userCheckResult = await userDao.selectUserIdx(connection, userId);
   connection.release();
@@ -68,6 +70,7 @@ exports.userCheck = async function (userId) {
 
 // 즐겨찾기 여부 조회
 exports.bookMarkCheck = async function (userId, storeId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const checkBookMarkResult = await userDao.selectUserBookMarkCheck(connection, userId, storeId);
   connection.release();
@@ -77,6 +80,7 @@ exports.bookMarkCheck = async function (userId, storeId) {
 
 // 추가한 즐겨찾기 매장 갯수 조회
 exports.getBookMarkCount = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const getBookMarkCount = await userDao.selectUserBookMarkCount(connection, userId);
   connection.release();
@@ -129,6 +133,7 @@ exports.getCoupon = async function (userId, couponId, sumprice) {
 
 // 쿠폰 등록 여부 조회
 exports.checkCoupon = async function (userId, couponId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const checkCouponResult = await userDao.selectUserCouponCheck(connection, userId, couponId);
   connection.release();
@@ -138,6 +143,7 @@ exports.checkCoupon = async function (userId, couponId) {
 
 // 사용자 기본 배송지 조회 
 exports.getUserDefaultAddress = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userDefaultAddressResult = await userDao.selectUserDefaultAddress(connection, userId);
   connection.release();
@@ -147,6 +153,7 @@ exports.getUserDefaultAddress = async function (userId) {
 
 // 사용자 이름 및 핸드폰번호 조회
 exports.getUserMyPage = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userMyPageResult = await userDao.selectUserMyPage(connection, userId);
   connection.release();
@@ -156,6 +163,7 @@ exports.getUserMyPage = async function (userId) {
 
 // 사용자 배달 주소지 리스트 조회
 exports.getUserAddressList = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userAddressResult = await userDao.selectUserAddressList(connection, userId);
   connection.release();
@@ -165,6 +173,7 @@ exports.getUserAddressList = async function (userId) {
 
 // 유저 공지사항 조회
 exports.getUserNotice = async function () {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userNoticeResult = await userDao.selectUserNotice(connection);
   connection.release();
@@ -174,6 +183,7 @@ exports.getUserNotice = async function () {
 
 // 영수증 상단정보 조회
 exports.getUserReceiptTopInfo = async function (userId, orderId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userReceiptTopInfoResult = await userDao.selectUserReceiptTopInfo(connection, userId, orderId);
   connection.release();
@@ -183,6 +193,7 @@ exports.getUserReceiptTopInfo = async function (userId, orderId) {
 
 // 영수증 메뉴 조회
 exports.getUserReceiptMenuInfo = async function (userId, orderId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userReceiptMenuInfoResult = await userDao.selectUserReceiptMenuInfo(connection, userId, orderId);
   connection.release();
@@ -192,6 +203,7 @@ exports.getUserReceiptMenuInfo = async function (userId, orderId) {
 
 // 영수증 메뉴 세부 옵션 조회
 exports.getUserDetailMenuInRecipt = async function (orderTotalId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userReceiptMenuOptionInfoResult = await userDao.selectUserReceiptMenuOptionInfo(connection, orderTotalId);
   connection.release();
@@ -201,6 +213,7 @@ exports.getUserDetailMenuInRecipt = async function (orderTotalId) {
 
 // 유저 카드 조회
 exports.getUserCard = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const userCardResult = await userDao.selectUserCard(connection, userId);
   connection.release();
@@ -210,17 +223,20 @@ exports.getUserCard = async function (userId) {
 
 //작성한 리뷰 조회
 exports.getMyReviewInfo = async function (userId, orderId) {
+  
   const connection = await pool.getConnection(async (conn) => conn);
-
   const writeReviewInfoResult = await userDao.selectMyReviewInfo(connection, userId, orderId);
-  connection.release();    
+  connection.release(); 
+     
   return writeReviewInfoResult;
 };
 
 //사용자의 Default Card정보 가져오기
 exports.getUserDefaultCard = async function (userId) {
+
   const connection = await pool.getConnection(async (conn) => conn);
   const getCardInfoResult = await userDao.selectUserDefaultCardInfo(connection, userId);
-  connection.release();    
+  connection.release();   
+
   return getCardInfoResult;
 };
