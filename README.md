@@ -1,4 +1,4 @@
-## :computer: Soft Squared Coupang-Eats App Clone Project - Team up with a client :computer:
+## :computer: Soft Squared Coupang-Eats Clone Project - Team up with a client :computer:
 
 ---
 
